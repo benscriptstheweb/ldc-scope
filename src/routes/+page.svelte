@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { auth } from '$lib/firebase';
+	import { auth } from '$lib/firebase/client';
 	import { user } from '$lib/stores/auth';
 	import { signOut } from 'firebase/auth';
 

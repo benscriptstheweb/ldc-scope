@@ -2,7 +2,7 @@
 // via email.
 
 import { getDocs, collection } from "firebase/firestore";
-import { db } from "$lib/firebase";
+import { db } from "$lib/firebase/client";
 import type { User } from "firebase/auth";
 
 const userCollection = collection(db, 'users');
