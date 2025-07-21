@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../app.css';
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/firebase/client';
 	import { user } from '$lib/stores/auth';
