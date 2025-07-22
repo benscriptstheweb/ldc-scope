@@ -1,6 +1,7 @@
 <script>
 	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 	import { goto } from '$app/navigation';
+	import Toast from '../../components/Toast.svelte';
 
 	let email = '';
 	let password = '';
@@ -22,6 +23,14 @@
 			alert('Login failed');
 		}
 	};
+
+	let isInfoRequested = false;
+	const showInfoRequestToast = () => {
+		isInfoRequested = true;
+		setTimeout(() => {
+			isInfoRequested = false;
+		}, 3000);
+	};
 </script>
 
 <div class="center-container">
@@ -35,9 +44,15 @@
 				<input class="input" type="password" bind:value={password} />
 			</div>
 			<button class="btn btn-sm btn-primary" type="submit">Login</button>
-			<button class="btn btn-sm">Request Account</button>
+			<button class="btn btn-sm" on:click|preventDefault={showInfoRequestToast}
+				>Request Account</button
+			>
 		</form>
 	</div>
+
+	{#if isInfoRequested}
+		<Toast infoText={'Please request an account through your project oveseer.'} />
+	{/if}
 </div>
 
 <style>
