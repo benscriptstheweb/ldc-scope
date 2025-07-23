@@ -6,6 +6,7 @@ import { db } from "$lib/firebase/client";
 import type { User } from "firebase/auth";
 
 const userCollection = collection(db, 'users');
+
 export const getUsers = async () => {
     const userData = await getDocs(userCollection);
 
@@ -22,8 +23,7 @@ export const getUsers = async () => {
     return users;
 }
 
-
-export const getSignedInUser = async (user: User) => {
+export const getSignedInUser = async (user: User | null) => {
     const users = await getUsers();
     const signedInPublisher = users.filter((e) => e.email === user?.email)[0];
     return signedInPublisher;
