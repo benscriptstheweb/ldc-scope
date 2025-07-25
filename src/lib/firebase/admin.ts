@@ -6,7 +6,7 @@ if (!getApps().length) {
     initializeApp({
         credential:
             dev
-                ? cert("../google-services.json")
+                ? cert("./google-services.json")
                 : cert({
                     projectId: process.env.PROJECT_ID,
                     clientEmail: process.env.CLIENT_EMAIL,

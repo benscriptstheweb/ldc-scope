@@ -8,9 +8,15 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (sessionCookie) {
         try {
             const decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
+            const adminStatus = await adminAuth.getUser(decodedToken.uid)
+                .then((record) => {
+                    return record.customClaims?.['admin']
+                })
+
             event.locals.user = {
                 uid: decodedToken.uid,
-                email: decodedToken.email
+                email: decodedToken.email,
+                isAdmin: adminStatus
             };
         } catch (err) {
             event.locals.user = null;

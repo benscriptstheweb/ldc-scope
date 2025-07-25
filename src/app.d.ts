@@ -6,6 +6,7 @@ declare global {
 			user: {
 				uid: string;
 				email: string | undefined;
+				isAdmin: boolean;
 			} | null
 		}
 		// interface Error {}

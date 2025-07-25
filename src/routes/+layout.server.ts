@@ -9,6 +9,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
     if (!locals.user && !publicRoutes.includes(pathname)) {
         throw redirect(302, '/signin');
     }
+
     return {
         user: locals.user
     };
