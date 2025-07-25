@@ -1,20 +1,16 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { auth } from '$lib/firebase/client';
 	import { signOut } from 'firebase/auth';
+	import { user } from '$lib/stores/user';
 
 	export let userData;
 
 	async function logout() {
 		// clear session cookies first
 		await fetch('/api/sessionLogout', { method: 'POST' });
-		await signOut(auth)
-			.then(() => {
-				goto('/signin');
-			})
-			.catch((err) => {
-				throw err;
-			});
+		await signOut(auth).then(() => {
+			user.set(null);
+		});
 	}
 </script>
 

@@ -2,8 +2,11 @@
 	import '../app.css';
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/firebase/client';
-	import { user } from '$lib/stores/auth';
+	import { user } from '$lib/stores/user';
 	import { onMount } from 'svelte';
+	import Navbar from '../components/Navbar.svelte';
+	import { page } from '$app/state';
+	export let data;
 
 	// unlike the redirect in the +layout.server.ts or the user check in hooks.server.ts files
 	// this will move a person to signin if anywhere in the already preloaded pages (client)
@@ -19,4 +22,7 @@
 	});
 </script>
 
+{#if page.url.pathname !== '/signin'}
+	<Navbar userData={data.user} />
+{/if}
 <slot />
