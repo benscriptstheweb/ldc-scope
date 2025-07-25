@@ -1,5 +1,5 @@
 <div class="spinner">
-	<span class="loading loading-spinner loading-xl mr-5"></span>
+	<span class="loading loading-spinner loading-xl mr-2"></span>
 	<p>Please wait...</p>
 </div>
 
@@ -9,6 +9,5 @@
 		justify-content: center;
 		align-items: center;
 		min-height: 100vh;
-		width: 100vw;
 	}
 </style>

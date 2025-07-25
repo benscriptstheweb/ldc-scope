@@ -25,4 +25,20 @@
 {#if page.url.pathname !== '/signin'}
 	<Navbar userData={data.user} />
 {/if}
-<slot />
+
+<div class="container">
+	<div class="main-content">
+		<slot />
+	</div>
+</div>
+
+<style>
+	.container {
+		width: 100%;
+	}
+	.main-content {
+		z-index: 1;
+		margin: 0 auto; /* Centers horizontally */
+		padding: 1rem; /* Optional: adds some spacing */
+	}
+</style>
