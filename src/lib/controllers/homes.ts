@@ -9,17 +9,18 @@ const homesFBCollection = collection(db, 'homes');
 export const getHomes = async () => {
     const homesFBData = await getDocs(homesFBCollection);
 
-    let homes = homesFBData.docs.map((e) => {
+    let homes = homesFBData.docs.map((doc) => {
         return {
-            address1: e.data().address1,
-            address2: e.data().address2,
-            city: e.data().city,
-            state: e.data().state,
-            zip: e.data().zip,
-            amenities: e.data().amenities,
-            allowsPets: e.data().allowsPets,
-            hostName: e.data().hostName,
-            hasVolunteer: e.data().hasVolunteer
+            id: doc.id,
+            address1: doc.data().address1,
+            address2: doc.data().address2,
+            city: doc.data().city,
+            state: doc.data().state,
+            zip: doc.data().zip,
+            amenities: doc.data().amenities,
+            allowsPets: doc.data().allowsPets,
+            hostName: doc.data().hostName,
+            hasVolunteer: doc.data().hasVolunteer
         };
     });
 
