@@ -35,7 +35,7 @@
 
 <div class="center-container">
 	<div class="logo">
-		<img src="/Main.png" alt="logo" />
+		<img width="150px" src="/Main.png" alt="logo" />
 	</div>
 	<div class="login-card">
 		<h1 class="welcome-sign">Welcome home</h1>
