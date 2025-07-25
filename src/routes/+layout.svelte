@@ -26,19 +26,15 @@
 	<Navbar userData={data.user} />
 {/if}
 
-<div class="container">
-	<div class="main-content">
-		<slot />
-	</div>
+<div class="main-content">
+	<slot />
 </div>
 
 <style>
-	.container {
-		width: 100%;
-	}
 	.main-content {
+		display: flex;
+		justify-content: center;
 		z-index: 1;
-		margin: 0 auto; /* Centers horizontally */
-		padding: 1rem; /* Optional: adds some spacing */
+		padding: 1.7rem;
 	}
 </style>

@@ -4,7 +4,7 @@
 	import HomeCard from '../components/HomeCard.svelte';
 </script>
 
-<div class="home-cards">
+<div>
 	{#await getHomes()}
 		<Loading />
 	{:then homes}
