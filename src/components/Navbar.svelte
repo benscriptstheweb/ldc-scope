@@ -3,9 +3,6 @@
 	import { signOut } from 'firebase/auth';
 
 	export let userData;
-	export let firebaseUserData;
-
-	console.log(userData);
 
 	async function logout() {
 		await signOut(auth);
@@ -127,6 +124,9 @@
 		ul.bg-base-100 {
 			margin-left: -20px;
 		}
+	}
+	ul.bg-base-100 {
+		z-index: 100;
 	}
 
 	.button-disabled {

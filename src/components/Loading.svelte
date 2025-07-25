@@ -1,5 +1,6 @@
 <div class="spinner">
 	<span class="loading loading-spinner loading-xl"></span>
+	<p>Please wait...</p>
 </div>
 
 <style>
