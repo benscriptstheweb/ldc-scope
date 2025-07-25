@@ -34,6 +34,9 @@
 </script>
 
 <div class="center-container">
+	<div class="logo">
+		<img src="/Main.png" alt="logo" />
+	</div>
 	<div class="login-card">
 		<h1 class="welcome-sign">Welcome home</h1>
 		<form on:submit|preventDefault={login}>
@@ -56,15 +59,29 @@
 </div>
 
 <style>
-	.welcome-sign {
-		font-size: 30px;
-	}
-
 	.center-container {
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		min-height: 100vh;
+	}
+	.welcome-sign {
+		display: none;
+	}
+	@media (min-width: 768px) and (max-width: 1024px) {
+	}
+	@media (min-width: 1025px) {
+		.center-container {
+			flex-direction: row;
+		}
+		.welcome-sign {
+			display: block;
+			font-size: 30px;
+		}
+		.logo {
+			margin-right: 50px;
+		}
 	}
 
 	.login-card {
