@@ -1,4 +1,4 @@
-import { adminDb } from '$lib/firebase/admin'; // Use your admin SDK instance
+import { adminDb } from '$lib/firebase/admin';
 
 export async function load({ params }) {
     const docSnap = await adminDb.collection('homes').doc(params.id).get();

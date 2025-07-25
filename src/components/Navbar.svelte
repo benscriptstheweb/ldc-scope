@@ -25,7 +25,7 @@
 		<ul class="menu menu-horizontal px-1">
 			<!-- basically home -->
 			<li>
-				<button>
+				<a href="/">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -41,12 +41,12 @@
 						/>
 					</svg>
 					<span class="menu-text">Inventory</span>
-				</button>
+				</a>
 			</li>
 
 			<!-- link to volunteers page -->
 			<li>
-				<button class="button-disabled">
+				<a href="/" class="button-disabled">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -62,7 +62,7 @@
 						/>
 					</svg>
 					<span class="menu-text">Volunteers</span>
-				</button>
+				</a>
 			</li>
 			<li>
 				<details>
