@@ -1,11 +1,22 @@
 <script lang="ts">
-	export let home;
+	import { goto } from '$app/navigation';
+
+	export let home: any;
 
 	const colArr = ['#87799F', '#FFB88C', '#5B9F82', '#FFADC7'];
 	const color = colArr[Math.floor(Math.random() * colArr.length)];
+
+	function visitHome() {
+		goto(`/homes/${home.id}`);
+	}
 </script>
 
-<div class="card card-side bg-base-100 shadow-sm">
+<button
+	type="button"
+	class="card card-side bg-base-100 shadow-sm"
+	on:click={visitHome}
+	style="width: 100%; text-align: left; padding: 0; border: none; background: none;"
+>
 	<figure>
 		<div class="color-block" style="background-color: {color};"></div>
 	</figure>
@@ -33,11 +44,12 @@
 			<p style="font-weight: 600">Host: <span>{home.hostName}</span></p>
 		</div>
 	</div>
-</div>
+</button>
 
 <style>
 	.card {
 		margin: 20px 0;
+		cursor: pointer;
 	}
 
 	.color-block {
