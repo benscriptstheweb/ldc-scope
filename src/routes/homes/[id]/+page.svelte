@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let data;
-	const home = data.home;
+	const home = data;
 </script>
 
 <div class="address-container">
@@ -12,6 +12,7 @@
 		{#if home.hasVolunteer}
 			<div class="badge badge-accent">Volunteer Assigned</div>
 		{/if}
+		Host: {home.owner.name}
 	{:else}
 		<h1>404</h1>
 		<p class="not-found">Home not found</p>
