@@ -17,10 +17,7 @@ export const getHomes = async () => {
             city: doc.data().city,
             state: doc.data().state,
             zip: doc.data().zip,
-            amenities: doc.data().amenities,
-            allowsPets: doc.data().allowsPets,
             hostName: doc.data().hostName,
-            hasVolunteer: doc.data().hasVolunteer
         };
     });
 

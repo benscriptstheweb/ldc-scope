@@ -1,13 +1,21 @@
 import { adminDb } from '$lib/firebase/admin';
 
 export async function load({ params }) {
+    // house details
     const homeDocRef = adminDb.doc(`homes/${params.id}`);
     const homeSnap = await homeDocRef.get();
     const homeData = homeSnap.data();
 
-    const ownerRef = homeData?.owner;
-    const ownerSnap = await ownerRef.get();
-    const ownerData = ownerSnap.data();
+    // attached volunteers
+    const volunteerRef = homeDocRef.collection('volunteers');
+    const volunteerSnap = await volunteerRef.get()
+    const volunteerData = volunteerSnap.docs.map((doc) => {
+        return {
+            name: doc.data().name,
+            dateStart: Intl.DateTimeFormat('en-CA').format(doc.data().dateStart.toDate()),
+            dateEnd: Intl.DateTimeFormat('en-CA').format(doc.data().dateEnd.toDate())
+        }
+    });
 
     const serializable = {
         address1: homeData?.address1,
@@ -15,8 +23,8 @@ export async function load({ params }) {
         city: homeData?.city,
         state: homeData?.state,
         zip: homeData?.zip,
-        hasVolunteer: homeData?.hasVolunteer,
-        owner: ownerData
+        amenities: homeData?.amenities,
+        volunteers: volunteerData
     }
 
     return serializable
