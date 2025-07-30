@@ -1,62 +1,48 @@
 <script lang="ts">
-	import Calendar from '../../../components/Calendar.svelte';
+	import Assignments from '../../../components/Assignments.svelte';
 
 	export let data;
 	const home = data;
 
-	let selectedDateStart: string;
-	let selectedDateEnd: string;
+	let isCurrentlyOccupied = false;
+	const today = Intl.DateTimeFormat('en-CA').format(new Date());
 
-	// $: console.log(dateStart);
-	function handleVolunteerSelect(event: Event) {
-		console.log(home.volunteers);
-
-		const select = event.target as HTMLSelectElement;
-		const selectedVolunteer = home.volunteers.find((v) => v.name === select.value);
-		if (selectedVolunteer) {
-			selectedDateStart = selectedVolunteer.dateStart;
-			selectedDateEnd = selectedVolunteer.dateEnd;
+	home.volunteers.forEach((v) => {
+		if (today >= v.dateStart && today <= v.dateEnd) {
+			isCurrentlyOccupied = true;
 		}
-	}
+	});
 </script>
 
 <div class="home-detail">
 	<div class="block address-container">
 		{#if home}
-			<h1 class="header-address">{home.address1} {home.address2}</h1>
 			<div>
+				<h1 class="header-address">{home.address1} {home.address2}</h1>
 				<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
 			</div>
-			<!-- {#if home.hasVolunteer}
-				<div class="badge badge-accent">Volunteer Assigned</div>
-			{/if} -->
-		{:else}
-			<h1>404</h1>
-			<p class="not-found">Home not found</p>
 		{/if}
+
+		<div class="badge-container">
+			{#if isCurrentlyOccupied}
+				<div class="badge badge-error">Booked</div>
+			{:else}
+				<div class="badge badge-success">Available</div>
+			{/if}
+		</div>
 	</div>
 
+	<div class="divider">History</div>
+	<div class="block volunteers">
+		<Assignments {home}></Assignments>
+	</div>
+
+	<div class="divider">Details</div>
 	<div class="block amenities">
-		<h1>Amenities</h1>
+		<h2>Amenities</h2>
 		{#each home.amenities as amenity}
-			<ul>
-				- {amenity}
-			</ul>
+			<li>{amenity}</li>
 		{/each}
-	</div>
-
-	<div class="block amenities">
-		<h1>Volunteers</h1>
-
-		<select class="select select-ghost" on:change={handleVolunteerSelect}>
-			<option disabled selected>Pick a volunteer</option>
-			{#each home.volunteers as { name }}
-				<option>
-					{name}
-				</option>
-			{/each}
-		</select>
-		<Calendar dateStart={selectedDateStart} dateEnd={selectedDateEnd}></Calendar>
 	</div>
 </div>
 
@@ -64,6 +50,10 @@
 	.home-detail {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.block {
+		margin-bottom: 50px;
 	}
 
 	h1 {
@@ -75,7 +65,18 @@
 		font-style: italic;
 	}
 
-	.block {
-		margin-bottom: 50px;
+	h2 {
+		font-size: 1em;
+		font-weight: bold;
+	}
+
+	.badge-container {
+		margin-top: 20px;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.volunteers {
+		margin: 20px 0 !important;
 	}
 </style>
