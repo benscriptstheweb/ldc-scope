@@ -1,12 +1,13 @@
 import { adminDb } from '$lib/firebase/admin';
+import type { PageServerLoad } from './$types';
 
-export async function load({ params }) {
+export const load: PageServerLoad = async ({ params }) => {
     // house details
     const homeDocRef = adminDb.doc(`homes/${params.id}`);
     const homeSnap = await homeDocRef.get();
     const homeData = homeSnap.data();
 
-    // attached volunteers
+    // attached volunteers :: will deprecate
     const volunteerRef = homeDocRef.collection('volunteers');
     const volunteerSnap = await volunteerRef.get()
     const volunteerData = volunteerSnap.docs.map((doc) => {
@@ -17,15 +18,28 @@ export async function load({ params }) {
         }
     });
 
-    const serializable = {
+    // contacts
+    const contactsRef = homeDocRef.collection('contacts');
+    const contactsSnap = await contactsRef.get();
+    const contactsData = contactsSnap.docs.map((contact) => {
+        return {
+            name: contact.data().name,
+            email: contact.data().email,
+            phone: contact.data().phone,
+            isPrimary: contact.data().isPrimary
+        }
+    });
+
+    const home = {
         address1: homeData?.address1,
         address2: homeData?.address2,
         city: homeData?.city,
         state: homeData?.state,
         zip: homeData?.zip,
         amenities: homeData?.amenities,
-        volunteers: volunteerData
+        volunteers: volunteerData,
+        contacts: contactsData
     }
 
-    return serializable
+    return home;
 }
