@@ -22,7 +22,7 @@ export const getHomes = async () => {
             state: doc.data().state,
             zip: doc.data().zip,
             hostName: doc.data().hostName,
-            primaryContact: primaryContact
+            primaryContact
         };
     }));
 
