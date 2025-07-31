@@ -21,7 +21,6 @@ export const getHomes = async () => {
             city: doc.data().city,
             state: doc.data().state,
             zip: doc.data().zip,
-            hostName: doc.data().hostName,
             primaryContact
         };
     }));
