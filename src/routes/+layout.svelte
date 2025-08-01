@@ -2,7 +2,6 @@
 	import '../app.css';
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/firebase/client';
-	import { user } from '$lib/stores/user';
 	import { onMount } from 'svelte';
 	import Navbar from '../components/Navbar.svelte';
 	import { page } from '$app/state';
@@ -13,9 +12,7 @@
 	// they hit the logout button
 	onMount(() => {
 		auth.onAuthStateChanged(async (u) => {
-			if (u) {
-				user.set(u);
-			} else {
+			if (!u) {
 				goto('/signin');
 			}
 		});
