@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Assignments from '../../../components/Assignments.svelte';
+	import List from '../../../components/List.svelte';
 
 	export let data;
 	const home = data;
@@ -14,8 +15,8 @@
 	});
 </script>
 
-<div class="home-detail">
-	<div class="block address-container">
+<div class="top-container">
+	<div class="address-container">
 		{#if home}
 			<div>
 				<p class="heading header-address">{home.address1} {home.address2}</p>
@@ -38,22 +39,45 @@
 	</div>
 
 	<div class="divider">Details</div>
+	<h2>Amenities</h2>
 	<div class="block amenities">
-		<h2>Amenities</h2>
 		{#each home.amenities as amenity}
-			<li>{amenity}</li>
+			{#if amenity}
+				<div class="badge badge-soft badge-info">{amenity}</div>
+			{:else}
+				<p class="amenities-none-text">No amenities listed for this home 🤔</p>
+			{/if}
+		{/each}
+	</div>
+
+	<h2>Contacts</h2>
+	<div class="block contacts">
+		{#each home.contacts as contact}
+			<List {contact} />
 		{/each}
 	</div>
 </div>
 
 <style>
-	.home-detail {
+	.heading {
+		padding-top: 30px;
+	}
+	.address-container {
+		margin: 0 auto;
+		margin-bottom: 50px;
+	}
+	.badge-container {
+		margin-top: 20px;
+		display: flex;
+		justify-content: space-between;
+	}
+	.top-container {
 		display: flex;
 		flex-direction: column;
 	}
-
 	.block {
-		margin-bottom: 50px;
+		align-items: center;
+		padding: 0 20px 50px 20px;
 	}
 
 	.secondary-address {
@@ -61,17 +85,32 @@
 	}
 
 	h2 {
-		font-size: 1em;
+		font-size: 1.2em;
 		font-weight: bold;
+		padding: 0 30px;
 	}
-
-	.badge-container {
-		margin-top: 20px;
+	.amenities {
+		margin-top: 10px;
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
+		flex-wrap: wrap;
+		height: 150px;
+		overflow: scroll;
+	}
+	.amenities-none-text {
+		color: gray;
 	}
 
-	.volunteers {
-		margin: 20px 0 !important;
+	.badge {
+		margin: 5px;
+	}
+
+	/* convert to only on phone */
+	.divider {
+		font-style: italic;
+		font-size: small;
+		width: 90%;
+		margin: 0 auto;
+		margin-bottom: 30px;
 	}
 </style>
