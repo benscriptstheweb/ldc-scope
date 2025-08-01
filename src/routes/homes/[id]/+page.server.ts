@@ -23,6 +23,7 @@ export const load: PageServerLoad = async ({ params }) => {
     const contactsSnap = await contactsRef.get();
     const contactsData = contactsSnap.docs.map((contact) => {
         return {
+            id: contact.id,
             name: contact.data().name,
             email: contact.data().email,
             phone: contact.data().phone,
@@ -31,6 +32,7 @@ export const load: PageServerLoad = async ({ params }) => {
     });
 
     const home = {
+        id: params.id,
         address1: homeData?.address1,
         address2: homeData?.address2,
         city: homeData?.city,
