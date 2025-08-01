@@ -6,7 +6,8 @@
 	let newContact = $state({
 		name: '',
 		phone: '',
-		email: ''
+		email: '',
+		isPrimary: false
 	});
 
 	async function deleteContact(homeId: string, contactId: string) {
@@ -99,6 +100,10 @@
 			<input class="input" bind:value={newContact.name} placeholder="Name" />
 			<input class="input" bind:value={newContact.phone} placeholder="Phone" />
 			<input class="input" bind:value={newContact.email} placeholder="Email" />
+			<label class="label">
+				Primary Contact?
+				<input type="checkbox" bind:checked={newContact.isPrimary} class="checkbox checkbox-info" />
+			</label>
 			<button
 				class="btn btn-success"
 				onclick={() => addContact(home.id, newContact)}
