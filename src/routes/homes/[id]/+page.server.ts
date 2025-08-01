@@ -2,6 +2,11 @@
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
+    const { homeId } = params;
+    const res = await fetch(`/api/homes/${homeId}`);
+    const home = await res.json();
+
+    return { home }
     // // house details
     // const homeDocRef = adminDb.doc(`homes/${params.id}`);
     // const homeSnap = await homeDocRef.get();
