@@ -27,3 +27,40 @@ export async function PATCH({ params, request }) {
         return json({ error: 'Failed to add contact' }, { status: 500 });
     }
 }
+
+export async function GET({ params }) {
+    const homeSnap = await adminDb
+        .collection('homes')
+        .doc(params.id)
+        .get();
+    const homeData = homeSnap.data();
+
+    // attached volunteers :: will deprecate 
+    const volunteerSnap = await adminDb
+        .collection('homes')
+        .doc(params.id)
+        .collection('volunteers')
+        .get();
+
+    const volunteerData = volunteerSnap.docs.map((doc) => {
+        return {
+            name: doc.data().name,
+            dateStart: Intl.DateTimeFormat('en-CA').format(doc.data().dateStart.toDate()),
+            dateEnd: Intl.DateTimeFormat('en-CA').format(doc.data().dateEnd.toDate())
+        }
+    });
+    // attached volunteers :: will deprecate
+
+    const home = {
+        id: params.id,
+        address1: homeData?.address1,
+        address2: homeData?.address2,
+        city: homeData?.city,
+        state: homeData?.state,
+        zip: homeData?.zip,
+        amenities: homeData?.amenities,
+        volunteers: volunteerData,
+    }
+
+    return json(home);
+}
