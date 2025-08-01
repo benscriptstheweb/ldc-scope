@@ -18,7 +18,7 @@
 	<div class="block address-container">
 		{#if home}
 			<div>
-				<h1 class="header-address">{home.address1} {home.address2}</h1>
+				<p class="heading header-address">{home.address1} {home.address2}</p>
 				<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
 			</div>
 		{/if}
@@ -54,11 +54,6 @@
 
 	.block {
 		margin-bottom: 50px;
-	}
-
-	h1 {
-		font-size: 1.7em;
-		font-weight: bold;
 	}
 
 	.secondary-address {
