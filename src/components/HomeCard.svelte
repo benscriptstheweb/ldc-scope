@@ -51,6 +51,7 @@
 <style>
 	.card-boundary {
 		padding: 10px;
+		width: 310px;
 	}
 
 	button {
