@@ -23,18 +23,9 @@
 	<Navbar userData={data.user} />
 {/if}
 
-<div class="main-content">
-	<slot />
-</div>
+<slot />
 
 <style>
-	.main-content {
-		display: flex;
-		justify-content: center;
-		z-index: 1;
-		padding: 1.7rem;
-	}
-
 	:global(.heading) {
 		font-size: 1.7em;
 		font-weight: bold;
