@@ -10,5 +10,5 @@ export async function DELETE({ params }) {
         throw error;
     }
 
-    return json({ status: 'success' });
+    return json({ status: 'deleted' });
 }

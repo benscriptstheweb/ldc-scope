@@ -21,7 +21,7 @@ export async function PATCH({ params, request }) {
                 zip: body.zip
             });
 
-        return json({ id: homeId });
+        return json({ success: true }, { status: 201 });
     } catch (err) {
         console.error(err);
         return json({ error: 'Failed to add contact' }, { status: 500 });

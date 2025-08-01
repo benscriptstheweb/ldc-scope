@@ -10,7 +10,7 @@ export async function POST({ params, request }) {
     }
 
     try {
-        const docRef = await adminDb
+        await adminDb
             .collection('homes')
             .doc(homeId)
             .collection('contacts')
@@ -18,9 +18,10 @@ export async function POST({ params, request }) {
                 name: body.name,
                 phone: body.phone,
                 email: body.email,
+                isPrimary: body.isPrimary
             });
 
-        return json({ id: docRef.id });
+        return json({ success: true }, { status: 201 });
     } catch (err) {
         console.error(err);
         return json({ error: 'Failed to add contact' }, { status: 500 });
