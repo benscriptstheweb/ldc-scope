@@ -18,7 +18,9 @@
 
 <Drawer {home} />
 
-<div class="top-container">
+<div class="parallax"></div>
+
+<div class="top-container bg-base-100">
 	<div class="address-container">
 		{#if home}
 			<div>
@@ -80,6 +82,15 @@
 </div>
 
 <style>
+	.parallax {
+		margin-top: -10px;
+
+		background-image: url('/ai_city.png');
+		height: 230px;
+
+		background-attachment: fixed;
+		background-position: center;
+	}
 	.heading {
 		padding-top: 30px;
 	}
@@ -87,6 +98,7 @@
 		margin: 0 auto;
 		margin-bottom: 50px;
 	}
+
 	.badge-container {
 		margin-top: 20px;
 		display: flex;
@@ -95,6 +107,9 @@
 	.top-container {
 		display: flex;
 		flex-direction: column;
+		margin-top: -25px;
+		border-top-left-radius: 25px;
+		border-top-right-radius: 25px;
 	}
 	.block {
 		align-items: center;
