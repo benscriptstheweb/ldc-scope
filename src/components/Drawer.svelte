@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	let { home } = $props();
 
 	let newContact = $state({
@@ -6,6 +8,15 @@
 		phone: '',
 		email: '',
 		isPrimary: false
+	});
+
+	onMount(() => {
+		newContact = {
+			name: '',
+			phone: '',
+			email: '',
+			isPrimary: false
+		};
 	});
 
 	async function deleteContact(homeId: string, contactId: string) {
@@ -96,7 +107,6 @@
 			{/each}
 
 			<div class="divider">Add New Contact</div>
-
 			<input class="input" bind:value={newContact.name} placeholder="Name" />
 			<input class="input" bind:value={newContact.phone} placeholder="Phone" />
 			<input class="input" bind:value={newContact.email} placeholder="Email" />
