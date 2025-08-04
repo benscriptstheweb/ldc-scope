@@ -54,6 +54,23 @@
 		}
 	}
 
+	let updatedDetails = $state({
+		name: '',
+		phone: null,
+		email: ''
+	});
+
+	async function editContact(homeId: string, contactId: string, updatedDetails: any) {
+		const res = await fetch(`/api/homes/${homeId}/contacts/${contactId}`, {
+			method: 'PATCH',
+			body: JSON.stringify(updatedDetails)
+		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
+
 	let homeFields = $state({
 		address1: home.address1,
 		address2: home.address2,
@@ -74,13 +91,12 @@
 	}
 
 	let editingId: number | null = $state(null);
-	let editedContactPhone: number | null = null;
-	let editedContactEmail = '';
 
 	function startEditing(contact) {
+		// Start with current details to populate the form.
+		updatedDetails = contact;
+
 		editingId = contact.id;
-		editedContactPhone = contact.phone;
-		editedContactEmail = contact.email;
 	}
 </script>
 
@@ -115,18 +131,41 @@
 					<div class="list-item">
 						{#if editingId === contact.id}
 							<div>
-								<input type="text" placeholder="Name" class="input" value={contact.name} />
-								<input type="text" placeholder="Phone" class="input" value={contact.phone} />
-								<input type="text" placeholder="Email" class="input" value={contact.email} />
+								<input
+									type="text"
+									placeholder="Name"
+									class="input"
+									bind:value={updatedDetails.name}
+								/>
+								<input
+									type="text"
+									placeholder="Phone"
+									class="input"
+									bind:value={updatedDetails.phone}
+								/>
+								<input
+									type="text"
+									placeholder="Email"
+									class="input"
+									bind:value={updatedDetails.email}
+								/>
 
 								<div class="button-container">
-									<button class="btn" onclick={() => (editingId = null)}> Cancel </button>
 									<button
-										class="btn btn-error"
+										class="btn btn-error flex-2"
 										onclick={() => deleteContact(home.id, contact.id)}
 										aria-label="delete"
 									>
 										<Trash />
+									</button>
+									<button
+										class="btn btn-primary flex-3"
+										onclick={() => editContact(home.id, contact.id, updatedDetails)}
+									>
+										Update
+									</button>
+									<button class="btn cancel flex-4" onclick={() => (editingId = null)}>
+										Cancel
 									</button>
 								</div>
 							</div>
@@ -147,7 +186,7 @@
 			<input class="input input-sm" bind:value={newContact.email} placeholder="Email" />
 
 			<div class="button-container">
-				<label class="label">
+				<label class="label mt-3">
 					<input
 						type="checkbox"
 						bind:checked={newContact.isPrimary}
@@ -213,5 +252,6 @@
 	}
 	.button-container > button {
 		float: right;
+		margin: 5px 5px;
 	}
 </style>
