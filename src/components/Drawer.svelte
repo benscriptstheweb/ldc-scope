@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Ex from '../icons/Ex.svelte';
 
 	let { home } = $props();
 
@@ -10,6 +11,8 @@
 		isPrimary: false
 	});
 
+	let isDrawerOpen = $state(false);
+
 	onMount(() => {
 		newContact = {
 			name: '',
@@ -17,6 +20,8 @@
 			email: '',
 			isPrimary: false
 		};
+
+		isDrawerOpen = false;
 	});
 
 	async function deleteContact(homeId: string, contactId: string) {
@@ -59,13 +64,15 @@
 </script>
 
 <div class="drawer">
-	<input id="my-drawer" type="checkbox" class="drawer-toggle" />
+	<input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
 
 	<div class="drawer-side">
 		<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<h1>Edit Home</h1>
-
+			<div class="header">
+				<h1>Edit Home</h1>
+				<Ex onclick={() => (isDrawerOpen = false)} />
+			</div>
 			<h2 class="edit-heading">Address</h2>
 			<input type="text" placeholder="Address 1" class="input" bind:value={homeFields.address1} />
 			<input type="text" placeholder="Address 2" class="input" bind:value={homeFields.address2} />
@@ -139,6 +146,11 @@
 </div>
 
 <style>
+	.header {
+		display: flex;
+		justify-content: space-between;
+	}
+
 	h1 {
 		font-size: 20px;
 		font-weight: bold;
