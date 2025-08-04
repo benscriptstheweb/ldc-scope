@@ -50,4 +50,7 @@
 	.contact-btns > a {
 		margin-left: 30px;
 	}
+	ul {
+		margin-bottom: 1px;
+	}
 </style>
