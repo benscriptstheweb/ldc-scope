@@ -21,7 +21,7 @@
 
 <style>
 	svg {
-		margin-bottom: 12px;
+		margin-bottom: 19px;
 		cursor: pointer;
 	}
 </style>

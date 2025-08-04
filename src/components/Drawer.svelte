@@ -157,6 +157,10 @@
 		margin-bottom: 20px;
 	}
 
+	.drawer {
+		z-index: 99;
+	}
+
 	.edit-heading {
 		font-size: 15px;
 		font-style: italic;

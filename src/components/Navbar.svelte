@@ -5,7 +5,6 @@
 	export let userData;
 
 	async function logout() {
-		// clear session cookies first
 		await fetch('/api/sessionLogout', { method: 'POST' });
 		await signOut(auth);
 	}
@@ -20,7 +19,6 @@
 
 	<div class="flex-none">
 		<ul class="menu menu-horizontal px-1">
-			<!-- basically home -->
 			<li>
 				<a href="/">
 					<svg
@@ -103,6 +101,8 @@
 	.navbar {
 		display: flex;
 		align-items: center;
+		position: fixed;
+		z-index: 98;
 	}
 
 	.menu-text {

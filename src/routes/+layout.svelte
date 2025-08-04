@@ -23,11 +23,16 @@
 	<Navbar userData={data.user} />
 {/if}
 
-<slot />
+<div class="body">
+	<slot />
+</div>
 
 <style>
 	:global(.heading) {
 		font-size: 1.7em;
 		font-weight: bold;
+	}
+	.body {
+		padding-top: 80px;
 	}
 </style>
