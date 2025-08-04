@@ -29,16 +29,17 @@ export async function PATCH({ params, request }) {
 }
 
 export async function GET({ params }) {
+    const { homeId } = params;
     const homeSnap = await adminDb
         .collection('homes')
-        .doc(params.id)
+        .doc(homeId)
         .get();
     const homeData = homeSnap.data();
 
     // attached volunteers :: will deprecate 
     const volunteerSnap = await adminDb
         .collection('homes')
-        .doc(params.id)
+        .doc(homeId)
         .collection('volunteers')
         .get();
 
@@ -52,7 +53,7 @@ export async function GET({ params }) {
     // attached volunteers :: will deprecate
 
     const home = {
-        id: params.id,
+        id: homeId,
         address1: homeData?.address1,
         address2: homeData?.address2,
         city: homeData?.city,

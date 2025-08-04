@@ -29,9 +29,10 @@ export async function POST({ params, request }) {
 }
 
 export async function GET({ params }) {
+    const { homeId } = params;
     const contactsSnap = await adminDb
         .collection('homes')
-        .doc(params.id)
+        .doc(homeId)
         .collection('contacts').get();
 
     const contacts = contactsSnap.docs.map((contact) => {
