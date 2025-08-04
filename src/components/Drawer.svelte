@@ -71,8 +71,8 @@
 			<h2 class="edit-heading">Contacts</h2>
 			{#each home.contacts as contact}
 				{contact.name}
-				<input type="text" placeholder="Phone" class="input" bind:value={contact.phone} />
-				<input type="text" placeholder="Email" class="input" bind:value={contact.email} />
+				<input type="text" placeholder="Phone" class="input" value={contact.phone} />
+				<input type="text" placeholder="Email" class="input" value={contact.email} />
 				<button
 					onclick={() => deleteContact(home.id, contact.id)}
 					class="btn btn-error delete"
@@ -97,12 +97,12 @@
 
 			<div class="divider">Add New Contact</div>
 
-			<input class="input" value={newContact.name} placeholder="Name" />
-			<input class="input" value={newContact.phone} placeholder="Phone" />
-			<input class="input" value={newContact.email} placeholder="Email" />
+			<input class="input" bind:value={newContact.name} placeholder="Name" />
+			<input class="input" bind:value={newContact.phone} placeholder="Phone" />
+			<input class="input" bind:value={newContact.email} placeholder="Email" />
 			<label class="label">
 				Primary Contact?
-				<input type="checkbox" checked={newContact.isPrimary} class="checkbox checkbox-info" />
+				<input type="checkbox" bind:checked={newContact.isPrimary} class="checkbox checkbox-info" />
 			</label>
 			<button
 				class="btn btn-success"
