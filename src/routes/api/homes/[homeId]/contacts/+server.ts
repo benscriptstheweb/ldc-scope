@@ -27,3 +27,23 @@ export async function POST({ params, request }) {
         return json({ error: 'Failed to add contact' }, { status: 500 });
     }
 }
+
+export async function GET({ params }) {
+    const { homeId } = params;
+    const contactsSnap = await adminDb
+        .collection('homes')
+        .doc(homeId)
+        .collection('contacts').get();
+
+    const contacts = contactsSnap.docs.map((contact) => {
+        return {
+            id: contact.id,
+            name: contact.data().name,
+            email: contact.data().email,
+            phone: contact.data().phone,
+            isPrimary: contact.data().isPrimary
+        }
+    });
+
+    return json(contacts);
+}

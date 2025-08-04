@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	let { home } = $props();
 
 	let newContact = $state({
@@ -11,39 +9,41 @@
 	});
 
 	async function deleteContact(homeId: string, contactId: string) {
-		await fetch(`/api/homes/${homeId}/contacts/${contactId}`, { method: 'DELETE' });
+		const res = await fetch(`/api/homes/${homeId}/contacts/${contactId}`, { method: 'DELETE' });
+
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 
 	async function addContact(homeId: string, newContact: any) {
-		await fetch(`/api/homes/${homeId}/contacts`, {
+		const res = await fetch(`/api/homes/${homeId}/contacts`, {
 			method: 'POST',
 			body: JSON.stringify(newContact)
 		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 
 	let homeFields = $state({
-		address1: '',
-		address2: '',
-		city: '',
-		state: '',
-		zip: ''
-	});
-
-	onMount(() => {
-		homeFields = {
-			address1: home.address1,
-			address2: home.address2,
-			city: home.city,
-			state: home.state,
-			zip: home.zip
-		};
+		address1: home.address1,
+		address2: home.address2,
+		city: home.city,
+		state: home.state,
+		zip: home.zip
 	});
 
 	async function updateHome(homeId: string, newHomeDetails: any) {
-		await fetch(`/api/homes/${homeId}`, {
+		const res = await fetch(`/api/homes/${homeId}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
 		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 </script>
 
@@ -71,8 +71,8 @@
 			<h2 class="edit-heading">Contacts</h2>
 			{#each home.contacts as contact}
 				{contact.name}
-				<input type="text" placeholder="Phone" class="input" value={contact.phone} />
-				<input type="text" placeholder="Email" class="input" value={contact.email} />
+				<input type="text" placeholder="Phone" class="input" bind:value={contact.phone} />
+				<input type="text" placeholder="Email" class="input" bind:value={contact.email} />
 				<button
 					onclick={() => deleteContact(home.id, contact.id)}
 					class="btn btn-error delete"
@@ -97,12 +97,12 @@
 
 			<div class="divider">Add New Contact</div>
 
-			<input class="input" bind:value={newContact.name} placeholder="Name" />
-			<input class="input" bind:value={newContact.phone} placeholder="Phone" />
-			<input class="input" bind:value={newContact.email} placeholder="Email" />
+			<input class="input" value={newContact.name} placeholder="Name" />
+			<input class="input" value={newContact.phone} placeholder="Phone" />
+			<input class="input" value={newContact.email} placeholder="Email" />
 			<label class="label">
 				Primary Contact?
-				<input type="checkbox" bind:checked={newContact.isPrimary} class="checkbox checkbox-info" />
+				<input type="checkbox" checked={newContact.isPrimary} class="checkbox checkbox-info" />
 			</label>
 			<button
 				class="btn btn-success"
