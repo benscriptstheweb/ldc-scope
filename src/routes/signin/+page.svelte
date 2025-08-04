@@ -35,7 +35,8 @@
 
 <div class="center-container">
 	<div class="logo">
-		<img width="150px" src="/Main.png" alt="logo" />
+		<img width="120px" src="/Main.png" alt="logo" />
+		<p class="logo-title">Casa | Morada</p>
 	</div>
 	<div class="login-card">
 		<h1 class="welcome-sign">Welcome home</h1>
@@ -59,6 +60,20 @@
 </div>
 
 <style>
+	@font-face {
+		font-family: 'ITC';
+		src: url('/fonts/itc-garamond-std.otf') format('opentype');
+	}
+	.logo-title {
+		font-family: 'ITC';
+		font-size: 35px;
+	}
+	.logo {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
 	.center-container {
 		display: flex;
 		flex-direction: column;
