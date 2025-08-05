@@ -1,7 +1,11 @@
 import { adminDb } from '$lib/firebase/admin.js';
 import { json } from '@sveltejs/kit';
 
-export async function DELETE({ params }) {
+export async function DELETE({ locals, params }) {
+    if (!locals.user?.isAdmin) {
+        return new Response('Forbidden', { status: 403 })
+    }
+
     const { homeId, contactId } = params;
 
     try {
@@ -13,7 +17,11 @@ export async function DELETE({ params }) {
     return json({ status: 'deleted' });
 }
 
-export async function PATCH({ params, request }) {
+export async function PATCH({ locals, params, request }) {
+    if (!locals.user?.isAdmin) {
+        return new Response('Forbidden', { status: 403 })
+    }
+
     const { homeId, contactId } = params;
     const body = await request.json();
 

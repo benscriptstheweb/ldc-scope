@@ -1,7 +1,11 @@
 import { adminDb } from '$lib/firebase/admin';
 import { json } from '@sveltejs/kit';
 
-export async function POST({ params, request }) {
+export async function POST({ locals, params, request }) {
+    if (!locals.user?.isAdmin) {
+        return new Response('Forbidden', { status: 403 })
+    }
+
     const { homeId } = params;
     const body = await request.json();
 
