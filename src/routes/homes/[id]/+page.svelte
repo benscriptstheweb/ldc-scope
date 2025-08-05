@@ -9,7 +9,7 @@
 	let isCurrentlyOccupied = false;
 	const today = Intl.DateTimeFormat('en-CA').format(new Date());
 
-	home.volunteers.forEach((v) => {
+	home.volunteers.forEach((v: any) => {
 		if (today >= v.dateStart && today <= v.dateEnd) {
 			isCurrentlyOccupied = true;
 		}
@@ -71,9 +71,11 @@
 
 	<h2>Contacts</h2>
 	<div class="block contacts">
-		{#each home.contacts as contact}
-			<List {contact} />
-		{/each}
+		<ul class="list bg-base-100 rounded-box shadow-md">
+			{#each home.contacts as contact}
+				<List {contact} />
+			{/each}
+		</ul>
 	</div>
 </div>
 
