@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import type { Home } from '$lib/types/homes';
 
-	export let home: any;
+	export let home: Home;
 
 	const colArr = ['#87799F', '#FFB88C', '#5B9F82', '#FFADC7'];
 	const color = colArr[Math.floor(Math.random() * colArr.length)];
@@ -23,9 +24,6 @@
 		</figure>
 		<div class="card-body">
 			<h2 class="card-title">{home.address1} {home.address2}</h2>
-			{#if home.hasVolunteer}
-				<div class="badge badge-accent">Volunteer Assigned</div>
-			{/if}
 			<p class="half-address">{home.city}, {home.state} {home.zip}</p>
 			<div class="card-actions justify-end">
 				<svg

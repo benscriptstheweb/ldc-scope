@@ -49,6 +49,7 @@ export async function GET({ params }) {
 
     const volunteerData = volunteerSnap.docs.map((doc) => {
         return {
+            id: doc.data().id,
             name: doc.data().name,
             dateStart: Intl.DateTimeFormat('en-CA').format(doc.data().dateStart.toDate()),
             dateEnd: Intl.DateTimeFormat('en-CA').format(doc.data().dateEnd.toDate())

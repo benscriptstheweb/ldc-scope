@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Ex from '../icons/Ex.svelte';
 	import Plus from '../icons/Plus.svelte';
 	import Trash from '../icons/Trash.svelte';
 	import Edit from '../icons/Edit.svelte';
+	import type { Contact, HomeAddress } from '$lib/types/homes';
 
 	let { home } = $props();
 
-	let newContact = $state({
+	let newContact: Partial<Contact> = $state({
 		name: '',
-		phone: '',
+		phone: null,
 		email: '',
 		isPrimary: false
 	});
@@ -17,13 +17,19 @@
 	let isDrawerOpen = $state(false);
 
 	onMount(() => {
+		// BUG: To mitigate a bug where the new contact form is filled with the previously
+		// deleted contact information, make sure that the new contact field and the update
+		// home fields start out with...
+
+		// ... an empty form
 		newContact = {
 			name: '',
-			phone: '',
+			phone: null,
 			email: '',
 			isPrimary: false
 		};
 
+		// ... the current address
 		homeFields = {
 			address1: home.address1,
 			address2: home.address2,
@@ -43,7 +49,8 @@
 		}
 	}
 
-	async function addContact(homeId: string, newContact: any) {
+	// We use Partial<T> for the add operations because the database auto-assigns a uuid upon creation.
+	async function addContact(homeId: string, newContact: Partial<Contact>) {
 		const res = await fetch(`/api/homes/${homeId}/contacts`, {
 			method: 'POST',
 			body: JSON.stringify(newContact)
@@ -54,16 +61,16 @@
 		}
 	}
 
-	let updatedDetails = $state({
+	let updatedDetails: Partial<Contact> = $state({
 		name: '',
 		phone: null,
 		email: ''
 	});
 
-	async function editContact(homeId: string, contactId: string, updatedDetails: any) {
+	async function editContact(homeId: string, contactId: string, fieldsToEdit: Partial<Contact>) {
 		const res = await fetch(`/api/homes/${homeId}/contacts/${contactId}`, {
 			method: 'PATCH',
-			body: JSON.stringify(updatedDetails)
+			body: JSON.stringify(fieldsToEdit)
 		});
 
 		if (res.ok) {
@@ -79,7 +86,7 @@
 		zip: home.zip
 	});
 
-	async function updateHome(homeId: string, newHomeDetails: any) {
+	async function updateHome(homeId: string, newHomeDetails: Partial<HomeAddress>) {
 		const res = await fetch(`/api/homes/${homeId}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
@@ -90,12 +97,11 @@
 		}
 	}
 
-	let editingId: number | null = $state(null);
+	let editingId: string | null = $state(null);
 
-	function startEditing(contact) {
-		// Start with current details to populate the form.
+	function startEditing(contact: Contact) {
+		// Populate form with current details from the contact object.
 		updatedDetails = contact;
-
 		editingId = contact.id;
 	}
 </script>
@@ -108,7 +114,6 @@
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
 			<div class="header">
 				<h1>Edit Home</h1>
-				<Ex onclick={() => (isDrawerOpen = false)} />
 			</div>
 			<h2 class="edit-heading">Address</h2>
 			<div class="row-inputs">
