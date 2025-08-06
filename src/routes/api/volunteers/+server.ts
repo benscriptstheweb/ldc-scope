@@ -5,6 +5,22 @@ export async function GET() {
     const volunteersSnapShot = await adminDb.collection('volunteers').get();
 
     const volunteers = await Promise.all(volunteersSnapShot.docs.map(async (volunteerDoc) => {
+        let assignedCity: any;
+
+        const assignmentsSnap = await adminDb.collection('assignments')
+            .where('volunteerId', '==', volunteerDoc.id)
+            .get();
+
+        // Only call the homes database if there is an assignment found.
+        if (assignmentsSnap.docs.length !== 0) {
+            assignedCity = await Promise.all(assignmentsSnap.docs.map(async (assignmentDoc) => {
+                const homeById = await adminDb.collection('homes').doc(assignmentDoc.data().homeId).get()
+                return homeById.data()?.city
+            }));
+        } else {
+            assignedCity = 'None'
+        }
+
         return {
             id: volunteerDoc.id,
             name: volunteerDoc.data().name,
@@ -12,9 +28,11 @@ export async function GET() {
             phone: volunteerDoc.data().phone,
             dateStart: Intl.DateTimeFormat('en-CA').format(volunteerDoc.data().dateStart.toDate()),
             dateEnd: Intl.DateTimeFormat('en-CA').format(volunteerDoc.data().dateEnd.toDate()),
-            project: volunteerDoc.data().project
+            project: volunteerDoc.data().project,
+            assignedCity
         };
     }));
+
 
     return json(volunteers);
 }

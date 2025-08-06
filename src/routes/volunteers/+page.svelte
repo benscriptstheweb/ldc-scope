@@ -24,9 +24,10 @@
 		<thead>
 			<tr>
 				<th>Name</th>
+				<th>Project</th>
 				<th>Date Start</th>
 				<th>Date End</th>
-				<th>Project</th>
+				<th>Home Assignment</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -36,6 +37,7 @@
 					<td>{volunteer.project}</td>
 					<td>{volunteer.dateStart}</td>
 					<td>{volunteer.dateEnd}</td>
+					<td onclick={() => console.log(volunteer.assignedCity)}>{volunteer.assignedCity}</td>
 				</tr>
 			{/each}
 		</tbody>
