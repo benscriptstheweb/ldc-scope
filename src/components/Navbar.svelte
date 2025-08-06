@@ -41,7 +41,7 @@
 
 			<!-- link to volunteers page -->
 			<li>
-				<a href="/" class="button-disabled">
+				<a href="/volunteers">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -126,13 +126,6 @@
 	}
 	ul.bg-base-100 {
 		z-index: 100;
-	}
-
-	.button-disabled {
-		color: #584955; /* Darker text color */
-		cursor: not-allowed; /* Changes cursor to a "not allowed" symbol */
-		opacity: 0.7; /* Reduces opacity to visually indicate disabled state */
-		pointer-events: none; /* Prevents click events on the button */
 	}
 
 	.title {
