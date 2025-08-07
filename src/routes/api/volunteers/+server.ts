@@ -18,7 +18,7 @@ export async function GET() {
                 return homeById.data()?.city
             }));
         } else {
-            assignedCity = 'None'
+            assignedCity = null
         }
 
         return {

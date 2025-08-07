@@ -20,7 +20,6 @@
 
 <div class="overflow-x-auto">
 	<table class="table">
-		<!-- head -->
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -37,7 +36,13 @@
 					<td>{volunteer.project}</td>
 					<td>{volunteer.dateStart}</td>
 					<td>{volunteer.dateEnd}</td>
-					<td onclick={() => console.log(volunteer.assignedCity)}>{volunteer.assignedCity}</td>
+					{#if volunteer.assignedCity !== null}
+						<td>{volunteer.assignedCity}</td>
+					{:else}
+						<td>
+							<button class="btn btn-primary btn-xs">Assign</button>
+						</td>
+					{/if}
 				</tr>
 			{/each}
 		</tbody>
