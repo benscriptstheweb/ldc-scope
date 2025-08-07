@@ -1,18 +1,35 @@
 <script lang="ts">
 	import type { Volunteer } from '$lib/types/volunteer';
+	import { Timestamp } from 'firebase/firestore';
 	import Plus from '../../icons/Plus.svelte';
 
 	export let data;
 	const volunteers = data.volunteers;
 
-	// async function addVolunteer(volunteerInfo: Volunteer) {
+	const newVolunteerData = {
+		project: 'San Bruno',
+		name: 'Dylan',
+		phone: 5168906678,
+		email: 'dylanweldz@yahoo.com',
+		dateStart: new Date('2025-08-07'),
+		dateEnd: new Date('2025-08-08')
+	};
 
-	// }
+	async function addVolunteer(newVolunteer: Partial<Volunteer>) {
+		const res = await fetch(`/api/volunteers`, {
+			method: 'POST',
+			body: JSON.stringify(newVolunteer)
+		});
+
+		// if (res.ok) {
+		// 	window.location.reload();
+		// }
+	}
 </script>
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button class="btn btn-success">
+	<button onclick={() => addVolunteer(newVolunteerData)} class="btn btn-success">
 		<Plus />
 		New
 	</button>

@@ -44,9 +44,11 @@ export async function POST({ locals, request }) {
 
     const body = await request.json();
 
+    console.log('adding new volunteer...', body)
+
     // For Volunteers, we can always add their contact info later. Most important now is their name
-    // and assignment, and a reachable contact.
-    if (!body.project || !body.name || !body.email) {
+    // project assignment, and phone.
+    if (!body.project || !body.name || !body.phone) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
