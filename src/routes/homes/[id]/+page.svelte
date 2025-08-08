@@ -58,7 +58,7 @@
 
 	<div class="divider">History</div>
 	<div class="block volunteers">
-		<Assignments {home}></Assignments>
+		<Assignments volunteers={home.assignments}></Assignments>
 	</div>
 
 	<div class="divider">Details</div>
