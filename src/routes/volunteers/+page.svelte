@@ -7,15 +7,6 @@
 	let { data } = $props();
 	const volunteers = data.volunteers;
 
-	const newVolunteerData = {
-		project: 'San Bruno',
-		name: 'Janetta',
-		phone: 5168906678,
-		email: 'jlcatzson@yahoo.com',
-		dateStart: new Date('2025-08-07'),
-		dateEnd: new Date('2025-08-08')
-	};
-
 	async function addVolunteer(newVolunteer: Partial<Volunteer>) {
 		const res = await fetch('/api/volunteers', {
 			method: 'POST',
