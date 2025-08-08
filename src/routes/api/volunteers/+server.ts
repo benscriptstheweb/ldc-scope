@@ -26,8 +26,8 @@ export async function GET() {
             name: volunteerDoc.data().name,
             email: volunteerDoc.data().email,
             phone: volunteerDoc.data().phone,
-            dateStart: Intl.DateTimeFormat('en-CA').format(volunteerDoc.data().dateStart.toDate()),
-            dateEnd: Intl.DateTimeFormat('en-CA').format(volunteerDoc.data().dateEnd.toDate()),
+            dateStart: Intl.DateTimeFormat('en-CA').format(new Date(volunteerDoc.data().dateStart)),
+            dateEnd: Intl.DateTimeFormat('en-CA').format(new Date(volunteerDoc.data().dateEnd)),
             project: volunteerDoc.data().project,
             assignedCity
         };
