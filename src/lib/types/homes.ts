@@ -23,7 +23,8 @@ export type HomeAddress = {
 }
 
 export type Homes = HomeAddress & {
-    primaryContact: string
+    primaryContact: string,
+    isAssigned: boolean
 }
 
 export type Home = Homes & {

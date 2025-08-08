@@ -18,6 +18,7 @@ export async function GET() {
             city: homeDoc.data().city,
             state: homeDoc.data().state,
             zip: homeDoc.data().zip,
+            isAssigned: homeDoc.data().isAssigned,
             primaryContact
         };
     }));
