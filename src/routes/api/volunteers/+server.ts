@@ -44,8 +44,6 @@ export async function POST({ locals, request }) {
 
     const body = await request.json();
 
-    console.log('adding new volunteer...', body)
-
     // For Volunteers, we can always add their contact info later. Most important now is their name
     // project assignment, and phone.
     if (!body.project || !body.name || !body.phone) {

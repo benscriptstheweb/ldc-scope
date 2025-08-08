@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import type { Volunteer } from '$lib/types/volunteer';
 	import Info from '../../icons/Info.svelte';
 	import Plus from '../../icons/Plus.svelte';
@@ -27,13 +28,34 @@
 	}
 
 	let assignableHomes: any = $state(null);
+	let idFromVolunteerData: any = $state(null);
 
 	async function openAssignmentModal(volunteerId: string) {
 		const modalElement = document.getElementById('my_modal_1') as HTMLDialogElement;
 		modalElement?.showModal();
 
+		idFromVolunteerData = volunteerId;
+
 		const res = await fetch('api/homes/assignable');
 		assignableHomes = await res.json();
+	}
+
+	function visitHome(homeId: string) {
+		goto(`/homes/${homeId}`);
+	}
+
+	async function createAssignment(volunteerId: string, homeId: string) {
+		const res = await fetch('/api/assignments', {
+			method: 'POST',
+			body: JSON.stringify({
+				volunteerId: volunteerId,
+				homeId: homeId
+			})
+		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 </script>
 
@@ -53,8 +75,14 @@
 					<li class="list-row">
 						{home.address1}
 						<div>
-							<button class="mr-4 btn btn-outline btn-xs btn-circle btn-info"><Info /></button>
-							<button class="btn btn-xs btn-circle btn-success"><Plus /></button>
+							<button
+								onclick={() => visitHome(home.id)}
+								class="mr-4 btn btn-outline btn-xs btn-circle btn-info"><Info /></button
+							>
+							<button
+								onclick={() => createAssignment(idFromVolunteerData, home.id)}
+								class="btn btn-xs btn-circle btn-success"><Plus /></button
+							>
 						</div>
 					</li>
 				{/each}
