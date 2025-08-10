@@ -1,10 +1,9 @@
-import { adminDb } from '$lib/firebase/admin';
-import { json } from '@sveltejs/kit';
-import { supabase } from '$lib/supabase/supabaseClient';
+import { json } from "@sveltejs/kit";
+import { supabase } from "$lib/supabase/supabaseClient";
 
 export async function PATCH({ locals, params, request }) {
     if (!locals.user?.isAdmin) {
-        return new Response('Forbidden', { status: 403 })
+        return new Response('Forbidden', { status: 403 });
     }
 
     const { homeId } = params;
@@ -14,23 +13,23 @@ export async function PATCH({ locals, params, request }) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    try {
-        await adminDb
-            .collection('homes')
-            .doc(homeId)
-            .update({
-                address1: body.address1,
-                address2: body.address2,
-                city: body.city,
-                state: body.state,
-                zip: body.zip
-            });
+    const { error } = await supabase
+        .from('homes')
+        .update({
+            address1: body.address1,
+            address2: body.address2,
+            city: body.city,
+            state: body.state,
+            zip: body.zip
+        })
+        .eq('id', homeId);
 
-        return json({ success: true }, { status: 201 });
-    } catch (err) {
-        console.error(err);
-        return json({ error: 'Failed to add contact' }, { status: 500 });
+    if (error) {
+        console.error(error);
+        return json({ error: 'Failed to update home' }, { status: 500 });
     }
+
+    return json({ success: true }, { status: 200 });
 }
 
 export async function GET({ params }) {
