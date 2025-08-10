@@ -2,8 +2,14 @@
 	let { volunteers } = $props();
 
 	// JS dates start at 0=Jan
-	function parseDate(dateString: string) {
-		return new Date(dateString);
+	function formatDate(date: string) {
+		const test = new Date(date);
+
+		const year = test.getFullYear();
+		const month = test.getMonth() + 1;
+		const day = test.getDate() + 1;
+
+		return `${month}-${day}-${year}`;
 	}
 
 	function isPastDate(date: Date) {
@@ -12,8 +18,8 @@
 
 	function sortedVolunteers(vol) {
 		return vol.sort((a, b) => {
-			const dateA = parseDate(a.dateEnd);
-			const dateB = parseDate(b.dateEnd);
+			const dateA = new Date(a.dateEnd);
+			const dateB = new Date(b.dateEnd);
 			return dateB.getTime() - dateA.getTime();
 		});
 	}
@@ -23,8 +29,7 @@
 	{#each sortedVolunteers(volunteers) as { volunteerName, dateStart, dateEnd }, index}
 		<li>
 			<div class="timeline-end">
-				{parseDate(dateStart).toLocaleString('default', { month: 'short' })}
-				{parseDate(dateStart).getDate()}-{parseDate(dateEnd).getDate()}
+				{formatDate(dateEnd)}
 			</div>
 
 			{#if index !== 0}

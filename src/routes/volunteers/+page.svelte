@@ -48,6 +48,16 @@
 			window.location.reload();
 		}
 	}
+
+	function parseDate(date: string) {
+		const test = new Date(date);
+
+		const year = test.getFullYear();
+		const month = test.getMonth() + 1;
+		const day = test.getDate() + 1;
+
+		return `${month}-${day}-${year}`;
+	}
 </script>
 
 <!-- START MODAL -->
@@ -113,8 +123,8 @@
 				<tr>
 					<td>{volunteer.name}</td>
 					<td>{volunteer.project}</td>
-					<td>{volunteer.dateStart}</td>
-					<td>{volunteer.dateEnd}</td>
+					<td>{parseDate(volunteer.dateStart)}</td>
+					<td>{parseDate(volunteer.dateEnd)}</td>
 					{#if volunteer.assignedCity !== null}
 						<td>{volunteer.assignedCity}</td>
 					{:else}
