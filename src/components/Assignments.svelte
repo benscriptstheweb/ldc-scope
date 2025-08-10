@@ -1,33 +1,35 @@
 <script lang="ts">
-	let { home } = $props();
-
-	const today = new Date();
+	let { volunteers } = $props();
 
 	// JS dates start at 0=Jan
-	function parseDate(dateString: string) {
-		const [year, month, day] = dateString.split('-').map(Number);
-		return new Date(year, month - 1, day); // month is 0-based in JS
+	function formatDate(date: string) {
+		const test = new Date(date);
+
+		const year = test.getFullYear();
+		const month = test.getMonth() + 1;
+		const day = test.getDate() + 1;
+
+		return `${month}-${day}-${year}`;
 	}
 
-	function isPastDate(date: string) {
-		return today >= parseDate(date);
+	function isPastDate(date: Date) {
+		return new Date() >= new Date(date);
 	}
 
-	function sortedVolunteers(volunteers) {
-		return volunteers.sort((a, b) => {
-			const dateA = parseDate(a.dateEnd);
-			const dateB = parseDate(b.dateEnd);
+	function sortedVolunteers(vol) {
+		return vol.sort((a, b) => {
+			const dateA = new Date(a.dateEnd);
+			const dateB = new Date(b.dateEnd);
 			return dateB.getTime() - dateA.getTime();
 		});
 	}
 </script>
 
 <ul class="timeline timeline-vertical">
-	{#each sortedVolunteers(home.volunteers) as { name, dateStart, dateEnd }, index}
+	{#each sortedVolunteers(volunteers) as { volunteerName, dateStart, dateEnd }, index}
 		<li>
 			<div class="timeline-end">
-				{parseDate(dateStart).toLocaleString('default', { month: 'short' })}
-				{parseDate(dateStart).getDate()}-{parseDate(dateEnd).getDate()}
+				{formatDate(dateEnd)}
 			</div>
 
 			{#if index !== 0}
@@ -70,7 +72,7 @@
 				</div>
 			{/if}
 
-			<div class="timeline-start timeline-box">{name}</div>
+			<div class="timeline-start timeline-box">{volunteerName}</div>
 			{#if isPastDate(dateEnd)}
 				<hr class="bg-success" />
 			{:else}

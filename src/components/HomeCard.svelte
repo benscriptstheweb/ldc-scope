@@ -41,6 +41,9 @@
 					/>
 				</svg>
 				<p style="font-weight: 600">Host: <span>{home.primaryContact}</span></p>
+				{#if !home.isAssigned}
+					<div class="badge badge-success">Available</div>
+				{/if}
 			</div>
 		</div>
 	</button>

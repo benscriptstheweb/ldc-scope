@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Assignments from '../../../components/Assignments.svelte';
-	import Drawer from '../../../components/Drawer.svelte';
+	import HomeDrawer from '../../../components/HomeDrawer.svelte';
 	import List from '../../../components/List.svelte';
 
 	export let data;
@@ -17,7 +17,7 @@
 </script>
 
 {#if data.user.isAdmin}
-	<Drawer {home} />
+	<HomeDrawer {home} />
 {/if}
 
 <div class="top-container">
@@ -58,7 +58,7 @@
 
 	<div class="divider">History</div>
 	<div class="block volunteers">
-		<Assignments {home}></Assignments>
+		<Assignments volunteers={home.assignments}></Assignments>
 	</div>
 
 	<div class="divider">Details</div>
