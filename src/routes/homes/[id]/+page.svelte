@@ -9,7 +9,7 @@
 	let isCurrentlyOccupied = false;
 	const today = Intl.DateTimeFormat('en-CA').format(new Date());
 
-	home.volunteers.forEach((v: any) => {
+	home.assignments.forEach((v: any) => {
 		if (today >= v.dateStart && today <= v.dateEnd) {
 			isCurrentlyOccupied = true;
 		}
@@ -64,13 +64,13 @@
 	<div class="divider">Details</div>
 	<h2>Amenities</h2>
 	<div class="block amenities">
-		{#each home.amenities as amenity}
-			{#if amenity}
+		{#if !home.amenities}
+			<p class="amenities-none-text">No amenities listed for this home 🤔</p>
+		{:else}
+			{#each home.amenities as amenity}
 				<div class="badge badge-soft badge-info">{amenity}</div>
-			{:else}
-				<p class="amenities-none-text">No amenities listed for this home 🤔</p>
-			{/if}
-		{/each}
+			{/each}
+		{/if}
 	</div>
 
 	<h2>Contacts</h2>
