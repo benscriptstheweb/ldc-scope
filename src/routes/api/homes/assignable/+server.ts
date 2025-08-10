@@ -1,22 +1,16 @@
-import { adminDb } from "$lib/firebase/admin";
 import { json } from "@sveltejs/kit";
+import { supabase } from "$lib/supabase/supabaseClient";
 
 export async function GET() {
-    const assignableHomesSnap = await adminDb
-        .collection('homes')
-        .where('isAssigned', '==', false)
-        .get();
+    const { data, error } = await supabase
+        .from('homes')
+        .select('id, address1, address2, city, state, zip')
+        .eq('isAssigned', false);
 
-    const assignableHomes = await Promise.all(assignableHomesSnap.docs.map(async (doc) => {
-        return {
-            id: doc.id,
-            address1: doc.data().address1,
-            address2: doc.data().address2,
-            city: doc.data().city,
-            state: doc.data().state,
-            zip: doc.data().zip,
-        };
-    }));
+    if (error) {
+        console.error('Error fetching assignable homes:', error);
+        return json({ error: error.message }, { status: 500 });
+    }
 
-    return json(assignableHomes);
+    return json(data);
 }
