@@ -101,10 +101,10 @@
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={() => addVolunteer(newVolunteerData)} class="btn btn-success">
+	<!-- <button onclick={() => addVolunteer(newVolunteerData)} class="btn btn-success">
 		<Plus />
 		New
-	</button>
+	</button> -->
 </div>
 
 <div class="overflow-x-auto">
