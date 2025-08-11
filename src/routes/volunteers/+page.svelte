@@ -123,18 +123,18 @@
 				<tr>
 					<td>{volunteer.name}</td>
 					<td>{volunteer.project}</td>
-					<td>{parseDate(volunteer.dateStart)}</td>
-					<td>{parseDate(volunteer.dateEnd)}</td>
-					<!-- {#if volunteer.assignedCity !== null}
+					<td>{parseDate(volunteer.date_start)}</td>
+					<td>{parseDate(volunteer.date_end)}</td>
+					{#if volunteer.assignedCity !== null}
 						<td>{volunteer.assignedCity}</td>
-					{:else} -->
-					<td>
-						<button
-							onclick={() => openAssignmentModal(volunteer.id)}
-							class="btn btn-outline btn-primary btn-xs">Assign</button
-						>
-					</td>
-					<!-- {/if} -->
+					{:else}
+						<td>
+							<button
+								onclick={() => openAssignmentModal(volunteer.id)}
+								class="btn btn-outline btn-primary btn-xs">Assign</button
+							>
+						</td>
+					{/if}
 				</tr>
 			{/each}
 		</tbody>
