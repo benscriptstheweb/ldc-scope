@@ -132,56 +132,56 @@
 			<h2 class="edit-heading">Contacts</h2>
 
 			<div class="contact-edit-list">
-				{#each home.contacts as contact (contact.id)}
+				{#each home.contacts as contact}
 					<div class="list-item">
-						{#if editingId === contact.id}
-							<div>
-								<input
-									type="text"
-									placeholder="Name"
-									class="input"
-									bind:value={updatedDetails.name}
-								/>
-								<input
-									type="text"
-									placeholder="Phone"
-									class="input"
-									bind:value={updatedDetails.phone}
-								/>
-								<input
-									type="text"
-									placeholder="Email"
-									class="input"
-									bind:value={updatedDetails.email}
-								/>
+						{contact.name}
 
-								<div class="button-container">
-									<button
-										class="btn btn-error flex-2"
-										onclick={() => deleteContact(home.id, contact.id)}
-										aria-label="delete"
-									>
-										<Trash />
-									</button>
-									<button
-										class="btn btn-primary flex-3"
-										onclick={() => editContact(home.id, contact.id, updatedDetails)}
-									>
-										Update
-									</button>
-									<button class="btn cancel flex-4" onclick={() => (editingId = null)}>
-										Cancel
-									</button>
-								</div>
-							</div>
-						{:else}
-							{contact.name}
-
-							<button class="btn" onclick={() => startEditing(contact)}>
-								<Edit />
-							</button>
-						{/if}
+						<button class="btn" onclick={() => startEditing(contact)}>
+							<Edit />
+						</button>
 					</div>
+
+					{#if editingId === contact.id}
+						<div>
+							<input
+								type="text"
+								placeholder="Name"
+								class="input"
+								bind:value={updatedDetails.name}
+							/>
+							<input
+								type="text"
+								placeholder="Phone"
+								class="input"
+								bind:value={updatedDetails.phone}
+							/>
+							<input
+								type="text"
+								placeholder="Email"
+								class="input"
+								bind:value={updatedDetails.email}
+							/>
+
+							<div class="button-container">
+								<button
+									class="btn btn-error flex-2"
+									onclick={() => deleteContact(home.id, contact.id)}
+									aria-label="delete"
+								>
+									<Trash />
+								</button>
+								<button
+									class="btn btn-primary flex-3"
+									onclick={() => editContact(home.id, contact.id, updatedDetails)}
+								>
+									Update
+								</button>
+								<button class="btn cancel flex-4" onclick={() => (editingId = null)}>
+									Cancel
+								</button>
+							</div>
+						</div>
+					{/if}
 				{/each}
 			</div>
 

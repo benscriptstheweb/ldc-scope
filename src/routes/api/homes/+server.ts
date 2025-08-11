@@ -1,27 +1,45 @@
-import { adminDb } from "$lib/firebase/admin";
-import { json } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
+import { supabase } from '$lib/supabase/supabaseClient';
 
 export async function GET() {
-    const homesSnapshot = await adminDb.collection('homes').get();
+    const { data, error } = await supabase
+        .from('homes')
+        .select(`
+      id,
+      address1,
+      address2,
+      city,
+      state,
+      zip,
+      isAssigned,
+      contacts (
+        isPrimary,
+        name
+      )
+    `);
 
-    const homes = await Promise.all(homesSnapshot.docs.map(async (homeDoc) => {
-        const contactsFromHome = homeDoc.ref.collection('contacts')
-        const primaryContactsList = contactsFromHome.where('isPrimary', '==', true);
-        const primaryContactsDocs = await primaryContactsList.get();
+    if (error) {
+        console.error('Error fetching homes:', error);
+        return json({ error: error.message }, { status: 500 });
+    }
 
-        const primaryContact = primaryContactsDocs.docs.map(contactDoc => contactDoc.data().name);
+    // Filter only primary contacts for each home
+    const homes = data.map(home => {
+        const primaryContacts = home.contacts
+            .filter(contact => contact.isPrimary)
+            .map(contact => contact.name);
 
         return {
-            id: homeDoc.id,
-            address1: homeDoc.data().address1,
-            address2: homeDoc.data().address2,
-            city: homeDoc.data().city,
-            state: homeDoc.data().state,
-            zip: homeDoc.data().zip,
-            isAssigned: homeDoc.data().isAssigned,
-            primaryContact
+            id: home.id,
+            address1: home.address1,
+            address2: home.address2,
+            city: home.city,
+            state: home.state,
+            zip: home.zip,
+            isAssigned: home.isAssigned,
+            primaryContacts
         };
-    }));
+    });
 
     return json(homes);
 }

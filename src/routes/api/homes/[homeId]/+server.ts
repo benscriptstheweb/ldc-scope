@@ -1,9 +1,9 @@
-import { adminDb } from '$lib/firebase/admin';
-import { json } from '@sveltejs/kit';
+import { json } from "@sveltejs/kit";
+import { supabase } from "$lib/supabase/supabaseClient";
 
 export async function PATCH({ locals, params, request }) {
     if (!locals.user?.isAdmin) {
-        return new Response('Forbidden', { status: 403 })
+        return new Response('Forbidden', { status: 403 });
     }
 
     const { homeId } = params;
@@ -13,60 +13,69 @@ export async function PATCH({ locals, params, request }) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    try {
-        await adminDb
-            .collection('homes')
-            .doc(homeId)
-            .update({
-                address1: body.address1,
-                address2: body.address2,
-                city: body.city,
-                state: body.state,
-                zip: body.zip
-            });
+    const { error } = await supabase
+        .from('homes')
+        .update({
+            address1: body.address1,
+            address2: body.address2,
+            city: body.city,
+            state: body.state,
+            zip: body.zip
+        })
+        .eq('id', homeId);
 
-        return json({ success: true }, { status: 201 });
-    } catch (err) {
-        console.error(err);
-        return json({ error: 'Failed to add contact' }, { status: 500 });
+    if (error) {
+        console.error(error);
+        return json({ error: 'Failed to update home' }, { status: 500 });
     }
+
+    return json({ success: true }, { status: 200 });
 }
 
 export async function GET({ params }) {
     const { homeId } = params;
-    const homeSnap = await adminDb
-        .collection('homes')
-        .doc(homeId)
-        .get();
-    const homeData = homeSnap.data();
+    const { data: home, error } = await supabase
+        .from('homes')
+        .select(`
+      id,
+      address1,
+      address2,
+      city,
+      state,
+      zip,
+      amenities,
+      contacts (
+        id,
+        name
+      ),
+      assignments (
+        volunteers (
+          id,
+          name,
+          date_start,
+          date_end
+        )
+      )
+    `)
+        .eq('id', homeId)
+        .single();
 
-    // attached volunteers :: will deprecate 
-    const volunteerSnap = await adminDb
-        .collection('homes')
-        .doc(homeId)
-        .collection('volunteers')
-        .get();
-
-    const volunteerData = volunteerSnap.docs.map((doc) => {
-        return {
-            id: doc.data().id,
-            name: doc.data().name,
-            dateStart: Intl.DateTimeFormat('en-CA').format(doc.data().dateStart.toDate()),
-            dateEnd: Intl.DateTimeFormat('en-CA').format(doc.data().dateEnd.toDate())
-        }
-    });
-    // attached volunteers :: will deprecate
-
-    const home = {
-        id: homeId,
-        address1: homeData?.address1,
-        address2: homeData?.address2,
-        city: homeData?.city,
-        state: homeData?.state,
-        zip: homeData?.zip,
-        amenities: homeData?.amenities,
-        volunteers: volunteerData,
+    if (error) {
+        console.error('Error fetching home details:', error);
+        return json({ error: error.message }, { status: 500 });
     }
 
-    return json(home);
+    const result = {
+        id: home.id,
+        address1: home.address1,
+        address2: home.address2,
+        city: home.city,
+        state: home.state,
+        zip: home.zip,
+        amenities: home.amenities,
+        contacts: home.contacts,
+        assignments: home.assignments.map(a => a.volunteers)
+    };
+
+    return json(result);
 }

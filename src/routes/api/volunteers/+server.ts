@@ -1,63 +1,62 @@
-import { adminDb } from "$lib/firebase/admin";
-import { json } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
+import { supabase } from '$lib/supabase/supabaseClient';
 
 export async function GET() {
-    const volunteersSnapShot = await adminDb.collection('volunteers').get();
+    const { data, error } = await supabase
+        .from('volunteers')
+        .select(`
+            id,
+            name,
+            email,
+            phone,
+            date_start,
+            date_end,
+            project,
+            assignments (
+            home:homes (
+                city
+            )
+            )
+        `);
 
-    const volunteers = await Promise.all(volunteersSnapShot.docs.map(async (volunteerDoc) => {
-        let assignedCity: any;
+    if (error) {
+        console.error('Error fetching volunteers with assignments:', error);
+    }
 
-        const assignmentsSnap = await adminDb.collection('assignments')
-            .where('volunteerId', '==', volunteerDoc.id)
-            .get();
-
-        // Only call the homes database if there is an assignment found.
-        if (assignmentsSnap.docs.length !== 0) {
-            assignedCity = await Promise.all(assignmentsSnap.docs.map(async (assignmentDoc) => {
-                const homeById = await adminDb.collection('homes').doc(assignmentDoc.data().homeId).get()
-                return homeById.data()?.city
-            }));
-        } else {
-            assignedCity = null
-        }
-
+    const volunteers = data?.map((v) => {
         return {
-            id: volunteerDoc.id,
-            name: volunteerDoc.data().name,
-            email: volunteerDoc.data().email,
-            phone: volunteerDoc.data().phone,
-            dateStart: volunteerDoc.data().dateStart,
-            dateEnd: volunteerDoc.data().dateEnd,
-            project: volunteerDoc.data().project,
-            assignedCity
-        };
-    }));
+            ...v,
 
+            // ts will complain that a.home.city is not valid because it thinks that a.home is an array.
+            // in the map below, check for 'city' in a.home then map a.home.city, removing the runtime
+            // complaint.
+            assignedCity: v.assignments.length > 0
+                ? v.assignments
+                    .map(a => ('city' in a.home ? a.home.city : null))
+                : null
+        }
+    });
 
     return json(volunteers);
 }
 
 export async function POST({ locals, request }) {
     if (!locals.user?.isAdmin) {
-        return new Response('Forbidden', { status: 403 })
+        return new Response('Forbidden', { status: 403 });
     }
 
     const body = await request.json();
 
-    // For Volunteers, we can always add their contact info later. Most important now is their name
-    // project assignment, and phone.
     if (!body.project || !body.name || !body.phone) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    try {
-        await adminDb
-            .collection('volunteers')
-            .add(body);
+    const { error } = await supabase.from('volunteers').insert([body]);
 
-        return json({ success: true }, { status: 201 });
-    } catch (err) {
-        console.error(err);
-        return json({ error: 'Failed to add contact' }, { status: 500 });
+    if (error) {
+        console.error('Failed to add volunteer:', error);
+        return json({ error: 'Failed to add volunteer' }, { status: 500 });
     }
+
+    return json({ success: true }, { status: 201 });
 }

@@ -123,8 +123,8 @@
 				<tr>
 					<td>{volunteer.name}</td>
 					<td>{volunteer.project}</td>
-					<td>{parseDate(volunteer.dateStart)}</td>
-					<td>{parseDate(volunteer.dateEnd)}</td>
+					<td>{parseDate(volunteer.date_start)}</td>
+					<td>{parseDate(volunteer.date_end)}</td>
 					{#if volunteer.assignedCity !== null}
 						<td>{volunteer.assignedCity}</td>
 					{:else}

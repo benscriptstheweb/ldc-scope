@@ -1,46 +1,35 @@
 <script lang="ts">
 	let { volunteers } = $props();
 
-	// JS dates start at 0=Jan
-	function formatDate(date: string) {
-		const test = new Date(date);
-
-		const year = test.getFullYear();
-		const month = test.getMonth() + 1;
-		const day = test.getDate() + 1;
-
-		return `${month}-${day}-${year}`;
-	}
-
 	function isPastDate(date: Date) {
 		return new Date() >= new Date(date);
 	}
 
-	function sortedVolunteers(vol) {
-		return vol.sort((a, b) => {
-			const dateA = new Date(a.dateEnd);
-			const dateB = new Date(b.dateEnd);
+	function sortedVolunteers(volunteer: any) {
+		return volunteer.sort((a: any, b: any) => {
+			const dateA = new Date(a.date_end);
+			const dateB = new Date(b.date_end);
 			return dateB.getTime() - dateA.getTime();
 		});
 	}
 </script>
 
 <ul class="timeline timeline-vertical">
-	{#each sortedVolunteers(volunteers) as { volunteerName, dateStart, dateEnd }, index}
+	{#each sortedVolunteers(volunteers) as { name, date_end }, index}
 		<li>
 			<div class="timeline-end">
-				{formatDate(dateEnd)}
+				{date_end}
 			</div>
 
 			{#if index !== 0}
-				{#if isPastDate(dateEnd)}
+				{#if isPastDate(date_end)}
 					<hr class="bg-success" />
 				{:else}
 					<hr class="bg-success-content" />
 				{/if}
 			{/if}
 
-			{#if isPastDate(dateEnd)}
+			{#if isPastDate(date_end)}
 				<div class="timeline-middle">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -72,8 +61,8 @@
 				</div>
 			{/if}
 
-			<div class="timeline-start timeline-box">{volunteerName}</div>
-			{#if isPastDate(dateEnd)}
+			<div class="timeline-start timeline-box">{name}</div>
+			{#if isPastDate(date_end)}
 				<hr class="bg-success" />
 			{:else}
 				<hr class="bg-success-content" />

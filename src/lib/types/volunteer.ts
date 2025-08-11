@@ -1,5 +1,3 @@
-import type { Timestamp } from "firebase-admin/firestore";
-
 export type Volunteer = {
     id: string,
     name: string,
