@@ -45,6 +45,7 @@ export async function GET({ params }) {
       zip,
       amenities,
       contacts (
+        id,
         name
       ),
       assignments (
