@@ -13,7 +13,7 @@ export async function GET() {
             date_end,
             project,
             assignments (
-            homes (
+            home:homes (
                 city
             )
             )
@@ -23,15 +23,20 @@ export async function GET() {
         console.error('Error fetching volunteers with assignments:', error);
     }
 
-    const volunteers = data?.map((volunteer) => {
+    const volunteers = data?.map((v) => {
         return {
-            ...volunteer,
-            // TODO: fix this.
-            assignedCity: volunteer.assignments.flatMap((assignment) => assignment.homes.city)
+            ...v,
+
+            // ts will complain that a.home.city is not valid because it thinks that a.home is an array.
+            // in the map below, check for 'city' in a.home then map a.home.city, removing the runtime
+            // complaint.
+            assignedCity: v.assignments.length > 0
+                ? v.assignments
+                    .map(a => ('city' in a.home ? a.home.city : null))
+                : null
         }
     });
 
-    console.log(volunteers);
     return json(volunteers);
 }
 
