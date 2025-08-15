@@ -5,17 +5,15 @@ export async function GET() {
     const { data, error } = await supabase
         .from('homes')
         .select(`
-      id,
-      address1,
-      address2,
-      city,
-      state,
-      zip,
-      isAssigned,
-      contacts (
-        isPrimary,
-        name
-      )
+            id,
+            address1,
+            address2,
+            city,
+            state,
+            zip,
+            isAssigned,
+            contacts ( isPrimary, name ),
+            congregation
     `);
 
     if (error) {
@@ -37,7 +35,8 @@ export async function GET() {
             state: home.state,
             zip: home.zip,
             isAssigned: home.isAssigned,
-            primaryContacts
+            primaryContacts,
+            congregation: home.congregation
         };
     });
 

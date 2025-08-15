@@ -37,26 +37,24 @@ export async function GET({ params }) {
     const { data: home, error } = await supabase
         .from('homes')
         .select(`
-      id,
-      address1,
-      address2,
-      city,
-      state,
-      zip,
-      amenities,
-      contacts (
-        id,
-        name
-      ),
-      assignments (
-        volunteers (
-          id,
-          name,
-          date_start,
-          date_end
-        )
-      )
-    `)
+            id,
+            address1,
+            address2,
+            city,
+            state,
+            zip,
+            amenities,
+            contacts ( id, name ),
+            assignments (
+                volunteers (
+                    id,
+                    name,
+                    date_start,
+                    date_end
+                )
+            ),
+            congregation
+        `)
         .eq('id', homeId)
         .single();
 
@@ -74,7 +72,8 @@ export async function GET({ params }) {
         zip: home.zip,
         amenities: home.amenities,
         contacts: home.contacts,
-        assignments: home.assignments.map(a => a.volunteers)
+        assignments: home.assignments.map(a => a.volunteers),
+        congregation: home.congregation
     };
 
     return json(result);

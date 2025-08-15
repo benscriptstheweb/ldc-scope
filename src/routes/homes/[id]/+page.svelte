@@ -81,6 +81,11 @@
 			{/each}
 		</ul>
 	</div>
+
+	<h2>Congregation</h2>
+	<div class="congregation">
+		{home.congregation}
+	</div>
 </div>
 
 <style>
@@ -124,6 +129,10 @@
 	}
 	.amenities-none-text {
 		color: gray;
+	}
+	.congregation {
+		padding: 0 30px;
+		margin-bottom: 30px;
 	}
 
 	.badge {
