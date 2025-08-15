@@ -5,7 +5,10 @@ type DBAssignment = {
     home_id: {
         address1: string;
     } | null;
-    project: number;
+    project: {
+        friendly_name: string,
+        project_region: number
+    };
 };
 
 type DBVolunteer = {
@@ -30,7 +33,7 @@ export async function GET() {
             date_end,
             assignments (
                 home_id ( address1 ),
-                project
+                project ( friendly_name, project_region )
             )
         `)
         .overrideTypes<DBVolunteer[]>();
@@ -46,7 +49,8 @@ export async function GET() {
         return {
             ...v,
             assignedHome: singleAssignment.home_id?.address1 ?? null,
-            assignedProject: singleAssignment.project ?? null
+            assignedProject: singleAssignment.project?.friendly_name,
+            region: singleAssignment.project?.project_region
         }
     });
     return json(volunteers);

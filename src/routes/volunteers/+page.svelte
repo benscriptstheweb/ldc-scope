@@ -54,7 +54,7 @@
 			<tr>
 				<th>Name</th>
 				<th></th>
-				<th>Project</th>
+				<th>Project - Region</th>
 				<th></th>
 				<th>Stay</th>
 			</tr>
@@ -65,9 +65,12 @@
 				<tr>
 					<td class="name">{volunteer.name}</td>
 					<td class="spacer"><Arrow /></td>
-					<td class="project">
+					<td class="project-region">
 						<div class="badge badge-soft badge-accent">
 							{volunteer.assignedProject}
+						</div>
+						<div class="badge badge-soft badge-secondary">
+							{volunteer.region}
 						</div>
 					</td>
 					<td class="spacer"> <Arrow /></td>
