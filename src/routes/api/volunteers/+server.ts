@@ -1,6 +1,23 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
 
+type Assignment = {
+    homes: {
+        address1: string;
+    } | null;
+    project: number | null;
+};
+
+type Volunteer = {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    date_start: string | null;
+    date_end: string | null;
+    assignments: Assignment[];
+};
+
 export async function GET() {
     const { data, error } = await supabase
         .from('volunteers')
@@ -11,13 +28,12 @@ export async function GET() {
             phone,
             date_start,
             date_end,
-            project,
             assignments (
-            home:homes (
-                city
+                homes ( address1 ),
+                project
             )
-            )
-        `);
+        `)
+        .overrideTypes<Volunteer[]>();
 
     if (error) {
         console.error('Error fetching volunteers with assignments:', error);
@@ -30,10 +46,11 @@ export async function GET() {
             // ts will complain that a.home.city is not valid because it thinks that a.home is an array.
             // in the map below, check for 'city' in a.home then map a.home.city, removing the runtime
             // complaint.
-            assignedCity: v.assignments.length > 0
+            assignedHome: v.assignments.length > 0
                 ? v.assignments
-                    .map(a => ('city' in a.home ? a.home.city : null))
-                : null
+                    .map(a => (a.homes?.address1 ?? null))
+                : null,
+            assignedProject: v.assignments.map(a => a.project)
         }
     });
 
