@@ -5,7 +5,19 @@
 	import { onMount } from 'svelte';
 	import Navbar from '../components/Navbar.svelte';
 	import { page } from '$app/state';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import Loading from '../components/Loading.svelte';
+
+	// this sets a loading spinner to run when navigating between pages. that way we can
+	// remove the impression that the app is hanging or frozen.
 	export let data;
+	let loading = false;
+	beforeNavigate(() => {
+		loading = true;
+	});
+	afterNavigate(() => {
+		loading = false;
+	});
 
 	// unlike the redirect in the +layout.server.ts or the user check in hooks.server.ts files
 	// this will move a person to signin if anywhere in the already preloaded pages (client)
@@ -23,9 +35,13 @@
 	<Navbar userData={data.user} />
 {/if}
 
-<div class="body">
-	<slot />
-</div>
+{#if loading}
+	<Loading />
+{:else}
+	<div class="body">
+		<slot />
+	</div>
+{/if}
 
 <style>
 	:global(.heading) {
