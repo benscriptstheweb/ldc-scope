@@ -42,7 +42,9 @@
 				</svg>
 				<p style="font-weight: 600">Host: <span>{home.primaryContacts}</span></p>
 				{#if !home.isAssigned}
-					<div class="badge badge-success">Available</div>
+					<div class="custom-badge badge badge-success">
+						<strong>A</strong>
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -50,6 +52,10 @@
 </div>
 
 <style>
+	.custom-badge {
+		border-radius: 25px;
+		width: 20px;
+	}
 	.card-boundary {
 		padding: 10px;
 		width: 310px;
@@ -65,5 +71,8 @@
 
 	.half-address {
 		font-style: italic;
+	}
+	.card-title {
+		font-weight: 800;
 	}
 </style>
