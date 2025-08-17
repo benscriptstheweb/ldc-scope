@@ -3,7 +3,7 @@
 	import Plus from '../icons/Plus.svelte';
 	import Info from '../icons/Info.svelte';
 
-	let { assignableHomes, idFromVolunteerData } = $props();
+	let { assignableHomes, idFromVolunteerData, id } = $props();
 
 	function visitHome(homeId: string) {
 		goto(`/homes/${homeId}`);
@@ -25,7 +25,7 @@
 </script>
 
 <!-- START MODAL -->
-<dialog id="my_modal_1" class="modal">
+<dialog {id} class="modal">
 	<div class="modal-box">
 		{#if assignableHomes === null}
 			<div class="flex w-52 flex-col gap-4">
