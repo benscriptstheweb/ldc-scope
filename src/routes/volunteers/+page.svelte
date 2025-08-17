@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Volunteer } from '$lib/types/volunteer';
+	import { tick } from 'svelte';
 	import HomeAssignmentModal from '../../components/HomeAssignmentModal.svelte';
+	import VolunteerDetailModal from '../../components/VolunteerDetailModal.svelte';
 	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
 
@@ -20,25 +22,42 @@
 
 	let assignableHomes: any = $state(null);
 	let idFromVolunteerData: any = $state(null);
+	let isAssigningHome = $state(false);
 
-	async function openAssignmentModal(volunteerId: string) {
-		const modalElement = document.getElementById('my_modal_1') as HTMLDialogElement;
-		modalElement?.showModal();
-
+	async function openAssignmentModal(volunteerId: string, event: MouseEvent) {
+		isAssigningHome = true;
 		idFromVolunteerData = volunteerId;
+
+		event.stopPropagation();
+
+		await tick();
+		const modalElement = document.getElementById('home-assigner') as HTMLDialogElement;
+		modalElement?.showModal();
 
 		const res = await fetch('api/homes/assignable');
 		assignableHomes = await res.json();
 	}
 
-	let editingId: string | null = $state(null);
+	let volunteerDetail: any = $state(null);
+	let isEditingVolunteer = $state(false);
 
-	function startEditing(volunteerId: string) {
-		editingId = volunteerId;
+	async function openVolunteerDetailModal(volunteer: any) {
+		isEditingVolunteer = true;
+		volunteerDetail = volunteer;
+
+		await tick();
+		const modalElement = document.getElementById('volunteer-detail') as HTMLDialogElement;
+		modalElement?.showModal();
 	}
 </script>
 
-<HomeAssignmentModal {assignableHomes} {idFromVolunteerData} />
+{#if isAssigningHome}
+	<HomeAssignmentModal id="home-assigner" {assignableHomes} {idFromVolunteerData} />
+{/if}
+
+{#if isEditingVolunteer}
+	<VolunteerDetailModal id="volunteer-detail" {volunteerDetail} />
+{/if}
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
@@ -62,7 +81,7 @@
 
 		<tbody>
 			{#each volunteers as volunteer}
-				<tr>
+				<tr onclick={() => openVolunteerDetailModal(volunteer)}>
 					<td class="name">{volunteer.name}</td>
 					<td class="spacer"><Arrow /></td>
 					<td class="project-region">
@@ -79,7 +98,7 @@
 					{:else}
 						<td class="stay">
 							<button
-								onclick={() => openAssignmentModal(volunteer.id)}
+								onclick={(event) => openAssignmentModal(volunteer.id, event)}
 								class="btn btn-outline btn-primary btn-xs">Assign</button
 							>
 						</td>
