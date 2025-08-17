@@ -2,23 +2,23 @@
 	import type { Volunteer } from '$lib/types/volunteer';
 	import { tick } from 'svelte';
 	import HomeAssignmentModal from '../../components/HomeAssignmentModal.svelte';
-	import VolunteerDetailModal from '../../components/VolunteerDetailModal.svelte';
+	import VolunteerDetailDrawer from '../../components/VolunteerDetailDrawer.svelte';
 	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
 
-	// async function addVolunteer(newVolunteer: Partial<Volunteer>) {
-	// 	const res = await fetch('/api/volunteers', {
-	// 		method: 'POST',
-	// 		body: JSON.stringify(newVolunteer)
-	// 	});
+	async function addVolunteer(newVolunteer: Partial<Volunteer>) {
+		const res = await fetch('/api/volunteers', {
+			method: 'POST',
+			body: JSON.stringify(newVolunteer)
+		});
 
-	// 	if (res.ok) {
-	// 		window.location.reload();
-	// 	}
-	// }
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
 
 	let assignableHomes: any = $state(null);
 	let idFromVolunteerData: any = $state(null);
@@ -56,7 +56,7 @@
 {/if}
 
 {#if isEditingVolunteer}
-	<VolunteerDetailModal id="volunteer-detail" {volunteerDetail} />
+	<VolunteerDetailDrawer {volunteerDetail} />
 {/if}
 
 <div class="add-btn-container">
@@ -82,7 +82,11 @@
 		<tbody>
 			{#each volunteers as volunteer}
 				<tr onclick={() => openVolunteerDetailModal(volunteer)}>
-					<td class="name">{volunteer.name}</td>
+					<td class="name">
+						<label for="my-drawer" class="btn drawer-button">
+							{volunteer.name}
+						</label>
+					</td>
 					<td class="spacer"><Arrow /></td>
 					<td class="project-region">
 						<div class="badge badge-soft badge-accent">
