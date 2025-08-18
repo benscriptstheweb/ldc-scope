@@ -16,6 +16,11 @@
 			window.location.reload();
 		}
 	}
+
+	async function getProjects() {
+		const res = await fetch('api/projects');
+		return res.json();
+	}
 </script>
 
 <dialog {id} class="modal">
@@ -23,20 +28,22 @@
 		<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
 			<legend class="fieldset-legend">Add new volunteer</legend>
 			<input bind:value={volunteerName} type="text" class="input" placeholder="Name" />
-			<input bind:value={volunteerPhone} type="tel" class="input" placeholder="Phone" />
+			<input bind:value={volunteerPhone} type="number" class="input" placeholder="Phone" />
 			<input bind:value={volunteerEmail} type="email" class="input" placeholder="Email" />
 
-			<!-- DB projects -->
 			<select bind:value={volunteerProject} class="select">
 				<option disabled selected>Select project</option>
-				<option>Crimson</option>
-				<option>Amber</option>
-				<option>Velvet</option>
+				{#await getProjects() then projects}
+					{#each projects as project}
+						<option value={project.id}>{project.friendly_name}</option>
+					{/each}
+				{/await}
 			</select>
 
 			<div class="join">
 				<button
-					onclick={() => addVolunteer({ volunteerName, volunteerEmail, volunteerPhone })}
+					onclick={() =>
+						addVolunteer({ volunteerName, volunteerEmail, volunteerPhone, volunteerProject })}
 					class="btn btn-primary">Add</button
 				>
 			</div>
@@ -58,5 +65,11 @@
 	.fieldset {
 		width: 95%;
 		margin: 0 auto;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
 	}
 </style>
