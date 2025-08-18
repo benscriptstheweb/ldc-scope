@@ -13,7 +13,7 @@
 			<h2 class="heading">{volunteerDetail.name}</h2>
 
 			<div class="divider">Project</div>
-			<p class="subheading">Assignment: {volunteerDetail.assignedProject}</p>
+			<p class="subheading">Assignment: {volunteerDetail.assignedProject.friendly_name}</p>
 			<p class="subheading">Date start: {volunteerDetail.date_start}</p>
 			<p class="subheading">Date end: {volunteerDetail.date_end}</p>
 			<p class="subheading">Assigned home: {volunteerDetail.assignedHome}</p>

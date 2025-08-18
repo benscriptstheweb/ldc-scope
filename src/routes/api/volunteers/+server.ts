@@ -5,10 +5,6 @@ type DBAssignment = {
     home_id: {
         address1: string;
     } | null;
-    project: {
-        friendly_name: string,
-        project_region: number
-    };
 };
 
 type DBVolunteer = {
@@ -18,6 +14,10 @@ type DBVolunteer = {
     phone: string;
     date_start: string | null;
     date_end: string | null;
+    project: {
+        id: number;
+        friendly_name: string;
+    }
     assignments: DBAssignment[];
 };
 
@@ -31,9 +31,9 @@ export async function GET() {
             phone,
             date_start,
             date_end,
+            project ( friendly_name ),
             assignments (
-                home_id ( address1 ),
-                project ( friendly_name, project_region )
+                home_id ( address1 )
             )
         `)
         .overrideTypes<DBVolunteer[]>();
@@ -48,9 +48,8 @@ export async function GET() {
 
         return {
             ...v,
-            assignedHome: singleAssignment.home_id?.address1 ?? null,
-            assignedProject: singleAssignment.project?.friendly_name,
-            region: singleAssignment.project?.project_region
+            assignedHome: v.assignments.length > 0 ? singleAssignment.home_id?.address1 ?? null : null,
+            assignedProject: v.project
         }
     });
     return json(volunteers);
@@ -63,11 +62,19 @@ export async function POST({ locals, request }) {
 
     const body = await request.json();
 
-    if (!body.project || !body.name || !body.phone) {
+    if (!body.volunteerProject || !body.volunteerName || !body.volunteerPhone) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { error } = await supabase.from('volunteers').insert([body]);
+    let supabaseBody = {
+        name: body.volunteerName,
+        email: body.volunteerEmail ?? null,
+        phone: body.volunteerPhone,
+        project: body.volunteerProject
+    }
+
+
+    const { error } = await supabase.from('volunteers').insert([supabaseBody]);
 
     if (error) {
         console.error('Failed to add volunteer:', error);

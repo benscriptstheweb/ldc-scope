@@ -85,7 +85,7 @@
 					</td>
 					<td class="project-region">
 						<div class="badge badge-soft badge-accent">
-							{volunteer.assignedProject}
+							{volunteer.assignedProject.friendly_name}
 						</div>
 					</td>
 					{#if volunteer.assignedHome !== null}
