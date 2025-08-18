@@ -1,24 +1,12 @@
 <script lang="ts">
-	import type { Volunteer } from '$lib/types/volunteer';
 	import { tick } from 'svelte';
 	import HomeAssignmentModal from '../../components/HomeAssignmentModal.svelte';
 	import VolunteerDetailDrawer from '../../components/VolunteerDetailDrawer.svelte';
-	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
+	import NewVolunteerModal from '../../components/NewVolunteerModal.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
-
-	async function addVolunteer(newVolunteer: Partial<Volunteer>) {
-		const res = await fetch('/api/volunteers', {
-			method: 'POST',
-			body: JSON.stringify(newVolunteer)
-		});
-
-		if (res.ok) {
-			window.location.reload();
-		}
-	}
 
 	let assignableHomes: any = $state(null);
 	let idFromVolunteerData: any = $state(null);
@@ -41,10 +29,19 @@
 	let volunteerDetail: any = $state(null);
 	let isEditingVolunteer = $state(false);
 
-	async function openVolunteerDetailModal(volunteer: any) {
+	async function openVolunteerDetailDrawer(volunteer: any) {
 		isEditingVolunteer = true;
 		volunteerDetail = volunteer;
 		await tick();
+	}
+
+	let isAddingVolunteer = $state(false);
+	async function openNewVolunteerModal() {
+		isAddingVolunteer = true;
+
+		await tick();
+		const modalElement = document.getElementById('new-volunteer-modal') as HTMLDialogElement;
+		modalElement?.showModal();
 	}
 </script>
 
@@ -56,9 +53,13 @@
 	<VolunteerDetailDrawer {volunteerDetail} />
 {/if}
 
+{#if isAddingVolunteer}
+	<NewVolunteerModal id="new-volunteer-modal" />
+{/if}
+
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={() => console.log('create new')} class="btn btn-success">
+	<button onclick={openNewVolunteerModal} class="btn btn-success">
 		<Plus />
 		New
 	</button>
@@ -69,14 +70,14 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>Project - Region</th>
+				<th>Project</th>
 				<th>Stay</th>
 			</tr>
 		</thead>
 
 		<tbody>
 			{#each volunteers as volunteer}
-				<tr onclick={() => openVolunteerDetailModal(volunteer)}>
+				<tr onclick={() => openVolunteerDetailDrawer(volunteer)}>
 					<td class="name">
 						<label for="my-drawer" class="drawer-button">
 							{volunteer.name}
@@ -85,9 +86,6 @@
 					<td class="project-region">
 						<div class="badge badge-soft badge-accent">
 							{volunteer.assignedProject}
-						</div>
-						<div class="custom-badge badge badge-secondary">
-							{volunteer.region}
 						</div>
 					</td>
 					{#if volunteer.assignedHome !== null}
@@ -107,12 +105,6 @@
 </div>
 
 <style>
-	.custom-badge {
-		border-radius: 25px;
-		width: 20px;
-		font-weight: bold;
-		color: white;
-	}
 	.add-btn-container {
 		display: flex;
 		justify-content: space-between;
