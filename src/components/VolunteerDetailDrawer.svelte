@@ -1,6 +1,4 @@
 <script lang="ts">
-	import Arrow from '../icons/Arrow.svelte';
-
 	let { volunteerDetail } = $props();
 	let isDrawerOpen = $state(false);
 </script>
@@ -27,7 +25,6 @@
 					<div class="badge badge-outline badge-secondary">
 						{volunteerDetail.date_start}
 					</div>
-					<!-- <Arrow /> -->
 					-
 					<div class="badge badge-outline badge-secondary">
 						{volunteerDetail.date_end}
