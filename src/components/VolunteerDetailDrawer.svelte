@@ -1,13 +1,35 @@
 <script lang="ts">
-	let { volunteerDetail } = $props();
+	import { tick } from 'svelte';
+	import HomeAssignmentModal from './HomeAssignmentModal.svelte';
+	import Plus from '../icons/Plus.svelte';
+
+	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
+
+	let isAssigningHome = $state(false);
+	let volunteerToAssign: any = $state(null);
+
+	async function openAssignmentModal(volunteer: any, event: MouseEvent) {
+		isAssigningHome = true;
+		volunteerToAssign = volunteer;
+
+		event.stopPropagation();
+
+		await tick();
+		const modalElement = document.getElementById('home-assigner') as HTMLDialogElement;
+		modalElement?.showModal();
+	}
 </script>
 
+{#if isAssigningHome}
+	<HomeAssignmentModal id="home-assigner" {volunteerToAssign} />
+{/if}
+
 <div class="drawer">
-	<input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
+	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
 
 	<div class="drawer-side">
-		<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
 			<h2 class="heading">{volunteerDetail.name}</h2>
@@ -44,6 +66,14 @@
 					{volunteerDetail.assignedHome.zip}
 				{:else}
 					<p class="no-stay-msg">No home assigned to this volunteer 🥲</p>
+					<label for="volunteer-drawer" class="drawer-button">
+						<button
+							onclick={(event) => openAssignmentModal(volunteerDetail, event)}
+							class="btn btn-primary btn-xs"
+						>
+							<Plus />Assign
+						</button>
+					</label>
 				{/if}
 			</div>
 
