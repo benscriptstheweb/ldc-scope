@@ -77,7 +77,7 @@
 
 		<tbody>
 			{#each volunteers as volunteer}
-				<tr onclick={() => openVolunteerDetailDrawer(volunteer)}>
+				<tr class="volunteer-rows" onclick={() => openVolunteerDetailDrawer(volunteer)}>
 					<td class="name">
 						<label for="my-drawer" class="drawer-button">
 							{volunteer.name}
@@ -89,7 +89,7 @@
 						</div>
 					</td>
 					{#if volunteer.assignedHome !== null}
-						<td class="stay">{volunteer.assignedHome}</td>
+						<td class="stay">{volunteer.assignedHome.address1}</td>
 					{:else}
 						<td class="stay">
 							<button
@@ -110,5 +110,9 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 30px;
+	}
+
+	.volunteer-rows:hover {
+		background-color: black;
 	}
 </style>
