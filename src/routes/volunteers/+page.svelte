@@ -89,8 +89,4 @@
 		align-items: center;
 		padding: 30px;
 	}
-
-	.volunteer-rows:hover {
-		background-color: black;
-	}
 </style>
