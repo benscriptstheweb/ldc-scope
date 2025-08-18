@@ -44,10 +44,7 @@
 	async function openVolunteerDetailModal(volunteer: any) {
 		isEditingVolunteer = true;
 		volunteerDetail = volunteer;
-
 		await tick();
-		const modalElement = document.getElementById('volunteer-detail') as HTMLDialogElement;
-		modalElement?.showModal();
 	}
 </script>
 
@@ -72,9 +69,7 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th></th>
 				<th>Project - Region</th>
-				<th></th>
 				<th>Stay</th>
 			</tr>
 		</thead>
@@ -83,27 +78,25 @@
 			{#each volunteers as volunteer}
 				<tr onclick={() => openVolunteerDetailModal(volunteer)}>
 					<td class="name">
-						<label for="my-drawer" class="btn drawer-button">
+						<label for="my-drawer" class="drawer-button">
 							{volunteer.name}
 						</label>
 					</td>
-					<td class="spacer"><Arrow /></td>
 					<td class="project-region">
 						<div class="badge badge-soft badge-accent">
 							{volunteer.assignedProject}
 						</div>
-						<div class="badge badge-soft badge-secondary">
+						<div class="custom-badge badge badge-secondary">
 							{volunteer.region}
 						</div>
 					</td>
-					<td class="spacer"> <Arrow /></td>
 					{#if volunteer.assignedHome !== null}
 						<td class="stay">{volunteer.assignedHome}</td>
 					{:else}
 						<td class="stay">
 							<button
 								onclick={(event) => openAssignmentModal(volunteer.id, event)}
-								class="btn btn-outline btn-primary btn-xs">Assign</button
+								class="btn btn-outline btn-primary btn-xs btn-circle"><Plus /></button
 							>
 						</td>
 					{/if}
@@ -114,6 +107,12 @@
 </div>
 
 <style>
+	.custom-badge {
+		border-radius: 25px;
+		width: 20px;
+		font-weight: bold;
+		color: white;
+	}
 	.add-btn-container {
 		display: flex;
 		justify-content: space-between;

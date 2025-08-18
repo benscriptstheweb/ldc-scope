@@ -61,4 +61,12 @@
 		</div>
 	</div>
 </dialog>
+
 <!-- END MODAL -->
+
+<style>
+	.list-row {
+		display: flex;
+		justify-content: space-between;
+	}
+</style>

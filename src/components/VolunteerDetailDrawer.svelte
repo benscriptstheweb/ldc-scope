@@ -1,6 +1,5 @@
 <script lang="ts">
 	let { volunteerDetail } = $props();
-
 	let isDrawerOpen = $state(false);
 </script>
 
@@ -11,7 +10,7 @@
 		<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<h2>{volunteerDetail.name}</h2>
+			<h2 class="heading">{volunteerDetail.name}</h2>
 			<!-- Sidebar content here -->
 		</ul>
 	</div>
