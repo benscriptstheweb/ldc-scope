@@ -5,7 +5,6 @@ export async function GET() {
     const { data, error } = await supabase
         .from('homes')
         .select('id, address1, address2, city, state, zip')
-        .eq('isAssigned', false);
 
     if (error) {
         console.error('Error fetching assignable homes:', error);

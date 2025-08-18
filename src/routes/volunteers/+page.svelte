@@ -1,30 +1,11 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import HomeAssignmentModal from '../../components/HomeAssignmentModal.svelte';
 	import VolunteerDetailDrawer from '../../components/VolunteerDetailDrawer.svelte';
 	import Plus from '../../icons/Plus.svelte';
 	import NewVolunteerModal from '../../components/NewVolunteerModal.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
-
-	let assignableHomes: any = $state(null);
-	let idFromVolunteerData: any = $state(null);
-	let isAssigningHome = $state(false);
-
-	async function openAssignmentModal(volunteerId: string, event: MouseEvent) {
-		isAssigningHome = true;
-		idFromVolunteerData = volunteerId;
-
-		event.stopPropagation();
-
-		await tick();
-		const modalElement = document.getElementById('home-assigner') as HTMLDialogElement;
-		modalElement?.showModal();
-
-		const res = await fetch('api/homes/assignable');
-		assignableHomes = await res.json();
-	}
 
 	let volunteerDetail: any = $state(null);
 	let isEditingVolunteer = $state(false);
@@ -45,12 +26,8 @@
 	}
 </script>
 
-{#if isAssigningHome}
-	<HomeAssignmentModal id="home-assigner" {assignableHomes} {idFromVolunteerData} />
-{/if}
-
 {#if isEditingVolunteer}
-	<VolunteerDetailDrawer {volunteerDetail} />
+	<VolunteerDetailDrawer id="volunteer-drawer" {volunteerDetail} />
 {/if}
 
 {#if isAddingVolunteer}
@@ -79,7 +56,7 @@
 			{#each volunteers as volunteer}
 				<tr class="volunteer-rows" onclick={() => openVolunteerDetailDrawer(volunteer)}>
 					<td class="name">
-						<label for="my-drawer" class="drawer-button">
+						<label for="volunteer-drawer" class="drawer-button">
 							{volunteer.name}
 						</label>
 					</td>
@@ -92,10 +69,11 @@
 						<td class="stay">{volunteer.assignedHome.address1}</td>
 					{:else}
 						<td class="stay">
-							<button
-								onclick={(event) => openAssignmentModal(volunteer.id, event)}
-								class="btn btn-outline btn-primary btn-xs btn-circle"><Plus /></button
-							>
+							<button class="btn btn-outline btn-primary btn-xs btn-circle">
+								<label for="volunteer-drawer" class="drawer-button">
+									<Plus />
+								</label>
+							</button>
 						</td>
 					{/if}
 				</tr>
@@ -110,9 +88,5 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 30px;
-	}
-
-	.volunteer-rows:hover {
-		background-color: black;
 	}
 </style>

@@ -74,7 +74,9 @@ export async function POST({ locals, request }) {
         name: body.volunteerName,
         email: body.volunteerEmail ?? null,
         phone: body.volunteerPhone,
-        project: body.volunteerProject
+        project: body.volunteerProject,
+        date_start: body.volunteerStartDate,
+        date_end: body.volunteerEndDate
     }
 
 
