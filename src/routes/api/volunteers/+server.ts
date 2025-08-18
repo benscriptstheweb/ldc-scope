@@ -4,6 +4,10 @@ import { supabase } from '$lib/supabase/supabaseClient';
 type DBAssignment = {
     home_id: {
         address1: string;
+        address2: string | null;
+        city: string;
+        state: string;
+        zip: string;
     } | null;
 };
 
@@ -31,9 +35,9 @@ export async function GET() {
             phone,
             date_start,
             date_end,
-            project ( friendly_name ),
+            project ( id, friendly_name, full_address ),
             assignments (
-                home_id ( address1 )
+                home_id ( address1, address2, city, state, zip )
             )
         `)
         .overrideTypes<DBVolunteer[]>();
@@ -44,11 +48,11 @@ export async function GET() {
 
     const volunteers = data?.map((v) => {
         // supabase always returns array, mitigate by getting just the [0] index
-        const singleAssignment = v.assignments[0];
+        const singleHomeAssignment = v.assignments[0];
 
         return {
             ...v,
-            assignedHome: v.assignments.length > 0 ? singleAssignment.home_id?.address1 ?? null : null,
+            assignedHome: v.assignments.length > 0 ? singleHomeAssignment.home_id ?? null : null,
             assignedProject: v.project
         }
     });
