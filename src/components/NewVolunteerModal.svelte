@@ -5,6 +5,8 @@
 	let volunteerPhone: number | null = $state(null);
 	let volunteerEmail: string = $state('');
 	let volunteerProject: any = $state();
+	let volunteerStartDate: Date | null = $state(null);
+	let volunteerEndDate: Date | null = $state(null);
 
 	async function addVolunteer(newVolunteer: any) {
 		const res = await fetch('/api/volunteers', {
@@ -40,10 +42,26 @@
 				{/await}
 			</select>
 
+			<div class="mt-3 mb-3">
+				<div>
+					Start Date <input class="input" type="date" bind:value={volunteerStartDate} />
+				</div>
+				<div>
+					End Date <input class="input" type="date" bind:value={volunteerEndDate} />
+				</div>
+			</div>
+
 			<div class="join">
 				<button
 					onclick={() =>
-						addVolunteer({ volunteerName, volunteerEmail, volunteerPhone, volunteerProject })}
+						addVolunteer({
+							volunteerName,
+							volunteerEmail,
+							volunteerPhone,
+							volunteerProject,
+							volunteerStartDate,
+							volunteerEndDate
+						})}
 					class="btn btn-primary">Add</button
 				>
 			</div>
