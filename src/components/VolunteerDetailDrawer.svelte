@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Spacer from './Spacer.svelte';
+	import { goto } from '$app/navigation';
 
 	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
@@ -41,6 +43,16 @@
 			window.location.reload();
 		}
 	}
+
+	async function deleteVolunteer() {
+		const res = await fetch(`/api/volunteers/${volunteerDetail.id}`, {
+			method: 'DELETE'
+		});
+
+		if (res.ok) {
+			goto('/volunteers');
+		}
+	}
 </script>
 
 <div class="drawer">
@@ -49,7 +61,7 @@
 	<div class="drawer-side">
 		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 
-		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+		<ul class="menu bg-base-200 text-base-content h-full w-80 p-4">
 			<h2 class="subheading">Contact Info</h2>
 			<input bind:value={newVolunteerDetails.name} type="text" placeholder="Name" />
 			<input bind:value={newVolunteerDetails.phone} type="number" placeholder="Phone" />
@@ -73,6 +85,7 @@
 				<strong>End</strong><input bind:value={newVolunteerDetails.date_end} type="date" />
 			</div>
 
+			<Spacer spacing="mt-12" />
 			<div class="button-group flex">
 				<button
 					class="btn btn-ghost"
@@ -83,6 +96,9 @@
 				>
 				<button class="btn btn-primary" onclick={() => updateInfo()}>Save</button>
 			</div>
+			<button class="delete-btn btn btn-error" onclick={() => deleteVolunteer()}
+				>Delete Volunteer</button
+			>
 		</ul>
 	</div>
 </div>
@@ -130,5 +146,9 @@
 	.dates {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.delete-btn {
+		margin-top: auto;
 	}
 </style>

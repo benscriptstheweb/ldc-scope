@@ -68,3 +68,19 @@ export async function GET({ params }) {
 
     return json(result);
 }
+
+export async function DELETE({ params }) {
+    const { volunteerId } = params;
+
+    const { error } = await supabase
+        .from('volunteers')
+        .delete()
+        .eq('id', volunteerId);
+
+    if (error) {
+        console.error('Error deleting volunteer:', error);
+        throw error;
+    }
+
+    return json({ status: 'deleted' });
+}
