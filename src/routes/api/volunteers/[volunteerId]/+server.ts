@@ -1,42 +1,58 @@
 import { json } from "@sveltejs/kit";
 import { supabase } from "$lib/supabase/supabaseClient";
 
-// export async function PATCH({ locals, params, request }) {
-//     if (!locals.user?.isAdmin) {
-//         return new Response('Forbidden', { status: 403 });
-//     }
+export async function PATCH({ locals, params, request }) {
+    if (!locals.user?.isAdmin) {
+        return new Response('Forbidden', { status: 403 });
+    }
 
-//     const { volunteerId } = params;
-//     const body = await request.json();
+    const { volunteerId } = params;
+    const body = await request.json();
 
-//     if (!body.address1 || !body.city || !body.state || !body.zip) {
-//         return json({ error: 'Missing required fields' }, { status: 400 });
-//     }
+    console.log(body)
 
-//     const { error } = await supabase
-//         .from('homes')
-//         .update({
-//             address1: body.address1,
-//             address2: body.address2,
-//             city: body.city,
-//             state: body.state,
-//             zip: body.zip
-//         })
-//         .eq('id', volunteerId);
+    if (!body.name || !body.phone || !body.project || !body.date_start || !body.date_end) {
+        return json({ error: 'Missing required fields' }, { status: 400 });
+    }
 
-//     if (error) {
-//         console.error(error);
-//         return json({ error: 'Failed to update home' }, { status: 500 });
-//     }
+    const { error } = await supabase
+        .from('volunteers')
+        .update({
+            name: body.name,
+            phone: body.phone,
+            email: body.email,
+            project: body.project.id,
+            date_start: body.date_start,
+            date_end: body.date_end
+        })
+        .eq('id', volunteerId)
+        .single();
 
-//     return json({ success: true }, { status: 200 });
-// }
+    if (error) {
+        console.error(error);
+        return json({ error: 'Failed to update volunteer' }, { status: 500 });
+    }
+
+    return json({ success: true }, { status: 200 });
+}
 
 export async function GET({ params }) {
     const { volunteerId } = params;
     const { data, error } = await supabase
         .from('volunteers')
-        .select('*')
+        .select(`
+            *,
+            assignments (
+                home_id (
+                    address1,
+                    address2,
+                    city,
+                    state,
+                    zip
+                )
+            ),
+            project ( id, friendly_name )
+        `)
         .eq('id', volunteerId)
         .single();
 
@@ -46,10 +62,9 @@ export async function GET({ params }) {
     }
 
     const result = {
-        ...data
+        ...data,
+        assignedHome: data.assignments.length > 0 ? data.assignments[0].home_id ?? null : null,
     };
-
-    console.log(result);
 
     return json(result);
 }

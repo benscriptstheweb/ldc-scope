@@ -28,43 +28,41 @@
 <dialog {id} class="modal">
 	<div class="modal-box">
 		<h2 class="heading">Add New Volunteer</h2>
-		<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-			<legend class="fieldset-legend">Details</legend>
-			<div class="join">
-				<input bind:value={volunteerName} type="text" class="input" placeholder="Name" />
-				<input bind:value={volunteerPhone} type="number" class="input" placeholder="Phone" />
-			</div>
-			<input bind:value={volunteerEmail} type="email" class="input" placeholder="Email" />
+		<legend class="fieldset-legend">Details</legend>
+		<div class="join">
+			<input bind:value={volunteerName} type="text" class="input" placeholder="Name" />
+			<input bind:value={volunteerPhone} type="number" class="input" placeholder="Phone" />
+		</div>
+		<input bind:value={volunteerEmail} type="email" class="input" placeholder="Email" />
 
-			<select bind:value={volunteerProject} class="select">
-				<option disabled selected>Select project</option>
-				{#await getProjects() then projects}
-					{#each projects as project}
-						<option value={project.id}>{project.friendly_name}</option>
-					{/each}
-				{/await}
-			</select>
+		<select bind:value={volunteerProject} class="select">
+			<option disabled selected>Select project</option>
+			{#await getProjects() then projects}
+				{#each projects as project}
+					<option value={project.id}>{project.friendly_name}</option>
+				{/each}
+			{/await}
+		</select>
 
-			<div class="flex mt-3 mb-3">
-				<input class="input" type="date" bind:value={volunteerStartDate} />
-				<input class="input" type="date" bind:value={volunteerEndDate} />
-			</div>
+		<div class="flex mt-3 mb-3">
+			<input class="input" type="date" bind:value={volunteerStartDate} />
+			<input class="input" type="date" bind:value={volunteerEndDate} />
+		</div>
 
-			<div class="join">
-				<button
-					onclick={() =>
-						addVolunteer({
-							volunteerName,
-							volunteerEmail,
-							volunteerPhone,
-							volunteerProject,
-							volunteerStartDate,
-							volunteerEndDate
-						})}
-					class="btn btn-primary">Add</button
-				>
-			</div>
-		</fieldset>
+		<div class="join">
+			<button
+				onclick={() =>
+					addVolunteer({
+						volunteerName,
+						volunteerEmail,
+						volunteerPhone,
+						volunteerProject,
+						volunteerStartDate,
+						volunteerEndDate
+					})}
+				class="btn btn-primary">Add</button
+			>
+		</div>
 
 		<div class="modal-action">
 			<form method="dialog">
