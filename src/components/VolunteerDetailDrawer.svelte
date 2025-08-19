@@ -84,8 +84,6 @@
 				<strong>Start</strong><input bind:value={newVolunteerDetails.date_start} type="date" />
 				<strong>End</strong><input bind:value={newVolunteerDetails.date_end} type="date" />
 			</div>
-
-			<Spacer spacing="mt-12" />
 			<div class="button-group flex">
 				<button
 					class="btn btn-ghost"
@@ -108,8 +106,13 @@
 		z-index: 99;
 	}
 
+	ul {
+		flex-wrap: nowrap;
+		height: 100%;
+	}
+
 	.subheading {
-		font-size: 1.5em;
+		font-size: 1.4em;
 		font-weight: bold;
 		margin-top: 10px;
 	}
@@ -131,7 +134,7 @@
 		outline: none;
 		padding: 5px;
 		margin-bottom: 15px;
-		font-size: 1.2em;
+		font-size: 1.1em;
 	}
 	input:focus {
 		border: none;
