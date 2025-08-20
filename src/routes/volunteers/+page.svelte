@@ -1,44 +1,34 @@
 <script lang="ts">
-	import { tick } from 'svelte';
-	import VolunteerDetailDrawer from '../../components/VolunteerDetailDrawer.svelte';
 	import Plus from '../../icons/Plus.svelte';
-	import NewVolunteerModal from '../../components/NewVolunteerModal.svelte';
+	import { goto } from '$app/navigation';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
 
-	let volunteerDetail: any = $state(null);
-	let isEditingVolunteer = $state(false);
-
-	async function openVolunteerDetailDrawer(volunteer: any) {
-		isEditingVolunteer = true;
-		volunteerDetail = volunteer;
-		await tick();
+	async function openVolunteerPage(volunteer: any) {
+		goto(`/volunteers/${volunteer.id}`);
 	}
 
-	let isAddingVolunteer = $state(false);
-	async function openNewVolunteerModal() {
-		isAddingVolunteer = true;
+	// let isAddingVolunteer = $state(false);
+	// async function openNewVolunteerModal() {
+	// 	isAddingVolunteer = true;
 
-		await tick();
-		const modalElement = document.getElementById('new-volunteer-modal') as HTMLDialogElement;
-		modalElement?.showModal();
-	}
+	// 	await tick();
+	// 	const modalElement = document.getElementById('new-volunteer-modal') as HTMLDialogElement;
+	// 	modalElement?.showModal();
+	// }
 </script>
 
-{#if isEditingVolunteer}
-	<VolunteerDetailDrawer id="volunteer-drawer" {volunteerDetail} />
-{/if}
-
-{#if isAddingVolunteer}
+<!-- TODO: move new volunteer to to shareable survey  -->
+<!-- {#if isAddingVolunteer}
 	<NewVolunteerModal id="new-volunteer-modal" />
-{/if}
+{/if} -->
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={openNewVolunteerModal} class="btn btn-success">
+	<button onclick={() => console.log('shareable!')} class="btn btn-success">
 		<Plus />
-		New
+		Share Survey
 	</button>
 </div>
 
@@ -54,7 +44,7 @@
 
 		<tbody>
 			{#each volunteers as volunteer}
-				<tr class="volunteer-rows" onclick={() => openVolunteerDetailDrawer(volunteer)}>
+				<tr class="volunteer-rows" onclick={() => openVolunteerPage(volunteer)}>
 					<td class="name">
 						<label for="volunteer-drawer" class="drawer-button">
 							{volunteer.name}
@@ -88,5 +78,9 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 30px;
+	}
+	tr:hover {
+		background-color: var(--color-base-300);
+		cursor: pointer;
 	}
 </style>
