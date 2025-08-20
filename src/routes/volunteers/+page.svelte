@@ -79,4 +79,8 @@
 		align-items: center;
 		padding: 30px;
 	}
+	tr:hover {
+		background-color: var(--color-base-300);
+		cursor: pointer;
+	}
 </style>
