@@ -4,7 +4,7 @@
 	export let infoText = '';
 </script>
 
-<div transition:fade class="toast">
+<div transition:fade class="toast toast-top toast-center">
 	<div class="alert alert-info">
 		<span>{infoText}</span>
 	</div>

@@ -10,8 +10,9 @@
 
 	// this sets a loading spinner to run when navigating between pages. that way we can
 	// remove the impression that the app is hanging or frozen.
-	export let data;
-	let loading = false;
+	let { data } = $props();
+
+	let loading = $state(false);
 	beforeNavigate(() => {
 		loading = true;
 	});
@@ -19,19 +20,21 @@
 		loading = false;
 	});
 
+	const publicRoutes = ['/signin', '/survey'];
+
 	// unlike the redirect in the +layout.server.ts or the user check in hooks.server.ts files
 	// this will move a person to signin if anywhere in the already preloaded pages (client)
 	// they hit the logout button
 	onMount(() => {
 		auth.onAuthStateChanged(async (u) => {
-			if (!u) {
+			if (!u && !publicRoutes.includes(page.url.pathname)) {
 				goto('/signin');
 			}
 		});
 	});
 </script>
 
-{#if page.url.pathname !== '/signin'}
+{#if !publicRoutes.includes(page.url.pathname)}
 	<Navbar userData={data.user} />
 {/if}
 
