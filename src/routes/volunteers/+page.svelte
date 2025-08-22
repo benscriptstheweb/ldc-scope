@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Plus from '../../icons/Plus.svelte';
 	import { goto } from '$app/navigation';
+	import Toast from '../../components/Toast.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -9,10 +10,24 @@
 		goto(`/volunteers/${volunteer.id}`);
 	}
 
+	let isLinkCopied = $state(false);
+
 	async function copySurveyLink() {
+		isLinkCopied = true;
+		setTimeout(() => {
+			isLinkCopied = false;
+		}, 3000);
 		await navigator.clipboard.writeText('https://ldc-scope.vercel.app/survey');
 	}
 </script>
+
+{#if isLinkCopied}
+	<Toast
+		infoText="Link copied to clipboard!"
+		verticalPos="toast-bottom"
+		alertType="alert-success"
+	/>
+{/if}
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
