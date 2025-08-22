@@ -20,7 +20,7 @@
 		loading = false;
 	});
 
-	const publicRoutes = ['/signin', '/survey'];
+	const publicRoutes = ['/signin', '/survey', '/survey/pass'];
 
 	// unlike the redirect in the +layout.server.ts or the user check in hooks.server.ts files
 	// this will move a person to signin if anywhere in the already preloaded pages (client)
