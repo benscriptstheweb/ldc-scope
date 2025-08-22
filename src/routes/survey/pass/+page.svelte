@@ -26,7 +26,7 @@
 </div>
 
 {#if isWrongPass}
-	<Toast infoText={'Wrong Password'} alertType={'error'} />
+	<Toast infoText={'Wrong Password'} alertType={'alert-error'} />
 {/if}
 
 <style>
