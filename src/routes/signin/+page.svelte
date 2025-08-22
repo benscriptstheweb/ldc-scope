@@ -80,6 +80,7 @@
 		justify-content: center;
 		align-items: center;
 		min-height: 90vh;
+		margin-top: -80px; /* to combat the global margin for the sticky nav*/
 	}
 	.welcome-sign {
 		display: none;
