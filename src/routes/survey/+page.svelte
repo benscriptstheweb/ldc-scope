@@ -39,10 +39,21 @@
 {/if}
 
 <h2 class="heading">Housing Request Form</h2>
-<Spacer spacing="mt-10" />
 
 <div class="flex flex-col items-center">
 	<div class="form flex flex-col h-full w-80">
+		<div class="message-block w-65 self-center">
+			<p class="message">
+				Thank you for volunteering to assist with this LDC project! To request housing accomodations
+				during your visit, please provide the following information.
+			</p>
+			<p class="message">
+				<i><strong>Note</strong></i>💡: To fulfill a housing request in the best possible way,
+				please submit this form no later than one week before your visit.
+			</p>
+		</div>
+		<div class="divider"></div>
+		<Spacer spacing="mt-2" />
 		<p class="subheading">1. 👷‍♀️ Basic info:</p>
 		<div class="info flex flex-col">
 			<input bind:value={volunteerName} type="text" placeholder="Name" />
@@ -86,6 +97,10 @@
 </div>
 
 <style>
+	.message {
+		font-size: 0.8em;
+		color: var(--color-neutral-content);
+	}
 	.subheading {
 		font-weight: bold;
 	}
