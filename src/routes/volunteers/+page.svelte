@@ -9,26 +9,30 @@
 		goto(`/volunteers/${volunteer.id}`);
 	}
 
-	// let isAddingVolunteer = $state(false);
-	// async function openNewVolunteerModal() {
-	// 	isAddingVolunteer = true;
-
-	// 	await tick();
-	// 	const modalElement = document.getElementById('new-volunteer-modal') as HTMLDialogElement;
-	// 	modalElement?.showModal();
-	// }
+	async function copySurveyLink() {
+		await navigator.clipboard.writeText('https://ldc-scope.vercel.app/survey');
+	}
 </script>
-
-<!-- TODO: move new volunteer to to shareable survey  -->
-<!-- {#if isAddingVolunteer}
-	<NewVolunteerModal id="new-volunteer-modal" />
-{/if} -->
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={() => console.log('shareable!')} class="btn btn-success">
-		<Plus />
-		Share Survey
+	<button onclick={copySurveyLink} class="btn btn-success">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="3"
+			stroke="currentColor"
+			class="size-4"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+			/>
+		</svg>
+
+		Survey Link
 	</button>
 </div>
 
