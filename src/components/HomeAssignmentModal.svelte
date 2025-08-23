@@ -39,7 +39,8 @@
 
 		const { data, error } = await supabase
 			.from('homes')
-			.select('id, address1, address2, city, state, zip')
+			.select('*')
+			.eq('project', volunteerToAssign.project.id)
 			.gte('max_days_stay', volunteerAssignmentLength);
 
 		if (error) {

@@ -1,5 +1,8 @@
 <script lang="ts">
+	import HomeAssignmentModal from '../../../components/HomeAssignmentModal.svelte';
 	import VolunteerDetailDrawer from '../../../components/VolunteerDetailDrawer.svelte';
+	import Arrow from '../../../icons/Arrow.svelte';
+	import Plus from '../../../icons/Plus.svelte';
 
 	export let data;
 </script>
@@ -10,7 +13,7 @@
 
 <div class="top-container">
 	<p class="heading header-name">{data.name}</p>
-	<div class="block mb-8">
+	<div class="block mb-5">
 		<div class="info-container">
 			<a href="tel:{data.phone}" aria-label="telephone" class="phone">
 				<svg
@@ -68,16 +71,77 @@
 		</div>
 	</div>
 
-	<div class="divider">Stay</div>
+	<div class="divider"></div>
+	<h2 class="subheading mb-5">Timeline</h2>
+
+	<div class="project-container ml-8">
+		Project:
+		<div class="badge">
+			{data.project.id} -
+			{data.project.friendly_name}
+		</div>
+	</div>
+
+	<div class="stay-container flex items-center ml-8 mb-9">
+		Date:
+		<div class="m-2 badge badge-success badge-soft">
+			{data.date_start}
+			<Arrow />
+			{data.date_end}
+		</div>
+	</div>
+
+	<div class="divider"></div>
+	<HomeAssignmentModal volunteerToAssign={data} id="assign-home-modal" />
+
+	<h2 class="subheading mb-5">Stay</h2>
+	<div class="stay-container flex flex-col justify-center items-center">
+		{#if data.assignedHome !== null}
+			<div class="card card-border bg-base-100 mb-9">
+				<div class="card-body">
+					<h2 class="card-title">{data.assignedHome.address1}, {data.assignedHome.address2}</h2>
+					<p>
+						{data.assignedHome.city}, {data.assignedHome.state}
+						{data.assignedHome.zip}
+					</p>
+				</div>
+			</div>
+		{:else}
+			<div class="flex w-80">
+				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
+
+				<button
+					onclick={() =>
+						(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
+					class="btn btn-soft btn-primary"><Plus />Assign</button
+				>
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style>
+	.message {
+		font-size: 0.9em;
+	}
+	.card {
+		box-shadow: 0px 6px 35px -12px #00000033;
+	}
+	img {
+		max-height: 130px;
+		object-fit: cover;
+	}
 	.top-container {
 		display: flex;
 		flex-direction: column;
 	}
 	.heading {
 		padding: 30px 0 0 30px;
+	}
+	.subheading {
+		padding-left: 30px;
+		font-size: 1.2em;
+		font-weight: bold;
 	}
 	.info-container {
 		padding: 30px 0 0 30px;
@@ -90,7 +154,7 @@
 		font-size: small;
 		width: 90%;
 		margin: 0 auto;
-		margin-bottom: 30px;
+		margin-bottom: 10px;
 	}
 
 	.phone {
