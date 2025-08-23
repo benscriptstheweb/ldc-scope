@@ -51,7 +51,7 @@ export async function GET({ params }) {
                     zip
                 )
             ),
-            project ( id, friendly_name )
+            project ( id, friendly_name, region )
         `)
         .eq('id', volunteerId)
         .single();
