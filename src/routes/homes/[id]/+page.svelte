@@ -4,10 +4,10 @@
 	import List from '../../../components/List.svelte';
 	import Map from '../../../components/Map.svelte';
 
-    const {data} = $props();
+	const { data } = $props();
 	const home = data;
 
-	let isCurrentlyOccupied = false;
+	let isCurrentlyOccupied = $state(false);
 	const today = Intl.DateTimeFormat('en-CA').format(new Date());
 
 	home.assignments.forEach((v: any) => {
@@ -15,13 +15,6 @@
 			isCurrentlyOccupied = true;
 		}
 	});
-
-
-
-
-
-
-
 </script>
 
 {#if data.user.isAdmin}
@@ -62,6 +55,7 @@
 				<div class="badge badge-success">Available</div>
 			{/if}
 		</div>
+		<Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" />
 	</div>
 
 	<div class="divider">History</div>
@@ -81,9 +75,6 @@
 		{/if}
 	</div>
 
-	<Map address={`${home.address1}${ home.address2 || ''} ${home.city} ${home.state} ${home.zip}`} />
-
-
 	<h2>Contacts</h2>
 	<div class="block contacts">
 		<ul class="list bg-base-100 rounded-box shadow-md">
@@ -93,7 +84,7 @@
 		</ul>
 	</div>
 
-	<h2>Congregation</h2>
+	<h2>Host Congregation</h2>
 	<div class="congregation">
 		{home.congregation}
 	</div>
@@ -150,7 +141,6 @@
 		margin: 5px;
 	}
 
-	/* convert to only on phone */
 	.divider {
 		font-style: italic;
 		font-size: small;
