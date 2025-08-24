@@ -2,8 +2,9 @@
 	import Assignments from '../../../components/Assignments.svelte';
 	import HomeDrawer from '../../../components/HomeDrawer.svelte';
 	import List from '../../../components/List.svelte';
+	import Map from '../../../components/Map.svelte';
 
-	export let data;
+    const {data} = $props();
 	const home = data;
 
 	let isCurrentlyOccupied = false;
@@ -14,6 +15,13 @@
 			isCurrentlyOccupied = true;
 		}
 	});
+
+
+
+
+
+
+
 </script>
 
 {#if data.user.isAdmin}
@@ -72,6 +80,9 @@
 			{/each}
 		{/if}
 	</div>
+
+	<Map address={`${home.address1}${ home.address2 || ''} ${home.city} ${home.state} ${home.zip}`} />
+
 
 	<h2>Contacts</h2>
 	<div class="block contacts">
