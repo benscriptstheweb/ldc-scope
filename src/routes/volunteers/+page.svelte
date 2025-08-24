@@ -2,6 +2,7 @@
 	import Plus from '../../icons/Plus.svelte';
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
+	import Trash from '../../icons/Trash.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -18,6 +19,23 @@
 			isLinkCopied = false;
 		}, 3000);
 		await navigator.clipboard.writeText('https://ldc-scope.vercel.app/survey');
+	}
+
+	let multiSelectVolunteers = $state([]);
+	let isAllSelected = $state(false);
+
+	function toggleSelectAll() {
+		isAllSelected = !isAllSelected;
+
+		if (isAllSelected) {
+			multiSelectVolunteers = volunteers.map((row) => row.id);
+		} else {
+			multiSelectVolunteers = [];
+		}
+	}
+
+	function deleteMultiple() {
+		console.log('deleting... ', multiSelectVolunteers);
 	}
 </script>
 
@@ -51,10 +69,21 @@
 	</button>
 </div>
 
+<div class="delete-container h-6 ml-4">
+	<input type="checkbox" class="checkbox checkbox-xs checkbox-error" onclick={toggleSelectAll} />
+
+	{#if multiSelectVolunteers.length > 0}
+		<button class="btn btn-error btn-xs btn-soft ml-2" onclick={deleteMultiple}>
+			<Trash /> Delete multiple
+		</button>
+	{/if}
+</div>
+
 <div class="overflow-x-auto">
 	<table class="table">
 		<thead>
 			<tr>
+				<th> </th>
 				<th>Name</th>
 				<th>Project</th>
 				<th>Stay</th>
@@ -63,8 +92,18 @@
 
 		<tbody>
 			{#each volunteers as volunteer}
-				<tr class="volunteer-rows" onclick={() => openVolunteerPage(volunteer)}>
-					<td class="name">
+				<tr class="volunteer-rows">
+					<th>
+						<label>
+							<input
+								type="checkbox"
+								value={volunteer.id}
+								bind:group={multiSelectVolunteers}
+								class="checkbox checkbox-accent checkbox-xs"
+							/>
+						</label>
+					</th>
+					<td class="name" onclick={() => openVolunteerPage(volunteer)}>
 						<label for="volunteer-drawer" class="drawer-button">
 							{volunteer.name}
 						</label>
