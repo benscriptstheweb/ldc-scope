@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Spacer from './Spacer.svelte';
 	import { goto } from '$app/navigation';
+	import { supabase } from '$lib/supabase/supabaseClient';
 
 	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
@@ -29,8 +29,17 @@
 	});
 
 	async function getProjects() {
-		const res = await fetch('/api/projects');
-		return res.json();
+		const { data, error } = await supabase
+			.from('projects')
+			.select('*')
+			.eq('region', volunteerDetail.project.region);
+
+		if (error) {
+			console.error('Error fetching assignable homes:', error);
+			return [];
+		}
+
+		return data;
 	}
 
 	async function updateInfo() {
