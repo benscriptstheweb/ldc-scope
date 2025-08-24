@@ -89,3 +89,19 @@ export async function POST({ locals, request }) {
 
     return json({ success: true }, { status: 201 });
 }
+
+export async function DELETE({ request }) {
+    const body = await request.json();
+
+    const { error } = await supabase
+        .from('volunteers')
+        .delete()
+        .in('id', body);
+
+    if (error) {
+        console.error('Error deleting multiple volunteers:', error);
+        throw error;
+    }
+
+    return json({ status: 'deleted' });
+}

@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
 	import Trash from '../../icons/Trash.svelte';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -24,6 +25,10 @@
 	let multiSelectVolunteers = $state([]);
 	let isAllSelected = $state(false);
 
+	onMount(() => {
+		isAllSelected = false;
+	});
+
 	function toggleSelectAll() {
 		isAllSelected = !isAllSelected;
 
@@ -34,8 +39,15 @@
 		}
 	}
 
-	function deleteMultiple() {
-		console.log('deleting... ', multiSelectVolunteers);
+	async function deleteMultiple() {
+		const res = await fetch(`/api/volunteers`, {
+			method: 'DELETE',
+			body: JSON.stringify(multiSelectVolunteers)
+		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 </script>
 
