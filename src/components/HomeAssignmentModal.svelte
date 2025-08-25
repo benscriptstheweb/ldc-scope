@@ -66,17 +66,17 @@
 			</div>
 		{:then assignableHomes}
 			<p class="heading">Available Homes</p>
-			<ul class="list bg-base-100 rounded-box shadow-md">
-				{#if assignableHomes.length === 0}
-					No homes available for {volunteerToAssign.name}'s project term.
-				{:else}
+			{#if assignableHomes.length === 0}
+				No homes available for {volunteerToAssign.name}'s project term 🚗
+			{:else}
+				<ul class="list bg-base-100 rounded-box shadow-md">
 					{#each assignableHomes as home}
 						<li class="list-row">
 							{home.address1}
 							<div>
 								<button
 									onclick={() => visitHome(home.id)}
-									class="mr-4 btn btn-outline btn-xs btn-circle btn-info"><Info /></button
+									class="mr-4 btn btn-xs btn-circle btn-info"><Info /></button
 								>
 								<button
 									onclick={(e) => confirmAssignment(home.id)}
@@ -86,40 +86,28 @@
 						</li>
 
 						{#if editingId === home.id && isConfirming}
-							<div class="volunteer-info mt-8 mb-2">
-								<div class="volunteer-name">
-									Assign
-									<div class="badge badge-outline badge-primary">
-										{volunteerToAssign.name}
-									</div>
-									to
-									<div class="badge badge-outline badge-primary">
+							<div class="edit-pane p-5">
+								<div class="volunteer-info mt-2 mb-8">
+									Assign {volunteerToAssign.name} to this home?
+									<div class="badge badge-outline badge-success mt-2">
 										{home.address1}
 									</div>
-									on
 								</div>
-								<div class="flex mb-8">
-									<div class="badge badge-outline badge-success">
-										{volunteerToAssign.date_start}
-									</div>
-									-
-									<div class="badge badge-outline badge-success">
-										{volunteerToAssign.date_end}
-									</div>
-									?
+
+								<div>
+									<button
+										onclick={() => createAssignment(home.id, volunteerToAssign.id)}
+										class="btn btn-success">Accept</button
+									>
+									<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
+										>Cancel</button
+									>
 								</div>
-							</div>
-							<div class="join mb-10">
-								<button
-									onclick={() => createAssignment(home.id, volunteerToAssign.id)}
-									class="btn btn-success">Accept</button
-								>
-								<button onclick={() => (isConfirming = false)} class="btn btn-ghost">Cancel</button>
 							</div>
 						{/if}
 					{/each}
-				{/if}
-			</ul>
+				</ul>
+			{/if}
 		{/await}
 
 		<div class="modal-action">
