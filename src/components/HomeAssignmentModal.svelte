@@ -89,8 +89,11 @@
 							<div class="edit-pane p-5">
 								<div class="volunteer-info mt-2 mb-8">
 									Assign {volunteerToAssign.name} to this home?
-									<div class="badge badge-outline badge-success mt-2">
-										{home.address1}
+									<div>
+										<strong>
+											{home.address1}, {home.city}, {home.state}
+											{home.zip}
+										</strong>
 									</div>
 								</div>
 
