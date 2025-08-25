@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Plus from '../../icons/Plus.svelte';
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
 	import Trash from '../../icons/Trash.svelte';
 	import { onMount } from 'svelte';
+	import Link from '../../icons/Link.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -12,8 +12,14 @@
 		goto(`/volunteers/${volunteer.id}`);
 	}
 
-	let isLinkCopied = $state(false);
+	let multiSelectVolunteers = $state([]);
+	let isAllSelected = $state(false);
 
+	onMount(() => {
+		isAllSelected = false;
+	});
+
+	let isLinkCopied = $state(false);
 	async function copySurveyLink() {
 		isLinkCopied = true;
 		setTimeout(() => {
@@ -21,13 +27,6 @@
 		}, 3000);
 		await navigator.clipboard.writeText('https://ldc-scope.vercel.app/survey');
 	}
-
-	let multiSelectVolunteers = $state([]);
-	let isAllSelected = $state(false);
-
-	onMount(() => {
-		isAllSelected = false;
-	});
 
 	function toggleSelectAll() {
 		isAllSelected = !isAllSelected;
@@ -38,7 +37,6 @@
 			multiSelectVolunteers = [];
 		}
 	}
-
 	async function deleteMultiple() {
 		const res = await fetch(`/api/volunteers`, {
 			method: 'DELETE',
@@ -51,7 +49,6 @@
 	}
 
 	let sortBy = $state('name');
-
 	let sortedVolunteers = $derived(
 		[...volunteers].sort((a, b) => {
 			if (sortBy === 'project') {
@@ -75,23 +72,8 @@
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={copySurveyLink} class="btn btn-success">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke-width="3"
-			stroke="currentColor"
-			class="size-4"
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
-			/>
-		</svg>
-
-		Survey Link
+	<button onclick={copySurveyLink} class="btn btn-primary">
+		<Link /> Survey
 	</button>
 </div>
 
@@ -101,11 +83,11 @@
 		disabled={multiSelectVolunteers.length <= 0}
 		onclick={deleteMultiple}
 	>
-		<Trash /> Delete
+		<Trash />
 	</button>
 
 	<select bind:value={sortBy} class="select mr-4 w-25">
-		<option disabled selected>Sort by</option>
+		<option disabled selected> Sort by</option>
 		<option value="name">Name</option>
 		<option value="project">Project</option>
 		<option value="unassigned">Unassigned</option>
@@ -117,52 +99,42 @@
 		<thead>
 			<tr>
 				<th>
-					<input
-						type="checkbox"
-						class="checkbox checkbox-xs checkbox-error"
-						onclick={toggleSelectAll}
-					/>
+					<input type="checkbox" onclick={toggleSelectAll} />
 				</th>
 				<th>Name</th>
 				<th>Project</th>
-				<th>Stay</th>
+				<th>Status</th>
 			</tr>
 		</thead>
 
 		<tbody>
 			{#each sortedVolunteers as volunteer}
-				<tr class="volunteer-rows">
+				<tr class="volunteer-rows" onclick={() => openVolunteerPage(volunteer)}>
 					<th>
 						<label>
 							<input
+								onclick={(e) => e.stopPropagation()}
 								type="checkbox"
 								value={volunteer.id}
 								bind:group={multiSelectVolunteers}
-								class="checkbox checkbox-accent checkbox-xs"
 							/>
 						</label>
 					</th>
-					<td class="name" onclick={() => openVolunteerPage(volunteer)}>
+					<td class="name">
 						<label for="volunteer-drawer" class="drawer-button">
 							{volunteer.name}
 						</label>
 					</td>
 					<td class="project-region">
-						<div class="badge badge-soft badge-accent">
-							{volunteer.assignedProject.friendly_name}
-						</div>
+						{volunteer.assignedProject.friendly_name}
 					</td>
-					{#if volunteer.assignedHome !== null}
-						<td class="stay">{volunteer.assignedHome.address1}</td>
-					{:else}
-						<td class="stay">
-							<button class="btn btn-outline btn-primary btn-xs btn-circle">
-								<label for="volunteer-drawer" class="drawer-button">
-									<Plus />
-								</label>
-							</button>
-						</td>
-					{/if}
+					<td class="stay">
+						{#if volunteer.assignedHome !== null}
+							<div class="custom-badge badge badge-success"><strong>A</strong></div>
+						{:else}
+							<div class="custom-badge badge badge-secondary"><strong>U</strong></div>
+						{/if}
+					</td>
 				</tr>
 			{/each}
 		</tbody>
@@ -170,6 +142,10 @@
 </div>
 
 <style>
+	.custom-badge {
+		border-radius: 25px;
+		width: 20px;
+	}
 	.add-btn-container {
 		display: flex;
 		justify-content: space-between;
