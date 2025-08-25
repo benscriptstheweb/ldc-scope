@@ -53,6 +53,7 @@ export async function GET() {
         return {
             ...v,
             assignedHome: v.assignments.length > 0 ? singleHomeAssignment.home_id ?? null : null,
+            isAssigned: v.assignments.length > 0 ? 1 : 0,
             assignedProject: v.project
         }
     });

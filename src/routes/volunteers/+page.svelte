@@ -49,6 +49,20 @@
 			window.location.reload();
 		}
 	}
+
+	let sortBy = $state('name');
+
+	let sortedVolunteers = $derived(
+		[...volunteers].sort((a, b) => {
+			if (sortBy === 'project') {
+				return a.project.friendly_name.localeCompare(b.project.friendly_name);
+			} else if (sortBy === 'unassigned') {
+				return a.isAssigned - b.isAssigned;
+			} else if (sortBy === 'name') {
+				return a.name.localeCompare(b.name);
+			}
+		})
+	);
 </script>
 
 {#if isLinkCopied}
@@ -81,21 +95,34 @@
 	</button>
 </div>
 
-<div class="delete-container h-6 ml-4">
-	<input type="checkbox" class="checkbox checkbox-xs checkbox-error" onclick={toggleSelectAll} />
+<div class="flex delete-container justify-between h-8 ml-2 mb-2">
+	<button
+		class="btn btn-error btn-soft ml-2"
+		disabled={multiSelectVolunteers.length <= 0}
+		onclick={deleteMultiple}
+	>
+		<Trash /> Delete
+	</button>
 
-	{#if multiSelectVolunteers.length > 0}
-		<button class="btn btn-error btn-xs btn-soft ml-2" onclick={deleteMultiple}>
-			<Trash /> Delete multiple
-		</button>
-	{/if}
+	<select bind:value={sortBy} class="select mr-4 w-25">
+		<option disabled selected>Sort by</option>
+		<option value="name">Name</option>
+		<option value="project">Project</option>
+		<option value="unassigned">Unassigned</option>
+	</select>
 </div>
 
 <div class="overflow-x-auto">
 	<table class="table">
 		<thead>
 			<tr>
-				<th> </th>
+				<th>
+					<input
+						type="checkbox"
+						class="checkbox checkbox-xs checkbox-error"
+						onclick={toggleSelectAll}
+					/>
+				</th>
 				<th>Name</th>
 				<th>Project</th>
 				<th>Stay</th>
@@ -103,7 +130,7 @@
 		</thead>
 
 		<tbody>
-			{#each volunteers as volunteer}
+			{#each sortedVolunteers as volunteer}
 				<tr class="volunteer-rows">
 					<th>
 						<label>
@@ -149,7 +176,7 @@
 		align-items: center;
 		padding: 30px;
 	}
-	tr:hover {
+	.volunteer-rows:hover {
 		background-color: var(--color-base-300);
 		cursor: pointer;
 	}
