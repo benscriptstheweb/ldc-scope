@@ -48,18 +48,38 @@
 		}
 	}
 
-	let sortBy = $state('name');
-	let sortedVolunteers = $derived(
-		[...volunteers].sort((a, b) => {
-			if (sortBy === 'project') {
-				return a.project.friendly_name.localeCompare(b.project.friendly_name);
-			} else if (sortBy === 'unassigned') {
-				return a.isAssigned - b.isAssigned;
-			} else if (sortBy === 'name') {
-				return a.name.localeCompare(b.name);
-			}
-		})
-	);
+	let sortedVolunteers = $state(volunteers);
+	let cycleSortState = $state(0);
+
+	function toggleSort(sorter: string) {
+		cycleSortState += 1;
+
+		console.log(cycleSortState);
+		if (cycleSortState === 1) {
+			sortedVolunteers = [...volunteers].sort((a, b) => {
+				if (sorter === 'project') {
+					return a.project.friendly_name.localeCompare(b.project.friendly_name);
+				} else if (sorter === 'status') {
+					return a.isAssigned - b.isAssigned;
+				} else if (sorter === 'name') {
+					return a.name.localeCompare(b.name);
+				}
+			});
+		} else if (cycleSortState === 2) {
+			sortedVolunteers = [...volunteers].sort((a, b) => {
+				if (sorter === 'project') {
+					return b.project.friendly_name.localeCompare(a.project.friendly_name);
+				} else if (sorter === 'status') {
+					return b.isAssigned - a.isAssigned;
+				} else if (sorter === 'name') {
+					return b.name.localeCompare(a.name);
+				}
+			});
+
+			// reset
+			cycleSortState = 0;
+		}
+	}
 </script>
 
 {#if isLinkCopied}
@@ -85,13 +105,6 @@
 	>
 		<Trash />
 	</button>
-
-	<select bind:value={sortBy} class="select mr-4 w-25">
-		<option disabled selected> Sort by</option>
-		<option value="name">Name</option>
-		<option value="project">Project</option>
-		<option value="unassigned">Unassigned</option>
-	</select>
 </div>
 
 <div class="overflow-x-auto">
@@ -101,9 +114,9 @@
 				<th>
 					<input type="checkbox" onclick={toggleSelectAll} />
 				</th>
-				<th>Name</th>
-				<th>Project</th>
-				<th>Status</th>
+				<th class="cursor-pointer" onclick={() => toggleSort('name')}>Name</th>
+				<th class="cursor-pointer" onclick={() => toggleSort('project')}>Project</th>
+				<th class="cursor-pointer" onclick={() => toggleSort('status')}>Status</th>
 			</tr>
 		</thead>
 
