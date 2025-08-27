@@ -54,7 +54,6 @@
 	function toggleSort(sorter: string) {
 		cycleSortState += 1;
 
-		console.log(cycleSortState);
 		if (cycleSortState === 1) {
 			sortedVolunteers = [...volunteers].sort((a, b) => {
 				if (sorter === 'project') {
