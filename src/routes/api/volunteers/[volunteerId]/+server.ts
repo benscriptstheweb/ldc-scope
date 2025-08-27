@@ -9,8 +9,6 @@ export async function PATCH({ locals, params, request }) {
     const { volunteerId } = params;
     const body = await request.json();
 
-    console.log(body)
-
     if (!body.name || !body.phone || !body.project || !body.date_start || !body.date_end) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
