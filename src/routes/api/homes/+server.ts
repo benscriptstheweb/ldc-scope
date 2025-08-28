@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
 
-export async function GET() {
+export async function GET({ locals }) {
     const { data, error } = await supabase
         .from('homes')
         .select(`
@@ -13,8 +13,11 @@ export async function GET() {
             zip,
             isAssigned,
             contacts ( isPrimary, name ),
+            max_days_stay,
+            project!inner ( id, friendly_name, full_address, region ),
             congregation
-    `);
+        `)
+        .eq('project.region', locals.user?.assignedRegion);
 
     if (error) {
         console.error('Error fetching homes:', error);

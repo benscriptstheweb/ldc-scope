@@ -7,6 +7,7 @@ declare global {
 				uid: string;
 				email: string | undefined;
 				isAdmin: boolean;
+				assignedRegion: number;
 			} | null
 		}
 		// interface Error {}
