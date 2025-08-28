@@ -41,6 +41,7 @@ export async function GET({ params }) {
         .select(`
             *,
             assignments (
+                id,
                 home_id (
                     address1,
                     address2,

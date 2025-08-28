@@ -47,3 +47,19 @@ export async function POST({ locals, request }) {
         return json({ error: 'Failed to assign' }, { status: 500 });
     }
 }
+
+export async function DELETE({ request }) {
+    const assignmentId = await request.json();
+
+    const { error } = await supabase
+        .from('assignments')
+        .delete()
+        .eq('id', [assignmentId]);
+
+    if (error) {
+        console.error('Error deleting assignment:', error);
+        throw error;
+    }
+
+    return json({ status: 'deleted' });
+}

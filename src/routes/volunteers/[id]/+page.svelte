@@ -3,8 +3,20 @@
 	import VolunteerDetailDrawer from '../../../components/VolunteerDetailDrawer.svelte';
 	import Arrow from '../../../icons/Arrow.svelte';
 	import Plus from '../../../icons/Plus.svelte';
+	import Trash from '../../../icons/Trash.svelte';
 
 	export let data;
+
+	async function deleteHomeAssignment() {
+		const res = await fetch('/api/assignments', {
+			method: 'DELETE',
+			body: JSON.stringify(data.assignments[0].id)
+		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
 </script>
 
 {#if data.user.isAdmin}
@@ -98,12 +110,17 @@
 	<div class="stay-container flex flex-col justify-center items-center">
 		{#if data.assignedHome !== null}
 			<div class="card card-border bg-base-100 mb-9">
-				<div class="card-body">
-					<h2 class="card-title">{data.assignedHome.address1}, {data.assignedHome.address2}</h2>
-					<p>
-						{data.assignedHome.city}, {data.assignedHome.state}
-						{data.assignedHome.zip}
-					</p>
+				<div class="flex flex-row items-center card-body">
+					<div class="address">
+						<h2 class="card-title">{data.assignedHome.address1}, {data.assignedHome.address2}</h2>
+						<p>
+							{data.assignedHome.city}, {data.assignedHome.state}
+							{data.assignedHome.zip}
+						</p>
+					</div>
+					<button class="btn btn-soft btn-error ml-5" onclick={deleteHomeAssignment}>
+						<Trash />
+					</button>
 				</div>
 			</div>
 		{:else}
