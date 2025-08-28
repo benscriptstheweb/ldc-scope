@@ -25,7 +25,7 @@ type DBVolunteer = {
     assignments: DBAssignment[];
 };
 
-export async function GET() {
+export async function GET({ locals }) {
     const { data, error } = await supabase
         .from('volunteers')
         .select(`
@@ -35,11 +35,12 @@ export async function GET() {
             phone,
             date_start,
             date_end,
-            project ( id, friendly_name, full_address ),
+            project!inner ( id, friendly_name, full_address ),
             assignments (
                 home_id ( address1, address2, city, state, zip )
             )
         `)
+        .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<DBVolunteer[]>();
 
     if (error) {
