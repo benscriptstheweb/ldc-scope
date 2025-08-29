@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Plus from '../icons/Plus.svelte';
-	import Edit from '../icons/Edit.svelte';
 	import type { Contact, HomeAddress } from '$lib/types/homes';
-	import Trash from '../icons/Trash.svelte';
+	import { goto } from '$app/navigation';
 
 	let { home, id } = $props();
 
@@ -17,11 +15,6 @@
 	let isDrawerOpen = $state(false);
 
 	onMount(() => {
-		// BUG: To mitigate a bug where the new contact form is filled with the previously
-		// deleted contact information, make sure that the new contact field and the update
-		// home fields start out with...
-
-		// ... an empty form
 		newContact = {
 			name: '',
 			phone: null,
@@ -29,7 +22,6 @@
 			isPrimary: false
 		};
 
-		// ... the current address
 		homeFields = {
 			address1: home.address1,
 			address2: home.address2,
@@ -59,6 +51,17 @@
 			window.location.reload();
 		}
 	}
+
+	async function deleteHome() {
+		const res = await fetch('/api/homes', {
+			method: 'DELETE',
+			body: JSON.stringify(home.id)
+		});
+
+		if (res.ok) {
+			goto('/');
+		}
+	}
 </script>
 
 <div class="drawer">
@@ -79,7 +82,12 @@
 				<input class="w-20" type="text" placeholder="State" bind:value={homeFields.state} />
 				<input class="w-50" type="text" placeholder="Zip" bind:value={homeFields.zip} />
 			</div>
-			<button onclick={() => updateHome(homeFields)} class="btn btn-primary">Update Address</button>
+			<div class="flex justify-between">
+				<button onclick={() => updateHome(homeFields)} class="btn btn-primary"
+					>Update Address</button
+				>
+				<button onclick={() => deleteHome()} class="btn btn-dash btn-error">Delete Home</button>
+			</div>
 		</ul>
 	</div>
 </div>
@@ -105,11 +113,6 @@
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		margin: 0;
-	}
-
-	/* Firefox */
-	input[type='number'] {
-		-moz-appearance: textfield;
 	}
 
 	input {

@@ -102,7 +102,7 @@ export async function GET({ locals }) {
 }
 
 export async function DELETE({ request }) {
-    const { homeId } = await request.json();
+    const homeId = await request.json();
 
     const { error } = await supabase
         .from('homes')
