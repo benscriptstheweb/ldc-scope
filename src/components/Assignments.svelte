@@ -1,21 +1,13 @@
 <script lang="ts">
-	let { volunteers } = $props();
+	let { sortedVolunteers } = $props();
 
 	function isPastDate(date: Date) {
 		return new Date() >= new Date(date);
 	}
-
-	function sortedVolunteers(volunteer: any) {
-		return volunteer.sort((a: any, b: any) => {
-			const dateA = new Date(a.date_end);
-			const dateB = new Date(b.date_end);
-			return dateB.getTime() - dateA.getTime();
-		});
-	}
 </script>
 
 <ul class="timeline timeline-vertical">
-	{#each sortedVolunteers(volunteers) as { name, date_end }, index}
+	{#each sortedVolunteers as { name, date_end }, index}
 		<li>
 			<div class="timeline-end">
 				{date_end}

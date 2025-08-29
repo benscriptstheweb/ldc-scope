@@ -1,24 +1,25 @@
 <script lang="ts">
 	import Assignments from '../../../components/Assignments.svelte';
-	import HomeDrawer from '../../../components/HomeDrawer.svelte';
-	import List from '../../../components/List.svelte';
+	import HomeEditDrawer from '../../../components/HomeEditDrawer.svelte';
+	import ContactList from '../../../components/ContactsList.svelte';
 	import Map from '../../../components/Map.svelte';
 
 	const { data } = $props();
 	const home = data;
 
-	let isCurrentlyOccupied = $state(false);
-	const today = Intl.DateTimeFormat('en-CA').format(new Date());
+	let sortedVolunteers = $state([]);
 
-	home.assignments.forEach((v: any) => {
-		if (today >= v.dateStart && today <= v.dateEnd) {
-			isCurrentlyOccupied = true;
-		}
-	});
+	if (home.assignments.length) {
+		sortedVolunteers = home.assignments.sort((a: any, b: any) => {
+			const dateA = new Date(a.date_end);
+			const dateB = new Date(b.date_end);
+			return dateB.getTime() - dateA.getTime();
+		});
+	}
 </script>
 
 {#if data.user.isAdmin}
-	<HomeDrawer {home} />
+	<HomeEditDrawer {home} />
 {/if}
 
 <div class="top-container">
@@ -32,7 +33,7 @@
 
 		<div class="badge-container">
 			{#if data.user.isAdmin}
-				<label for="my-drawer" class="btn drawer-button">
+				<label for="my-drawer" class="btn btn-soft btn-primary mb-8">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
@@ -46,13 +47,8 @@
 							d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z"
 						/>
 					</svg>
+					Edit Home
 				</label>
-			{/if}
-
-			{#if isCurrentlyOccupied}
-				<div class="badge badge-error">Booked</div>
-			{:else}
-				<div class="badge badge-success">Available</div>
 			{/if}
 		</div>
 		<Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" />
@@ -60,7 +56,11 @@
 
 	<div class="divider">History</div>
 	<div class="block volunteers">
-		<Assignments volunteers={home.assignments}></Assignments>
+		{#if sortedVolunteers.length !== 0}
+			<Assignments {sortedVolunteers}></Assignments>
+		{:else}
+			<p class="message text-center">This home has no assigned volunteers 🪹</p>
+		{/if}
 	</div>
 
 	<div class="divider">Details</div>
@@ -79,7 +79,7 @@
 	<div class="block contacts">
 		<ul class="list bg-base-100 rounded-box shadow-md">
 			{#each home.contacts as contact}
-				<List {contact} />
+				<ContactList {contact} />
 			{/each}
 		</ul>
 	</div>
@@ -147,5 +147,8 @@
 		width: 90%;
 		margin: 0 auto;
 		margin-bottom: 30px;
+	}
+	.message {
+		font-size: 0.9em;
 	}
 </style>
