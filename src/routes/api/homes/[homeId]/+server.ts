@@ -37,13 +37,8 @@ export async function GET({ params }) {
     const { data: home, error } = await supabase
         .from('homes')
         .select(`
-            id,
-            address1,
-            address2,
-            city,
-            state,
-            zip,
-            amenities,
+            *,
+            project ( id, friendly_name ),
             contacts ( id, name, phone, email, isPrimary ),
             assignments (
                 volunteers (
@@ -52,8 +47,7 @@ export async function GET({ params }) {
                     date_start,
                     date_end
                 )
-            ),
-            congregation
+            )
         `)
         .eq('id', homeId)
         .single();
@@ -73,7 +67,11 @@ export async function GET({ params }) {
         amenities: home.amenities,
         contacts: home.contacts,
         assignments: home.assignments.map(a => a.volunteers),
-        congregation: home.congregation
+        congregation: home.congregation,
+        project: home.project,
+        maxDays: home.max_days_stay,
+        occupantType: home.occupant_type,
+        allergies: home.allergies
     };
 
     return json(result);
