@@ -45,13 +45,17 @@
 		<Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" />
 	</div>
 
-	<div class="divider">History</div>
-	<div class="block volunteers">
-		{#if sortedVolunteers.length !== 0}
-			<Assignments {sortedVolunteers}></Assignments>
-		{:else}
-			<p class="message text-center">This home has no assigned volunteers 🪹</p>
-		{/if}
+	<div class="history flex flex-col">
+		<div class="w-90 self-center">
+			<div class="divider">History</div>
+		</div>
+		<div class="block volunteers">
+			{#if sortedVolunteers.length !== 0}
+				<Assignments {sortedVolunteers}></Assignments>
+			{:else}
+				<p class="message text-center">This home has no assigned volunteers 🪹</p>
+			{/if}
+		</div>
 	</div>
 
 	<div class="self-center card bg-base-300 pt-9 w-90">
@@ -107,21 +111,23 @@
 		</div>
 	</div>
 
-	<div class="flex justify-between mt-9">
-		<h2>Contacts</h2>
-		{#if data.user.isAdmin}
-			<label for="edit-contacts-drawer" class="btn btn-soft btn-primary mr-5 mb-4">
-				<Edit size="size-5" strokeWidth="2" />
-			</label>
-		{/if}
-	</div>
+	<div class="contacts flex flex-col items-center">
+		<div class="flex justify-between mt-9 w-90">
+			<h2>Contacts</h2>
+			{#if data.user.isAdmin}
+				<label for="edit-contacts-drawer" class="btn btn-soft btn-primary mr-5 mb-4">
+					<Edit size="size-5" strokeWidth="2" />
+				</label>
+			{/if}
+		</div>
 
-	<div class="block contacts">
-		<ul class="list bg-base-100 rounded-box shadow-md">
-			{#each home.contacts as contact}
-				<ContactsList {contact} />
-			{/each}
-		</ul>
+		<div class="block w-90">
+			<ul class="list bg-base-100 rounded-box shadow-md">
+				{#each home.contacts as contact}
+					<ContactsList {contact} />
+				{/each}
+			</ul>
+		</div>
 	</div>
 </div>
 
