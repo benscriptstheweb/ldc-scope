@@ -1,6 +1,39 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
 
+type Home = {
+    id: string;
+    address1: string;
+    address2: string
+    city: string;
+    state: string;
+    zip: string;
+    contacts: {
+        isPrimary: boolean;
+        name: string;
+    }[];
+    max_days_stay: number;
+    project: {
+        id: string;
+        friendly_name: string;
+        full_address: string;
+        region: number;
+    }[]
+    assignments: Assignment[];
+    congregation: string;
+}
+
+type Assignment = {
+    volunteer: Volunteer;
+}
+
+type Volunteer = {
+    id: string;
+    name: string;
+    date_start: string;
+    date_end: string;
+}
+
 export async function GET({ locals }) {
     const { data, error } = await supabase
         .from('homes')
@@ -15,7 +48,7 @@ export async function GET({ locals }) {
             max_days_stay,
             project!inner ( id, friendly_name, full_address, region ),
             assignments (
-                volunteers (
+                volunteer:volunteers (
                     id,
                     name,
                     date_start,
@@ -24,7 +57,8 @@ export async function GET({ locals }) {
             ),
             congregation
         `)
-        .eq('project.region', locals.user?.assignedRegion);
+        .eq('project.region', locals.user?.assignedRegion)
+        .overrideTypes<Home[]>();
 
     if (error) {
         console.error('Error fetching homes:', error);
@@ -37,7 +71,7 @@ export async function GET({ locals }) {
             .filter(contact => contact.isPrimary)
             .map(contact => contact.name);
 
-        let sortedAssignments = home.assignments.length
+        let sortedAssignments: Assignment[] = home.assignments.length
             ? home.assignments.sort((a: any, b: any) => {
                 const dateA = new Date(a.date_end);
                 const dateB = new Date(b.date_end);
@@ -48,7 +82,7 @@ export async function GET({ locals }) {
         const today = new Date();
 
         let hasAssignmentNow = sortedAssignments[0]
-            ? today >= new Date(sortedAssignments[0].volunteers.date_start) && today <= new Date(sortedAssignments[0].volunteers.date_end)
+            ? today >= new Date(sortedAssignments[0].volunteer.date_start) && today <= new Date(sortedAssignments[0].volunteer.date_end)
             : false
 
         return {
