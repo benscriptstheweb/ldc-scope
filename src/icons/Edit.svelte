@@ -1,10 +1,15 @@
+<script lang="ts">
+	export let size = 'size-4.5';
+	export let strokeWidth = '1.5';
+</script>
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	fill="none"
 	viewBox="0 0 24 24"
-	stroke-width="1.5"
+	stroke-width={strokeWidth}
 	stroke="currentColor"
-	class="size-4.5"
+	class={size}
 >
 	<path
 		stroke-linecap="round"

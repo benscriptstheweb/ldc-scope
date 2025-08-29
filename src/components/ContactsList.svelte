@@ -1,11 +1,10 @@
 <script lang="ts">
-	export let contact: any;
+	let { contact } = $props();
 </script>
 
-<li class="list-row">
+<li class="list-row items-center">
 	<div>{contact.name}</div>
-
-	<div class="contact-btns">
+	<div class="contact-btns justify-center content-center items-center">
 		<a href="tel:{contact.phone}" aria-label="telephone">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

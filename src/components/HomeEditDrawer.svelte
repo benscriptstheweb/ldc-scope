@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Plus from '../icons/Plus.svelte';
-	import Trash from '../icons/Trash.svelte';
 	import Edit from '../icons/Edit.svelte';
 	import type { Contact, HomeAddress } from '$lib/types/homes';
+	import Trash from '../icons/Trash.svelte';
 
-	let { home } = $props();
+	let { home, id } = $props();
 
 	let newContact: Partial<Contact> = $state({
 		name: '',
@@ -41,43 +41,6 @@
 		isDrawerOpen = false;
 	});
 
-	async function deleteContact(homeId: string, contactId: string) {
-		const res = await fetch(`/api/homes/${homeId}/contacts/${contactId}`, { method: 'DELETE' });
-
-		if (res.ok) {
-			window.location.reload();
-		}
-	}
-
-	// We use Partial<T> for the add operations because the database auto-assigns a uuid upon creation.
-	async function addContact(homeId: string, newContact: Partial<Contact>) {
-		const res = await fetch(`/api/homes/${homeId}/contacts`, {
-			method: 'POST',
-			body: JSON.stringify(newContact)
-		});
-
-		if (res.ok) {
-			window.location.reload();
-		}
-	}
-
-	let updatedDetails: Partial<Contact> = $state({
-		name: '',
-		phone: null,
-		email: ''
-	});
-
-	async function editContact(homeId: string, contactId: string, fieldsToEdit: Partial<Contact>) {
-		const res = await fetch(`/api/homes/${homeId}/contacts/${contactId}`, {
-			method: 'PATCH',
-			body: JSON.stringify(fieldsToEdit)
-		});
-
-		if (res.ok) {
-			window.location.reload();
-		}
-	}
-
 	let homeFields = $state({
 		address1: home.address1,
 		address2: home.address2,
@@ -86,8 +49,8 @@
 		zip: home.zip
 	});
 
-	async function updateHome(homeId: string, newHomeDetails: Partial<HomeAddress>) {
-		const res = await fetch(`/api/homes/${homeId}`, {
+	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
+		const res = await fetch(`/api/homes/${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
 		});
@@ -96,126 +59,34 @@
 			window.location.reload();
 		}
 	}
-
-	let editingId: string | null = $state(null);
-
-	function startEditing(contact: Contact) {
-		// Populate form with current details from the contact object.
-		updatedDetails = contact;
-		editingId = contact.id;
-	}
 </script>
 
 <div class="drawer">
-	<input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
+	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
 
 	<div class="drawer-side">
-		<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<div class="header">
-				<h1>Edit Home</h1>
-			</div>
+			<h1>Edit Home</h1>
+
 			<h2 class="edit-heading">Address</h2>
-			<div class="row-inputs">
-				<input type="text" placeholder="Address 1" class="input" bind:value={homeFields.address1} />
-				<input type="text" placeholder="Address 2" class="input" bind:value={homeFields.address2} />
+			<input type="text" placeholder="Address 1" bind:value={homeFields.address1} />
+			<input type="text" placeholder="Address 2" bind:value={homeFields.address2} />
+
+			<input type="text" placeholder="City" bind:value={homeFields.city} />
+
+			<div class="state-zip">
+				<input class="w-20" type="text" placeholder="State" bind:value={homeFields.state} />
+				<input class="w-50" type="text" placeholder="Zip" bind:value={homeFields.zip} />
 			</div>
-			<input type="text" placeholder="City" class="input" bind:value={homeFields.city} />
-			<div class="row-inputs">
-				<input type="text" placeholder="State" class="input" bind:value={homeFields.state} />
-				<input type="text" placeholder="Zip" class="input" bind:value={homeFields.zip} />
-			</div>
-			<button onclick={() => updateHome(home.id, homeFields)} class="btn btn-primary">Update</button
-			>
-
-			<div class="divider"></div>
-			<h2 class="edit-heading">Contacts</h2>
-
-			<div class="contact-edit-list">
-				{#each home.contacts as contact}
-					<div class="list-item">
-						{contact.name}
-
-						<button class="btn" onclick={() => startEditing(contact)}>
-							<Edit />
-						</button>
-					</div>
-
-					{#if editingId === contact.id}
-						<div>
-							<input
-								type="text"
-								placeholder="Name"
-								class="input"
-								bind:value={updatedDetails.name}
-							/>
-							<input
-								type="text"
-								placeholder="Phone"
-								class="input"
-								bind:value={updatedDetails.phone}
-							/>
-							<input
-								type="text"
-								placeholder="Email"
-								class="input"
-								bind:value={updatedDetails.email}
-							/>
-
-							<div class="button-container">
-								<button
-									class="btn btn-error flex-2"
-									onclick={() => deleteContact(home.id, contact.id)}
-									aria-label="delete"
-								>
-									<Trash />
-								</button>
-								<button
-									class="btn btn-primary flex-3"
-									onclick={() => editContact(home.id, contact.id, updatedDetails)}
-								>
-									Update
-								</button>
-								<button class="btn cancel flex-4" onclick={() => (editingId = null)}>
-									Cancel
-								</button>
-							</div>
-						</div>
-					{/if}
-				{/each}
-			</div>
-
-			<div class="divider">New Contact</div>
-			<input class="input input-sm" bind:value={newContact.name} placeholder="Name" />
-			<input class="input input-sm" bind:value={newContact.phone} placeholder="Phone" />
-			<input class="input input-sm" bind:value={newContact.email} placeholder="Email" />
-
-			<div class="button-container">
-				<label class="label mt-3">
-					<input
-						type="checkbox"
-						bind:checked={newContact.isPrimary}
-						class="checkbox checkbox-info"
-					/>
-					Primary Contact
-				</label>
-
-				<button
-					class="btn btn-success"
-					onclick={() => addContact(home.id, newContact)}
-					aria-label="add"
-				>
-					<Plus />
-				</button>
-			</div>
+			<button onclick={() => updateHome(homeFields)} class="btn btn-primary">Update Address</button>
 		</ul>
 	</div>
 </div>
 
 <style>
-	.header {
-		display: flex;
-		justify-content: space-between;
+	.drawer {
+		z-index: 99;
 	}
 
 	h1 {
@@ -224,39 +95,34 @@
 		margin-bottom: 20px;
 	}
 
-	.drawer {
-		z-index: 99;
-	}
-
 	.edit-heading {
 		font-size: 15px;
 		font-style: italic;
 		padding-bottom: 10px;
 	}
 
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* Firefox */
+	input[type='number'] {
+		-moz-appearance: textfield;
+	}
+
 	input {
-		margin: 2px 0;
+		border: none;
+		border-bottom: 1px solid rgba(110, 109, 112, 0.589);
+		outline: none;
+		padding: 5px;
+		margin-bottom: 15px;
+		font-size: 1.1em;
 	}
-
-	.row-inputs {
-		display: flex;
-	}
-
-	.contact-edit-list {
-		display: flex;
-		flex-direction: column;
-	}
-	.list-item {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.button-container {
-		width: 100%;
-	}
-	.button-container > button {
-		float: right;
-		margin: 5px 5px;
+	input:focus {
+		border: none;
+		border-bottom: 1px solid white;
+		outline: none;
 	}
 </style>
