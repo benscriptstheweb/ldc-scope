@@ -21,13 +21,3 @@ export type HomeAddress = {
     state: string,
     zip: string,
 }
-
-export type Homes = HomeAddress & {
-    primaryContacts: string[],
-    isAssigned: boolean
-}
-
-export type Home = Homes & {
-    amenities: string[],
-    volunteers: Volunteer[],
-}

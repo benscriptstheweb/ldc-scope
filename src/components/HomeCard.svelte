@@ -1,28 +1,25 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Home } from '$lib/types/homes';
 
-	export let home: Home;
-
-	const colArr = ['#87799F', '#FFB88C', '#5B9F82', '#FFADC7'];
-	const color = colArr[Math.floor(Math.random() * colArr.length)];
+	let { home } = $props();
 
 	function visitHome() {
 		goto(`/homes/${home.id}`);
 	}
 </script>
 
-<div class="card-boundary">
+<div class="cards-container p-3 w-90">
 	<button
 		type="button"
-		class="card card-side bg-base-100 shadow-sm"
-		on:click={visitHome}
+		class="card card-side shadow-md cursor-pointer"
+		onclick={visitHome}
 		style="width: 100%; text-align: left; padding: 0; border: none; background: none;"
 	>
 		<figure>
-			<div class="color-block" style="background-color: {color};"></div>
+			<!-- img goes here -->
+			<!-- <div class="color-block" style="background-color: {color};"></div> -->
 		</figure>
-		<div class="card-body">
+		<div class="card-body bg-base-200">
 			<h2 class="card-title">{home.address1} {home.address2}</h2>
 			<p class="half-address">{home.city}, {home.state} {home.zip}</p>
 			<div class="card-actions justify-end">
@@ -41,9 +38,9 @@
 					/>
 				</svg>
 				<p style="font-weight: 600">Host: <span>{home.primaryContacts}</span></p>
-				{#if !home.isAssigned}
-					<div class="custom-badge badge badge-success">
-						<strong>A</strong>
+				{#if home.hasAssignmentNow}
+					<div class="custom-badge badge badge-error">
+						<strong>O</strong>
 					</div>
 				{/if}
 			</div>
@@ -56,19 +53,6 @@
 		border-radius: 25px;
 		width: 20px;
 	}
-	.card-boundary {
-		padding: 10px;
-		width: 310px;
-	}
-
-	button {
-		cursor: pointer;
-	}
-
-	.color-block {
-		width: 50px;
-	}
-
 	.half-address {
 		font-style: italic;
 	}

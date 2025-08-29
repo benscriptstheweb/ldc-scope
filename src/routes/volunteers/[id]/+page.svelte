@@ -1,6 +1,6 @@
 <script lang="ts">
 	import HomeAssignmentModal from '../../../components/HomeAssignmentModal.svelte';
-	import VolunteerDetailDrawer from '../../../components/VolunteerDetailDrawer.svelte';
+	import VolunteerEditDrawer from '../../../components/VolunteerEditDrawer.svelte';
 	import Arrow from '../../../icons/Arrow.svelte';
 	import Plus from '../../../icons/Plus.svelte';
 	import Trash from '../../../icons/Trash.svelte';
@@ -20,7 +20,7 @@
 </script>
 
 {#if data.user.isAdmin}
-	<VolunteerDetailDrawer id="edit-volunteer-drawer" volunteerDetail={data} />
+	<VolunteerEditDrawer id="edit-volunteer-drawer" volunteerDetail={data} />
 {/if}
 
 <div class="top-container">
@@ -144,10 +144,10 @@
 	.card {
 		box-shadow: 0px 6px 35px -12px #00000033;
 	}
-	img {
+	/* img {
 		max-height: 130px;
 		object-fit: cover;
-	}
+	} */
 	.top-container {
 		display: flex;
 		flex-direction: column;

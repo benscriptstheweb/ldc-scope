@@ -21,31 +21,16 @@ export async function POST({ locals, request }) {
 
     const body = await request.json();
 
-    try {
-        const { error: insertError } = await supabase
-            .from('assignments')
-            .insert([{ home_id: body.homeId, volunteer_id: body.volunteerId }]);
+    const { error } = await supabase
+        .from('assignments')
+        .insert([{ home_id: body.homeId, volunteer_id: body.volunteerId }]);
 
-        if (insertError) {
-            console.error('Failed to add assignment:', insertError);
-            return json({ error: 'Failed to assign' }, { status: 500 });
-        }
-
-        const { error: updateError } = await supabase
-            .from('homes')
-            .update({ isAssigned: true })
-            .eq('id', body.homeId);
-
-        if (updateError) {
-            console.error('Failed to update home:', updateError);
-            return json({ error: 'Failed to update home assignment status' }, { status: 500 });
-        }
-
-        return json({ success: true }, { status: 201 });
-    } catch (err) {
-        console.error(err);
+    if (error) {
+        console.error('Failed to add assignment:', error);
         return json({ error: 'Failed to assign' }, { status: 500 });
     }
+
+    return json({ success: true }, { status: 201 });
 }
 
 export async function DELETE({ request }) {
