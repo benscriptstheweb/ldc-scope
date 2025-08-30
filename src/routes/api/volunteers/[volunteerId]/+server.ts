@@ -19,7 +19,7 @@ export async function PATCH({ locals, params, request }) {
             name: body.name,
             phone: body.phone,
             email: body.email,
-            project: body.project.id,
+            project: body.project,
             date_start: body.date_start,
             date_end: body.date_end
         })
