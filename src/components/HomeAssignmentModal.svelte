@@ -31,17 +31,16 @@
 		isConfirming = true;
 	}
 
-	async function getAssignableHomes() {
-		const volunteerAssignmentLength =
-			(new Date(volunteerToAssign.date_end).getTime() -
-				new Date(volunteerToAssign.date_start).getTime()) /
-			(1000 * 60 * 60 * 24);
+	const volunteerAssignmentLength =
+		(new Date(volunteerToAssign.date_end).getTime() -
+			new Date(volunteerToAssign.date_start).getTime()) /
+		(1000 * 60 * 60 * 24);
 
+	async function getAssignableHomes() {
 		const { data, error } = await supabase
 			.from('homes')
 			.select('*')
 			.eq('project', volunteerToAssign.project.id)
-			.gte('max_days_stay', volunteerAssignmentLength);
 
 		if (error) {
 			console.error('Error fetching assignable homes:', error);
@@ -54,6 +53,8 @@
 		(document.getElementById(id) as HTMLDialogElement).close();
 		isConfirming = false;
 	}
+	
+	let test = $state(null);
 </script>
 
 <dialog {id} class="modal">
@@ -95,6 +96,22 @@
 											{home.zip}
 										</strong>
 									</div>
+								</div>
+
+								<div class="flex flex-col mb-10">	
+									Meets the following criteria:
+										<label>
+											<input
+												bind:group={test}
+												type="radio"
+												class="radio radio-accent radio-xs"
+												checked={home.max_days_stay >= volunteerAssignmentLength}
+											/>
+											Stay Duration
+										</label>
+										<label>
+											<input bind:group={test} type="radio" class="radio radio-accent radio-xs" value="recOccupant" checked={home.occupant_type === volunteerToAssign.type} /> Recommended Occupant
+										</label>
 								</div>
 
 								<div>
