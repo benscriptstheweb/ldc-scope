@@ -21,6 +21,7 @@ type Home = {
     }[]
     assignments: Assignment[];
     congregation: string;
+    occupant_type: string | null;
 }
 
 type Assignment = {
@@ -55,7 +56,8 @@ export async function GET({ locals }) {
                     date_end
                 )
             ),
-            congregation
+            congregation,
+            occupant_type
         `)
         .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<Home[]>();
@@ -94,7 +96,8 @@ export async function GET({ locals }) {
             zip: home.zip,
             primaryContacts,
             congregation: home.congregation,
-            hasAssignmentNow
+            hasAssignmentNow,
+            occupantType: home.occupant_type
         };
     });
 

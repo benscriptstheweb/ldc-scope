@@ -23,6 +23,7 @@ type DBVolunteer = {
         friendly_name: string;
     }
     assignments: DBAssignment[];
+    type: string;
 };
 
 export async function GET({ locals }) {
@@ -38,7 +39,8 @@ export async function GET({ locals }) {
             project!inner ( id, friendly_name, full_address ),
             assignments (
                 home_id ( address1, address2, city, state, zip )
-            )
+            ),
+            type
         `)
         .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<DBVolunteer[]>();
