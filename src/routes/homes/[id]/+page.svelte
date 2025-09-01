@@ -5,6 +5,7 @@
 	import Map from '../../../components/Map.svelte';
 	import ContactsEditDrawer from '../../../components/ContactsEditDrawer.svelte';
 	import Edit from '../../../icons/Edit.svelte';
+	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -73,15 +74,9 @@
 				<strong>Stay Duration: </strong>
 				{home.maxDays} days
 			</div>
-			<div class="detail mt-9">
-				Recommended Occupant -
-				{#if home.occupantType === 'M'}
-					<div class="custom-badge badge badge-info">M</div>
-				{:else if home.occupantType === 'F'}
-					<div class="custom-badge badge badge-secondary">F</div>
-				{:else}
-					<div class="custom-badge badge badge-success">A</div>
-				{/if}
+			<div class="flex detail mt-9">
+				<p class="mr-2">Recommended Occupant</p>
+				<RecommendedOccupantBadge occupantType={home.occupantType} />
 			</div>
 			<div class="detail mt-9">
 				Homeowner is allergic to:
@@ -132,11 +127,6 @@
 </div>
 
 <style>
-	.custom-badge {
-		border-radius: 25px;
-		width: 20px;
-		font-weight: bold;
-	}
 	.heading {
 		padding-top: 30px;
 	}

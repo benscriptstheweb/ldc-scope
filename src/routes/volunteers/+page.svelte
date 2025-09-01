@@ -4,6 +4,7 @@
 	import Trash from '../../icons/Trash.svelte';
 	import { onMount } from 'svelte';
 	import Link from '../../icons/Link.svelte';
+	import RecommendedOccupantBadge from '../../components/RecommendedOccupantBadge.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -79,15 +80,6 @@
 			cycleSortState = 0;
 		}
 	}
-
-	function setColors(volunteer: any) {
-		return volunteer.type === "F"
-		? 'color: var(--color-secondary); background-color: var(--color-secondary-content)'
-		: volunteer.type === "M" ? 'color: var(--color-info-content); background-color: var(--color-info)'
-		: 'color: #2d055c; background-color: #ddbfff'
-	}
-
-
 </script>
 
 {#if isLinkCopied}
@@ -155,9 +147,7 @@
 						{:else}
 							<div class="custom-badge badge badge-secondary mr-2">U</div>
 						{/if}
-						<div class="custom-badge-type" style={setColors(volunteer)}>
-							{volunteer.type}
-						</div>
+						<RecommendedOccupantBadge occupantType={volunteer.type} />
 					</td>
 				</tr>
 			{/each}
@@ -172,12 +162,6 @@
 	.custom-badge {
 		border-radius: 25px;
 		width: 20px;
-	}
-	.custom-badge-type {
-		border-radius: 25px;
-		width: 23px;
-		height: 23px;
-		text-align: center;
 	}
 	.add-btn-container {
 		display: flex;

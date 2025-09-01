@@ -40,12 +40,13 @@
 		const { data, error } = await supabase
 			.from('homes')
 			.select('*')
-			.eq('project', volunteerToAssign.project.id)
+			.eq('project', volunteerToAssign.project.id);
 
 		if (error) {
 			console.error('Error fetching assignable homes:', error);
 			return [];
 		}
+
 		return data;
 	}
 
@@ -53,8 +54,6 @@
 		(document.getElementById(id) as HTMLDialogElement).close();
 		isConfirming = false;
 	}
-	
-	let test = $state(null);
 </script>
 
 <dialog {id} class="modal">
@@ -98,26 +97,37 @@
 									</div>
 								</div>
 
-								<div class="flex flex-col mb-10">	
+								<div class="flex flex-col mb-10">
 									Meets the following criteria:
-										<label>
-											<input
-												bind:group={test}
-												type="radio"
-												class="radio radio-accent radio-xs"
-												checked={home.max_days_stay >= volunteerAssignmentLength}
-											/>
-											Stay Duration
-										</label>
-										<label>
-											<input bind:group={test} type="radio" class="radio radio-accent radio-xs" value="recOccupant" checked={home.occupant_type === volunteerToAssign.type} /> Recommended Occupant
-										</label>
+									<label>
+										<input
+											type="checkbox"
+											class="checkbox checkbox-accent checkbox-xs"
+											checked={home.max_days_stay >= volunteerAssignmentLength}
+											onclick={(e) => e.preventDefault()}
+										/>
+										Stay Duration
+									</label>
+									<label>
+										<input
+											type="checkbox"
+											class="checkbox checkbox-accent checkbox-xs"
+											checked={home.occupant_type === volunteerToAssign.type ||
+												home.occupant_type === 'A'}
+											onclick={(e) => e.preventDefault()}
+										/>
+										Recommended Occupant
+									</label>
 								</div>
 
 								<div>
 									<button
 										onclick={() => createAssignment(home.id, volunteerToAssign.id)}
-										class="btn btn-success">Accept</button
+										class="btn btn-success"
+										disabled={!(
+											home.max_days_stay >= volunteerAssignmentLength &&
+											(home.occupant_type === volunteerToAssign.type || home.occupant_type === 'A')
+										)}>Accept</button
 									>
 									<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
 										>Cancel</button
@@ -142,9 +152,6 @@
 	.volunteer-info {
 		justify-content: space-between;
 		align-items: center;
-	}
-	.volunteer-name {
-		font-size: 1em;
 	}
 	.list-row {
 		display: flex;
