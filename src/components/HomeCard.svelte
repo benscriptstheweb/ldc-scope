@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import RecommendedOccupantBadge from './RecommendedOccupantBadge.svelte';
 
 	let { home } = $props();
 
@@ -22,27 +23,34 @@
 		<div class="card-body bg-base-200">
 			<h2 class="card-title">{home.address1} {home.address2}</h2>
 			<p class="half-address">{home.city}, {home.state} {home.zip}</p>
-			<div class="card-actions justify-end">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-4.5"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-					/>
-				</svg>
-				<p style="font-weight: 600">Host: <span>{home.primaryContacts}</span></p>
-				{#if home.hasAssignmentNow}
-					<div class="custom-badge badge badge-error">
-						<strong>O</strong>
-					</div>
-				{/if}
+
+			<div class="flex items-center justify-between">
+				<div class="flex items-center">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="currentColor"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						class="size-4 mr-2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+						/>
+					</svg>
+
+					{home.primaryContacts}
+				</div>
+
+				<div class="flex">
+					{#if home.hasAssignmentNow}
+						<div class="custom-badge badge badge-error">
+							<strong>O</strong>
+						</div>
+					{/if}
+					<RecommendedOccupantBadge occupantType={home.occupantType} />
+				</div>
 			</div>
 		</div>
 	</button>

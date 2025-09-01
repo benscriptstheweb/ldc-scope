@@ -50,7 +50,8 @@ export async function GET({ params }) {
                     zip
                 )
             ),
-            project ( id, friendly_name, region )
+            project ( id, friendly_name, region ),
+            type
         `)
         .eq('id', volunteerId)
         .single();

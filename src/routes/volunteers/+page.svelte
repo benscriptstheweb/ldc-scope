@@ -4,6 +4,7 @@
 	import Trash from '../../icons/Trash.svelte';
 	import { onMount } from 'svelte';
 	import Link from '../../icons/Link.svelte';
+	import RecommendedOccupantBadge from '../../components/RecommendedOccupantBadge.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -140,12 +141,13 @@
 					<td class="project-region">
 						{volunteer.assignedProject.friendly_name}
 					</td>
-					<td class="stay">
+					<td class="info-status flex">
 						{#if volunteer.assignedHome !== null}
-							<div class="custom-badge badge badge-success"><strong>A</strong></div>
+							<div class="custom-badge badge badge-success mr-2">A</div>
 						{:else}
-							<div class="custom-badge badge badge-secondary"><strong>U</strong></div>
+							<div class="custom-badge badge badge-secondary mr-2">U</div>
 						{/if}
+						<RecommendedOccupantBadge occupantType={volunteer.type} />
 					</td>
 				</tr>
 			{/each}
@@ -154,6 +156,9 @@
 </div>
 
 <style>
+	.info-status {
+		font-weight: bold;
+	}
 	.custom-badge {
 		border-radius: 25px;
 		width: 20px;
