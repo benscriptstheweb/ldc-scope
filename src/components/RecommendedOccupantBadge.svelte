@@ -23,5 +23,9 @@
 		height: 23px;
 		text-align: center;
 		font-weight: bold;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+		align-items: center;
 	}
 </style>
