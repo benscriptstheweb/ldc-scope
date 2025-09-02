@@ -7,14 +7,6 @@
 	function visitHome() {
 		goto(`/homes/${home.id}`);
 	}
-
-	function setColors(home: any) {
-		return home.occupantType === 'F'
-			? 'color: var(--color-secondary); background-color: var(--color-secondary-content)'
-			: home.occupantType === 'M'
-				? 'color: var(--color-info-content); background-color: var(--color-info)'
-				: '';
-	}
 </script>
 
 <div class="cards-container p-3 w-90">
@@ -29,7 +21,13 @@
 			<!-- <div class="color-block" style="background-color: {color};"></div> -->
 		</figure>
 		<div class="card-body bg-base-200">
-			<h2 class="card-title">{home.address1} {home.address2}</h2>
+			<h2 class="card-title flex justify-between">
+				{home.address1}
+				{home.address2}
+				{#if home.hasAssignmentNow}
+					<div class="badge badge-error badge-soft">Hosting</div>
+				{/if}
+			</h2>
 			<p class="half-address">{home.city}, {home.state} {home.zip}</p>
 
 			<div class="flex items-center justify-between">
@@ -52,12 +50,10 @@
 				</div>
 
 				<div class="flex">
-					{#if home.hasAssignmentNow}
-						<div class="custom-badge badge badge-error">
-							<strong>O</strong>
-						</div>
-					{/if}
 					<RecommendedOccupantBadge occupantType={home.occupantType} />
+					<div class="custom-badge badge badge-warning">
+						<strong>{home.maxDaysStay}</strong>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -74,5 +70,9 @@
 	}
 	.card-title {
 		font-weight: 800;
+	}
+	.badge {
+		font-weight: normal !important;
+		align-items: center;
 	}
 </style>

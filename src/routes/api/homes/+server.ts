@@ -97,7 +97,8 @@ export async function GET({ locals }) {
             primaryContacts,
             congregation: home.congregation,
             hasAssignmentNow,
-            occupantType: home.occupant_type
+            occupantType: home.occupant_type,
+            maxDaysStay: home.max_days_stay
         };
     });
 

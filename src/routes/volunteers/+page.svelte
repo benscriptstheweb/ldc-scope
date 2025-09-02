@@ -146,6 +146,13 @@
 							<div class="custom-badge badge badge-secondary">U</div>
 						{/if}
 						<RecommendedOccupantBadge occupantType={volunteer.type} />
+						<div class="custom-badge badge badge-warning">
+							<strong
+								>{(new Date(volunteer.date_end).getTime() -
+									new Date(volunteer.date_start).getTime()) /
+									(1000 * 60 * 60 * 24)}</strong
+							>
+						</div>
 					</td>
 				</tr>
 			{/each}
