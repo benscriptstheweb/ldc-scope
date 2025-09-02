@@ -80,14 +80,6 @@
 			cycleSortState = 0;
 		}
 	}
-
-	function setColors(volunteer: any) {
-		return volunteer.type === 'F'
-			? 'color: var(--color-secondary); background-color: var(--color-secondary-content)'
-			: volunteer.type === 'M'
-				? 'color: var(--color-info-content); background-color: var(--color-info)'
-				: 'color: #2d055c; background-color: #ddbfff';
-	}
 </script>
 
 {#if isLinkCopied}
@@ -100,7 +92,7 @@
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={copySurveyLink} class="btn btn-primary">
+	<button onclick={copySurveyLink} class="btn btn-soft btn-primary">
 		<Link /> Survey
 	</button>
 </div>
@@ -149,11 +141,9 @@
 					<td class="project-region">
 						{volunteer.assignedProject.friendly_name}
 					</td>
-					<td class="info-status flex">
-						{#if volunteer.assignedHome !== null}
-							<div class="custom-badge badge badge-success mr-2">A</div>
-						{:else}
-							<div class="custom-badge badge badge-secondary mr-2">U</div>
+					<td class="info-status flex justify-end">
+						{#if volunteer.assignedHome === null}
+							<div class="custom-badge badge badge-secondary">U</div>
 						{/if}
 						<RecommendedOccupantBadge occupantType={volunteer.type} />
 					</td>

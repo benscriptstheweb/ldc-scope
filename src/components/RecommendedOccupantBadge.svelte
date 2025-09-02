@@ -2,9 +2,9 @@
 	let { occupantType } = $props();
 
 	function setColors() {
-		return occupantType === 'F'
+		return occupantType === 'S'
 			? 'color: var(--color-secondary); background-color: var(--color-secondary-content)'
-			: occupantType === 'M'
+			: occupantType === 'B'
 				? 'color: var(--color-info-content); background-color: var(--color-info)'
 				: occupantType === 'C'
 					? 'color: #2d055c; background-color: #ddbfff'
