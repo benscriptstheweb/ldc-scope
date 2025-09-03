@@ -29,7 +29,7 @@
 	let spouse2 = $state();
 	let coupleName = $derived(`${spouse1} & ${spouse2}`);
 
-	let familyMembers = $state([]);
+	let familyMembers: string[] = $state([]);
 	let familyNames = $derived(familyMembers.join(', '));
 
 	let newVolunteerName = $derived.by(() => {
