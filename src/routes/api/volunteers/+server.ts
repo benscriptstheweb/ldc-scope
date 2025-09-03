@@ -70,21 +70,11 @@ export async function POST({ locals, request }) {
 
     const body = await request.json();
 
-    if (!body.volunteerProject || !body.volunteerName || !body.volunteerPhone) {
+    if (!body.project || !body.name || !body.phone) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    let supabaseBody = {
-        name: body.volunteerName,
-        email: body.volunteerEmail ?? null,
-        phone: body.volunteerPhone,
-        project: body.volunteerProject,
-        date_start: body.volunteerStartDate,
-        date_end: body.volunteerEndDate
-    }
-
-
-    const { error } = await supabase.from('volunteers').insert([supabaseBody]);
+    const { error } = await supabase.from('volunteers').insert([body]);
 
     if (error) {
         console.error('Failed to add volunteer:', error);
