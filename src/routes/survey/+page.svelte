@@ -43,7 +43,6 @@
 	});
 
 	let submitted = $state(false);
-
 	async function addVolunteer(name: string, details: any, type: string) {
 		const res = await fetch('/api/volunteers', {
 			method: 'POST',
@@ -62,7 +61,8 @@
 			submitted = true;
 			setTimeout(() => {
 				submitted = false;
-			}, 3000);
+				window.location.reload();
+			}, 7000);
 		}
 	}
 
@@ -73,7 +73,7 @@
 </script>
 
 {#if submitted}
-	<Toast infoText={'Thank you! An agent will contact you shortly.'} />
+	<Toast infoText={'Your request has been submitted. An agent will contact you shortly.'} />
 {/if}
 
 <div class="flex flex-col items-center mb-10">
