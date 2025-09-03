@@ -13,8 +13,8 @@
 	}
 </script>
 
-<div class="container flex flex-col items-center">
-	<h2 class="header-text mb-10">Enter Survey</h2>
+<div class="container">
+	<h2 class="header-text mb-10 mt-50">Enter Survey</h2>
 	<form method="POST" action="?/unlock">
 		<div class="join">
 			<input class="input" type="password" name="password" placeholder="Password" required />
@@ -30,6 +30,10 @@
 {/if}
 
 <style>
+	.container {
+		text-align: center;
+		margin: 0 auto;
+	}
 	.header-text {
 		font-size: 20px;
 		font-weight: bold;
