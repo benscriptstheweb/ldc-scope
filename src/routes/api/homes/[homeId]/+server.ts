@@ -71,7 +71,8 @@ export async function GET({ params }) {
         project: home.project,
         maxDays: home.max_days_stay,
         occupantType: home.occupant_type,
-        allergies: home.allergies
+        allergies: home.allergies,
+        distanceToProject: home.distance_to_project
     };
 
     return json(result);

@@ -44,6 +44,7 @@
 			{/if}
 		</div>
 		<Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" />
+		<p class="mt-2"><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
 	</div>
 
 	<div class="history flex flex-col">

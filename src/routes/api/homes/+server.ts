@@ -22,6 +22,7 @@ type Home = {
     assignments: Assignment[];
     congregation: string;
     occupant_type: string | null;
+    distance_to_project: number;
 }
 
 type Assignment = {
@@ -57,7 +58,8 @@ export async function GET({ locals }) {
                 )
             ),
             congregation,
-            occupant_type
+            occupant_type,
+            distance_to_project
         `)
         .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<Home[]>();
@@ -98,7 +100,8 @@ export async function GET({ locals }) {
             congregation: home.congregation,
             hasAssignmentNow,
             occupantType: home.occupant_type,
-            maxDaysStay: home.max_days_stay
+            maxDaysStay: home.max_days_stay,
+            distanceToProject: home.distance_to_project
         };
     });
 
