@@ -3,6 +3,7 @@
 	import Plus from '../icons/Plus.svelte';
 	import type { Contact } from '$lib/types/homes';
 	import Trash from '../icons/Trash.svelte';
+	import DeleteConfirm from './DeleteConfirm.svelte';
 
 	let { home, id } = $props();
 
@@ -72,6 +73,8 @@
 	}
 </script>
 
+<DeleteConfirm id="delete-confirm" deleteFunction={deleteContact} />
+
 <div class="drawer">
 	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
 
@@ -101,10 +104,11 @@
 								</button>
 								<button
 									class="btn btn-dash btn-error ml-10"
-									onclick={() => deleteContact(contact.id)}
+									onclick={() =>
+										(document.getElementById('delete-confirm') as HTMLDialogElement).showModal()}
 								>
-									<Trash />
-								</button>
+									<Trash /></button
+								>
 							</div>
 						</div>
 					{:else}

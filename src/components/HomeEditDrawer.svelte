@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { Contact, HomeAddress } from '$lib/types/homes';
 	import { goto } from '$app/navigation';
+	import DeleteConfirm from './DeleteConfirm.svelte';
 
 	let { home, id } = $props();
 
@@ -64,6 +65,8 @@
 	}
 </script>
 
+<DeleteConfirm id="delete-confirm" deleteFunction={deleteHome} />
+
 <div class="drawer">
 	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
 
@@ -86,7 +89,12 @@
 				<button onclick={() => updateHome(homeFields)} class="btn btn-primary"
 					>Update Address</button
 				>
-				<button onclick={() => deleteHome()} class="btn btn-dash btn-error">Delete Home</button>
+				<button
+					class="btn btn-dash btn-error"
+					onclick={() =>
+						(document.getElementById('delete-confirm') as HTMLDialogElement).showModal()}
+					>Delete Home</button
+				>
 			</div>
 		</ul>
 	</div>
