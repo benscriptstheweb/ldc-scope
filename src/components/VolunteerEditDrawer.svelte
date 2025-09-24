@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { supabase } from '$lib/supabase/supabaseClient';
+	import DeleteConfirm from './DeleteConfirm.svelte';
 
 	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
@@ -64,22 +65,7 @@
 	}
 </script>
 
-<dialog id="delete-btn-confirm" class="modal">
-	<div class="modal-box">
-		<h3 class="text-lg font-bold">Confirm Delete</h3>
-		<p>Are you sure you want to delete this volunteer? This action cannot be undone.</p>
-		<div class="modal-action">
-			<button
-				onclick={() =>
-					(document.getElementById('delete-btn-confirm') as HTMLDialogElement)?.close()}
-				class="btn">Cancel</button
-			>
-			<button onclick={() => deleteVolunteer()} class="btn btn-soft btn-error"
-				>Delete Volunteer</button
-			>
-		</div>
-	</div>
-</dialog>
+<DeleteConfirm id="delete-confirm" deleteFunction={deleteVolunteer} />
 
 <div class="drawer">
 	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
@@ -122,8 +108,7 @@
 			</div>
 			<button
 				class="delete-btn btn btn-soft btn-error"
-				onclick={() =>
-					(document.getElementById('delete-btn-confirm') as HTMLDialogElement).showModal()}
+				onclick={() => (document.getElementById('delete-confirm') as HTMLDialogElement).showModal()}
 				>Delete Volunteer</button
 			>
 		</ul>
