@@ -123,3 +123,22 @@ export async function DELETE({ request }) {
 
     return json({ status: 'deleted' });
 }
+
+
+export async function POST({ request }) {
+    const body = await request.json();
+
+    if (!body) {
+        return json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    console.log(body)
+
+    const { error } = await supabase.from('homes').insert([body]);
+
+    if (error) {
+        return json({ error: 'Failed to add home' }, { status: 500 });
+    }
+
+    return json({ success: true }, { status: 201 });
+}
