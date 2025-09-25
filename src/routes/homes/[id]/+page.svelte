@@ -95,7 +95,7 @@
 
 		<div class="divider"></div>
 
-		<h2>Amenities</h2>
+		<h2>What This Home Offers</h2>
 		<div class="block amenities">
 			{#if !home.amenities}
 				<p class="amenities-none-text">No amenities listed for this home 🤔</p>
