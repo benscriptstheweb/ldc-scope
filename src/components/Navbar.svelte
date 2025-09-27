@@ -19,7 +19,7 @@
 <div class="navbar bg-base-100 shadow-sm">
 	<div class="flex-1">
 		<a href="/">
-			<img width="61px" src="/Vari1.png" alt="The Purple House" class="title" />
+			<img width="41px" src="/Vari1.png" alt="The Purple House" class="title" />
 		</a>
 	</div>
 

@@ -67,15 +67,18 @@
 <dialog {id} class="modal">
 	<div class="modal-box">
 		<form id="add-home">
-			<h1 class="heading mb-4">Add Home</h1>
+			<h1 class="heading mb-4">Add New Home</h1>
 
 			<div class="divider">1. Property Data</div>
 			<input bind:value={address1} type="text" placeholder="Address 1" />
 			<input bind:value={address2} type="text" placeholder="Address 2" />
 
 			<input bind:value={city} type="text" placeholder="City" />
-			<input bind:value={addressState} type="text" placeholder="State" />
-			<input bind:value={zip} type="text" placeholder="Zip" />
+
+			<div class="flex">
+				<input bind:value={addressState} type="text" placeholder="State" class="w-30 mr-3" />
+				<input bind:value={zip} type="text" placeholder="Zip" class="w-21" />
+			</div>
 
 			<div>
 				<label class="label">
@@ -117,11 +120,12 @@
 
 			<div class="modal-action">
 				<button
-					class="btn"
+					class="btn btn-soft"
 					onclick={() => (document.getElementById('add-home') as HTMLFormElement).reset()}
 					>Close</button
 				>
-				<button class="btn btn-success" onclick={() => addHome(newHomeDetails)}>Add</button>
+				<button class="btn btn-soft btn-success" onclick={() => addHome(newHomeDetails)}>Add</button
+				>
 			</div>
 		</form>
 	</div>
