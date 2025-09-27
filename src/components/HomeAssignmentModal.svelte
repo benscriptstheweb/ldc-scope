@@ -3,6 +3,8 @@
 	import Plus from '../icons/Plus.svelte';
 	import Info from '../icons/Info.svelte';
 	import { supabase } from '$lib/supabase/supabaseClient';
+	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
+	import { onMount } from 'svelte';
 
 	let { volunteerToAssign, id } = $props();
 
@@ -54,8 +56,6 @@
 		(document.getElementById(id) as HTMLDialogElement).close();
 		isConfirming = false;
 	}
-
-	let test = $state(null);
 </script>
 
 <dialog {id} class="modal">
@@ -73,70 +73,83 @@
 			{:else}
 				<ul class="list bg-base-100 rounded-box shadow-md">
 					{#each assignableHomes as home}
-						<li class="list-row">
-							{home.address1}
-							<div>
-								<button
-									onclick={() => visitHome(home.id)}
-									class="mr-4 btn btn-xs btn-circle btn-info"><Info /></button
-								>
-								<button
-									onclick={(e) => confirmAssignment(home.id)}
-									class="btn btn-xs btn-circle btn-success"><Plus /></button
-								>
-							</div>
-						</li>
-
-						{#if editingId === home.id && isConfirming}
-							<div class="edit-pane p-5">
-								<div class="volunteer-info mt-2 mb-8">
-									Assign {volunteerToAssign.name} to this home?
-									<div>
-										<strong>
-											{home.address1}, {home.city}, {home.state}
-											{home.zip}
-										</strong>
-									</div>
-								</div>
-
-								<div class="flex flex-col mb-10">
-									Meets the following criteria:
-									<label>
-										<input
-											type="checkbox"
-											class="checkbox checkbox-accent checkbox-xs"
-											checked={home.max_days_stay >= volunteerAssignmentLength}
-											onclick={(e) => e.preventDefault()}
-										/>
-										Stay Duration
-									</label>
-									<label>
-										<input
-											type="checkbox"
-											class="checkbox checkbox-accent checkbox-xs"
-											checked={home.occupant_type === volunteerToAssign.type ||
-												home.occupant_type === 'A'}
-											onclick={(e) => e.preventDefault()}
-										/>
-										Recommended Occupant
-									</label>
-								</div>
-
+						{#await isOverlapping(volunteerToAssign.id, home.id) then hasOverlap}
+							<li class="list-row">
+								{home.address1}
 								<div>
 									<button
-										onclick={() => createAssignment(home.id, volunteerToAssign.id)}
-										class="btn btn-success"
-										disabled={!(
-											home.max_days_stay >= volunteerAssignmentLength &&
-											(home.occupant_type === volunteerToAssign.type || home.occupant_type === 'A')
-										)}>Accept</button
+										onclick={() => visitHome(home.id)}
+										class="mr-4 btn btn-xs btn-circle btn-info"><Info /></button
 									>
-									<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
-										>Cancel</button
+									<button
+										onclick={() => confirmAssignment(home.id)}
+										class="btn btn-xs btn-circle btn-success"><Plus /></button
 									>
 								</div>
-							</div>
-						{/if}
+							</li>
+
+							{#if editingId === home.id && isConfirming}
+								<div class="edit-pane p-5">
+									<div class="volunteer-info mt-2 mb-8">
+										Assign {volunteerToAssign.name} to this home?
+										<div>
+											<strong>
+												{home.address1}, {home.city}, {home.state}
+												{home.zip}
+											</strong>
+										</div>
+									</div>
+
+									<div class="flex flex-col mb-10">
+										Meets the following criteria:
+										<label>
+											<input
+												type="checkbox"
+												class="checkbox checkbox-accent checkbox-xs"
+												checked={home.max_days_stay >= volunteerAssignmentLength}
+												onclick={(e) => e.preventDefault()}
+											/>
+											Stay duration
+										</label>
+										<label>
+											<input
+												type="checkbox"
+												class="checkbox checkbox-accent checkbox-xs"
+												checked={home.occupant_type === volunteerToAssign.type ||
+													home.occupant_type === 'A'}
+												onclick={(e) => e.preventDefault()}
+											/>
+											Recommended occupant
+										</label>
+										<label>
+											<input
+												type="checkbox"
+												class="checkbox checkbox-accent checkbox-xs"
+												checked={!hasOverlap}
+												onclick={(e) => e.preventDefault()}
+											/>
+											No overlapping assignment
+										</label>
+									</div>
+
+									<div>
+										<button
+											onclick={() => createAssignment(home.id, volunteerToAssign.id)}
+											class="btn btn-success"
+											disabled={!(
+												!hasOverlap &&
+												home.max_days_stay >= volunteerAssignmentLength &&
+												(home.occupant_type === volunteerToAssign.type ||
+													home.occupant_type === 'A')
+											)}>Accept</button
+										>
+										<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
+											>Cancel</button
+										>
+									</div>
+								</div>
+							{/if}
+						{/await}
 					{/each}
 				</ul>
 			{/if}

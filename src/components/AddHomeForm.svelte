@@ -22,6 +22,7 @@
 	let zip = $state('');
 	let hostCongregation = $state('');
 	let distanceToProject: null | number = $state(null);
+	let maxDays: null | number = $state(null);
 	let multiSelectAmenities = $state([]);
 
 	let newHomeDetails = $derived({
@@ -32,6 +33,7 @@
 		zip: zip,
 		congregation: hostCongregation,
 		distance_to_project: distanceToProject,
+		max_days_stay: maxDays,
 		amenities: multiSelectAmenities
 	});
 
@@ -48,10 +50,14 @@
 	});
 
 	async function addHome(newHome: any) {
-		// const res = await fetch(`/api/homes`, {
-		// 	method: 'POST',
-		// 	body: JSON.stringify(newHome)
-		// });
+		const res = await fetch(`/api/homes`, {
+			method: 'POST',
+			body: JSON.stringify({
+				home: newHome,
+				contact: newHomeContact
+			})
+		});
+
 		// if (res.ok) {
 		// 	window.location.reload();
 		// }
@@ -60,61 +66,71 @@
 
 <dialog {id} class="modal">
 	<div class="modal-box">
-		<h1 class="heading mb-4">Add Home</h1>
+		<form id="add-home">
+			<h1 class="heading mb-4">Add Home</h1>
 
-		<div class="divider">Property Data</div>
-		<input bind:value={address1} type="text" placeholder="Address 1" />
-		<input bind:value={address2} type="text" placeholder="Address 2" />
+			<div class="divider">1. Property Data</div>
+			<input bind:value={address1} type="text" placeholder="Address 1" />
+			<input bind:value={address2} type="text" placeholder="Address 2" />
 
-		<input bind:value={city} type="text" placeholder="City" />
-		<input bind:value={addressState} type="text" placeholder="State" />
-		<input bind:value={zip} type="text" placeholder="Zip" />
+			<input bind:value={city} type="text" placeholder="City" />
+			<input bind:value={addressState} type="text" placeholder="State" />
+			<input bind:value={zip} type="text" placeholder="Zip" />
 
-		<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>
-		<ul>
-			{#each amenities as amenity}
-				<li>
-					{amenity.type}
-					<input type="checkbox" value={amenity.type} bind:group={multiSelectAmenities} />
-				</li>
-			{/each}
-		</ul>
+			<div>
+				<label class="label">
+					<p>Stay Duration</p>
+					<input bind:value={maxDays} type="number" class="w-15" />
+				</label>
+			</div>
 
-		<div class="divider mt-7">Project</div>
-		<select class="select mb-7">
-			<option disabled selected>Select project</option>
-			{#await getProjects() then projects}
-				{#each projects as project}
-					<option value={project.id}>{project.friendly_name}</option>
+			<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>
+			<ul>
+				{#each amenities as amenity}
+					<li>
+						{amenity.type}
+						<input type="checkbox" value={amenity.type} bind:group={multiSelectAmenities} />
+					</li>
 				{/each}
-			{/await}
-		</select>
+			</ul>
 
-		<p>Distance to Project (in miles)</p>
-		<input bind:value={distanceToProject} type="number" class="w-15" />
+			<div class="divider mt-7">2. Project</div>
+			<select class="select mb-7">
+				<option disabled selected>Select project</option>
+				{#await getProjects() then projects}
+					{#each projects as project}
+						<option value={project.id}>{project.friendly_name}</option>
+					{/each}
+				{/await}
+			</select>
 
-		<div class="divider mt-7">Host Details</div>
-		<input bind:value={hostName} type="text" placeholder="Primary Host Name" />
-		<input bind:value={hostEmail} type="text" placeholder="Host Email" />
-		<input bind:value={hostPhone} type="number" placeholder="Host Phone" />
-		<input bind:value={hostCongregation} type="text" placeholder="Host Congregation" />
+			<label class="label">
+				<p>Distance to Project (in miles)</p>
+				<input bind:value={distanceToProject} type="number" class="w-15" />
+			</label>
 
-		<div class="modal-action">
-			<form method="dialog">
-				<button class="btn">Close</button>
+			<div class="divider mt-7">3. Primary Host Details</div>
+			<input bind:value={hostName} type="text" placeholder="Name" />
+			<input bind:value={hostEmail} type="text" placeholder="Email" />
+			<input bind:value={hostPhone} type="number" placeholder="Phone" />
+			<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
+
+			<div class="modal-action">
 				<button
-					class="btn btn-success"
-					onclick={(e) => {
-						e.preventDefault();
-						addHome(newHomeDetails);
-					}}>Add</button
+					class="btn"
+					onclick={() => (document.getElementById('add-home') as HTMLFormElement).reset()}
+					>Close</button
 				>
-			</form>
-		</div>
+				<button class="btn btn-success" onclick={() => addHome(newHomeDetails)}>Add</button>
+			</div>
+		</form>
 	</div>
 </dialog>
 
 <style>
+	.divider {
+		font-style: italic;
+	}
 	.subheading {
 		font-weight: bold;
 		margin-bottom: 5px;
@@ -132,5 +148,15 @@
 		border: none;
 		border-bottom: 1px solid white;
 		outline: none;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* Firefox */
+	input[type='number'] {
+		-moz-appearance: textfield;
 	}
 </style>
