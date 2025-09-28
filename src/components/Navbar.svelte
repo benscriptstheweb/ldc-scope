@@ -12,7 +12,7 @@
 	async function getUnassignedCount() {
 		const res = await fetch('/api/volunteers');
 		const volunteers = await res.json();
-		return volunteers.filter((v) => v.isAssigned === 0).length;
+		return volunteers.filter((v: any) => v.isAssigned === 0).length;
 	}
 </script>
 
@@ -91,7 +91,7 @@
 					</summary>
 
 					<ul class="bg-base-100 rounded-t-none p-2 dropdown-content menu">
-						<li><button on:click={logout}>Logout</button></li>
+						<li><button onclick={logout}>Logout</button></li>
 						<li class="menu-disabled"><button>Settings</button></li>
 						<div class="divider"></div>
 						<div class="user-privilege">

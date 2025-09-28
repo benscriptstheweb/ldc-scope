@@ -40,7 +40,12 @@
 	</div>
 	<div class="login-card">
 		<h1 class="welcome-sign">Welcome home</h1>
-		<form on:submit|preventDefault={login}>
+		<form
+			onsubmit={(e) => {
+				e.preventDefault();
+				login;
+			}}
+		>
 			<div class="login-card-input">
 				<input class="input" type="text" bind:value={email} />
 			</div>
@@ -48,8 +53,12 @@
 				<input class="input" type="password" bind:value={password} />
 			</div>
 			<button class="btn btn-sm btn-primary" type="submit">Login</button>
-			<button class="btn btn-sm" on:click|preventDefault={showInfoRequestToast}
-				>Request Account</button
+			<button
+				class="btn btn-sm"
+				onclick={(e) => {
+					e.preventDefault();
+					showInfoRequestToast;
+				}}>Request Account</button
 			>
 		</form>
 	</div>
