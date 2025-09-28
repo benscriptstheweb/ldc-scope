@@ -39,28 +39,13 @@
 		<p class="logo-title">Casa Morada</p>
 	</div>
 	<div class="login-card">
-		<h1 class="welcome-sign">Welcome home</h1>
-		<form
-			onsubmit={(e) => {
-				e.preventDefault();
-				login;
-			}}
-		>
-			<div class="login-card-input">
-				<input class="input" type="text" bind:value={email} />
-			</div>
-			<div class="login-card-input">
-				<input class="input" type="password" bind:value={password} />
-			</div>
-			<button class="btn btn-sm btn-primary" type="submit">Login</button>
-			<button
-				class="btn btn-sm"
-				onclick={(e) => {
-					e.preventDefault();
-					showInfoRequestToast;
-				}}>Request Account</button
-			>
-		</form>
+		<h1 class="welcome-sign mb-2">Welcome home</h1>
+		<div class="mb-5 flex flex-col">
+			<input class="input mb-2" type="text" bind:value={email} placeholder="username" />
+			<input class="input" type="password" bind:value={password} placeholder="password" />
+		</div>
+		<button class="btn btn-soft btn-primary mr-2" type="submit" onclick={login}>Login</button>
+		<button class="btn btn-ghost" onclick={showInfoRequestToast}>Request Account</button>
 	</div>
 
 	{#if isInfoRequested}
@@ -91,6 +76,9 @@
 		display: none;
 	}
 	@media (min-width: 768px) and (max-width: 1024px) {
+		.logo {
+			margin-bottom: 30px;
+		}
 	}
 	@media (min-width: 1025px) {
 		.center-container {
@@ -103,16 +91,5 @@
 		.logo {
 			margin-right: 50px;
 		}
-	}
-
-	.login-card {
-		margin: 10px;
-	}
-	.login-card-input {
-		margin: 10px 0;
-	}
-
-	.btn {
-		float: right;
 	}
 </style>
