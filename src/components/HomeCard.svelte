@@ -9,12 +9,11 @@
 	}
 </script>
 
-<div class="cards-container p-3 w-90">
+<div class="cards-container">
 	<button
 		type="button"
-		class="card card-side shadow-md cursor-pointer"
+		class="card card-side shadow-md cursor-pointer w-70 text-left m-3"
 		onclick={visitHome}
-		style="width: 100%; text-align: left; padding: 0; border: none; background: none;"
 	>
 		<figure>
 			<!-- img goes here -->
