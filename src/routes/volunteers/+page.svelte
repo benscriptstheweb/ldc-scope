@@ -116,7 +116,7 @@
 				</th>
 				<th class="cursor-pointer" onclick={() => toggleSort('name')}>Name</th>
 				<th class="cursor-pointer" onclick={() => toggleSort('project')}>Project</th>
-				<th class="cursor-pointer" onclick={() => toggleSort('status')}>Status</th>
+				<th class="cursor-pointer text-right" onclick={() => toggleSort('status')}>Status</th>
 			</tr>
 		</thead>
 
