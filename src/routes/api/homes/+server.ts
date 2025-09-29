@@ -18,7 +18,7 @@ type Home = {
         friendly_name: string;
         full_address: string;
         region: number;
-    }[]
+    }
     assignments: Assignment[];
     congregation: string;
     occupant_type: string | null;
@@ -99,6 +99,7 @@ export async function GET({ locals }) {
             primaryContacts,
             congregation: home.congregation,
             hasAssignmentNow,
+            project: home.project.friendly_name,
             occupantType: home.occupant_type,
             maxDaysStay: home.max_days_stay,
             distanceToProject: home.distance_to_project

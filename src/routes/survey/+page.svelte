@@ -4,6 +4,7 @@
 	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
 	import Trash from '../../icons/Trash.svelte';
+	import { getProjects } from '$lib/helpers/getProjects';
 
 	let householdType = $state('brother');
 
@@ -64,11 +65,6 @@
 				window.location.reload();
 			}, 7000);
 		}
-	}
-
-	async function getProjects() {
-		const res = await fetch('api/projects');
-		return res.json();
 	}
 </script>
 

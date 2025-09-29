@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { supabase } from '$lib/supabase/supabaseClient';
 	import DeleteConfirm from './DeleteConfirm.svelte';
+	import { getProjectsByRegion } from '$lib/helpers/getProjects';
 
 	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
@@ -28,20 +28,6 @@
 	onMount(() => {
 		newVolunteerDetails = defaultInfo;
 	});
-
-	async function getProjects() {
-		const { data, error } = await supabase
-			.from('projects')
-			.select('*')
-			.eq('region', volunteerDetail.project.region);
-
-		if (error) {
-			console.error('Error fetching assignable homes:', error);
-			return [];
-		}
-
-		return data;
-	}
 
 	async function updateInfo() {
 		const res = await fetch(`/api/volunteers/${volunteerDetail.id}`, {
@@ -82,7 +68,7 @@
 			<h2 class="subheading">Project</h2>
 			<select bind:value={newVolunteerDetails.project} class="select mb-7">
 				<option disabled selected>Select project</option>
-				{#await getProjects() then projects}
+				{#await getProjectsByRegion(volunteerDetail.project.region) then projects}
 					{#each projects as project}
 						<option value={project.id} selected={project.id === newVolunteerDetails.project}
 							>{project.friendly_name}</option
