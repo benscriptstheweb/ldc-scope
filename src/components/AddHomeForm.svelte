@@ -1,19 +1,8 @@
 <script lang="ts">
 	import { amenities } from '$lib/helpers/amenities';
-	import { supabase } from '$lib/supabase/supabaseClient';
+	import { getProjects } from '$lib/helpers/getProjects';
 
 	let { id } = $props();
-
-	async function getProjects() {
-		const { data, error } = await supabase.from('projects').select('*');
-
-		if (error) {
-			console.error('Error fetching assignable homes:', error);
-			return [];
-		}
-
-		return data;
-	}
 
 	let address1 = $state('');
 	let address2 = $state('');

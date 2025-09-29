@@ -29,6 +29,7 @@
 				{/if}
 			</h2>
 			<p class="half-address">{home.city}, {home.state} {home.zip}</p>
+			<p>{home.distanceToProject} miles away</p>
 
 			<div class="flex items-center justify-between">
 				<div class="flex items-center">
