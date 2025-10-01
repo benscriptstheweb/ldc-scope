@@ -13,6 +13,8 @@
 	let distanceToProject: null | number = $state(null);
 	let maxDays: null | number = $state(null);
 	let multiSelectAmenities = $state([]);
+	let projectId: null | number = $state(null);
+	let recommendedOccupant = $state('A');
 
 	let newHomeDetails = $derived({
 		address1: address1,
@@ -21,9 +23,11 @@
 		state: addressState,
 		zip: zip,
 		congregation: hostCongregation,
+		project: projectId,
 		distance_to_project: distanceToProject,
 		max_days_stay: maxDays,
-		amenities: multiSelectAmenities
+		amenities: multiSelectAmenities,
+		occupant_type: recommendedOccupant
 	});
 
 	let hostName = $state('');
@@ -47,9 +51,9 @@
 			})
 		});
 
-		// if (res.ok) {
-		// 	window.location.reload();
-		// }
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 </script>
 
@@ -76,6 +80,15 @@
 				</label>
 			</div>
 
+			<p>Recommended Occupant</p>
+			<select class="select" bind:value={recommendedOccupant}>
+				<option value="S">Sister</option>
+				<option value="B">Brother</option>
+				<option value="C">Couple</option>
+				<option value="F">Family</option>
+				<option value="A">Any</option>
+			</select>
+
 			<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>
 			<ul>
 				{#each amenities as amenity}
@@ -87,7 +100,7 @@
 			</ul>
 
 			<div class="divider mt-7">2. Project</div>
-			<select class="select mb-7">
+			<select class="select mb-7" bind:value={projectId}>
 				<option disabled selected>Select project</option>
 				{#await getProjects() then projects}
 					{#each projects as project}
@@ -107,15 +120,18 @@
 			<input bind:value={hostPhone} type="number" placeholder="Phone" />
 			<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
 
-			<div class="modal-action">
-				<button
-					class="btn btn-soft"
-					onclick={() => (document.getElementById('add-home') as HTMLFormElement).reset()}
-					>Close</button
-				>
-				<button class="btn btn-soft btn-success" onclick={() => addHome(newHomeDetails)}>Add</button
-				>
-			</div>
+			<button
+				class="btn btn-soft"
+				onclick={() => (document.getElementById('add-home') as HTMLFormElement).reset()}
+				>Close</button
+			>
+			<button
+				class="btn btn-soft btn-success"
+				onclick={(e) => {
+					e.preventDefault();
+					addHome(newHomeDetails);
+				}}>Add</button
+			>
 		</form>
 	</div>
 </dialog>

@@ -135,26 +135,26 @@ export async function POST({ request }) {
 
     console.log(body.home)
 
-    // const { data, error } = await supabase.from('homes')
-    //     .insert([body.home])
-    //     .select('id')
-    //     .single();
+    const { data, error } = await supabase.from('homes')
+        .insert([body.home])
+        .select('id')
+        .single();
 
-    // if (error) {
-    //     return json({ error: 'Failed to add home' }, { status: 500 });
-    // }
+    if (error) {
+        return json({ error: 'Failed to add home' }, { status: 500 });
+    }
 
-    // const { error: contactsError } = await supabase.from('contacts').insert([{
-    //     home_id: data.id,
-    //     name: body.contact.name,
-    //     phone: body.contact.phone,
-    //     email: body.contact.email,
-    //     isPrimary: true
-    // }]);
+    const { error: contactsError } = await supabase.from('contacts').insert([{
+        home_id: data.id,
+        name: body.contact.name,
+        phone: body.contact.phone,
+        email: body.contact.email,
+        isPrimary: true
+    }]);
 
-    // if (contactsError) {
-    //     return json({ error: 'Failed to add contact to new home' }, { status: 500 });
-    // }
+    if (contactsError) {
+        return json({ error: 'Failed to add contact to new home' }, { status: 500 });
+    }
 
     return json({ success: true }, { status: 201 });
 }
