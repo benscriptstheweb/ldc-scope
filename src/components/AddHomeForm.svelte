@@ -73,8 +73,8 @@
 </script>
 
 <dialog {id} class="modal">
-	<form id="add-form">
-		<div class="modal-box">
+	<div class="modal-box">
+		<form id="add-form">
 			<h1 class="heading mb-4">Add New Home</h1>
 
 			<div class="divider">1. Property Data</div>
@@ -171,8 +171,8 @@
 				<button class="btn btn-soft btn-success" onclick={() => addHome(newHomeDetails)}>Add</button
 				>
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 </dialog>
 
 <style>
