@@ -73,93 +73,106 @@
 </script>
 
 <dialog {id} class="modal">
-	<div class="modal-box">
-		<h1 class="heading mb-4">Add New Home</h1>
+	<form id="add-form">
+		<div class="modal-box">
+			<h1 class="heading mb-4">Add New Home</h1>
 
-		<div class="divider">1. Property Data</div>
-		<input bind:value={address1} type="text" placeholder="Address 1" />
-		<input bind:value={address2} type="text" placeholder="Address 2" />
+			<div class="divider">1. Property Data</div>
+			<input bind:value={address1} type="text" placeholder="Address 1" />
+			<input bind:value={address2} type="text" placeholder="Address 2" />
 
-		<input bind:value={city} type="text" placeholder="City" />
+			<input bind:value={city} type="text" placeholder="City" />
 
-		<div class="flex">
-			<input bind:value={addressState} type="text" placeholder="State" class="w-30 mr-3" />
-			<input bind:value={zip} type="text" placeholder="Zip" class="w-21" />
-		</div>
+			<div class="flex">
+				<input bind:value={addressState} type="text" placeholder="State" class="w-30 mr-3" />
+				<input bind:value={zip} type="text" placeholder="Zip" class="w-21" />
+			</div>
 
-		<div>
-			<label class="label">
-				<p>Stay Duration</p>
-				<input bind:value={maxDays} type="number" class="w-15" />
-			</label>
-		</div>
+			<div>
+				<label class="label">
+					<p>Stay Duration</p>
+					<input bind:value={maxDays} type="number" class="w-15" />
+				</label>
+			</div>
 
-		<p>Recommended Occupant</p>
-		<select class="select" bind:value={recommendedOccupant}>
-			<option value="S">Sister</option>
-			<option value="B">Brother</option>
-			<option value="C">Couple</option>
-			<option value="F">Family</option>
-			<option value="A">Any</option>
-		</select>
+			<p>Recommended Occupant</p>
+			<select class="select" bind:value={recommendedOccupant}>
+				<option value="S">Sister</option>
+				<option value="B">Brother</option>
+				<option value="C">Couple</option>
+				<option value="F">Family</option>
+				<option value="A">Any</option>
+			</select>
 
-		<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>
-		<ul>
-			{#each amenities as amenity}
-				<li>
-					{amenity.type}
-					<input type="checkbox" value={amenity.type} bind:group={multiSelectAmenities} />
-				</li>
-			{/each}
-		</ul>
-
-		<h3 class="subheading mt-7">Homeowner Allergies</h3>
-		<input type="text" bind:value={allergy} />
-		<button class="btn btn-soft btn-primary" onclick={() => addAllergyToList()}>
-			<Plus />
-		</button>
-		<div class="allergies-list">
-			{#each homeownerAllergies as tag}
-				<div class="badge badge-primary mr-1">
-					{tag}
-					<button onclick={() => removeTag(tag)}>
-						<Ex />
-					</button>
-				</div>
-			{/each}
-		</div>
-
-		<div class="divider mt-7">2. Project</div>
-		<select class="select mb-7" bind:value={projectId}>
-			<option disabled selected>Select project</option>
-			{#await getProjects() then projects}
-				{#each projects as project}
-					<option value={project.id}>{project.friendly_name}</option>
+			<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>
+			<ul>
+				{#each amenities as amenity}
+					<li>
+						{amenity.type}
+						<input type="checkbox" value={amenity.type} bind:group={multiSelectAmenities} />
+					</li>
 				{/each}
-			{/await}
-		</select>
+			</ul>
 
-		<label class="label">
-			<p>Distance to Project (in miles)</p>
-			<input bind:value={distanceToProject} type="number" class="w-15" />
-		</label>
-
-		<div class="divider mt-7">3. Primary Host Details</div>
-		<input bind:value={hostName} type="text" placeholder="Name" />
-		<input bind:value={hostEmail} type="text" placeholder="Email" />
-		<input bind:value={hostPhone} type="number" placeholder="Phone" />
-		<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
-
-		<div class="mt-30 mb-20">
+			<h3 class="subheading mt-7">Homeowner Allergies</h3>
+			<input type="text" bind:value={allergy} />
 			<button
-				class="btn btn-soft"
-				onclick={() => (document.getElementById(id) as HTMLDialogElement).close()}>Close</button
+				class="btn btn-soft btn-primary"
+				onclick={(e) => {
+					e.preventDefault();
+					addAllergyToList();
+				}}
 			>
-			<button type="submit" class="btn btn-soft btn-success" onclick={() => addHome(newHomeDetails)}
-				>Add</button
-			>
+				<Plus />
+			</button>
+			<div class="allergies-list">
+				{#each homeownerAllergies as tag}
+					<div class="badge badge-primary mr-1">
+						{tag}
+						<button
+							onclick={(e) => {
+								e.preventDefault();
+								removeTag(tag);
+							}}
+						>
+							<Ex />
+						</button>
+					</div>
+				{/each}
+			</div>
+
+			<div class="divider mt-7">2. Project</div>
+			<select class="select mb-7" bind:value={projectId}>
+				<option disabled selected>Select project</option>
+				{#await getProjects() then projects}
+					{#each projects as project}
+						<option value={project.id}>{project.friendly_name}</option>
+					{/each}
+				{/await}
+			</select>
+
+			<label class="label">
+				<p>Distance to Project (in miles)</p>
+				<input bind:value={distanceToProject} type="number" class="w-15" />
+			</label>
+
+			<div class="divider mt-7">3. Primary Host Details</div>
+			<input bind:value={hostName} type="text" placeholder="Name" />
+			<input bind:value={hostEmail} type="text" placeholder="Email" />
+			<input bind:value={hostPhone} type="number" placeholder="Phone" />
+			<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
+
+			<div class="mt-30 mb-20">
+				<button
+					class="btn btn-soft"
+					onclick={() => (document.getElementById('add-form') as HTMLFormElement).reset()}
+					>Close</button
+				>
+				<button class="btn btn-soft btn-success" onclick={() => addHome(newHomeDetails)}>Add</button
+				>
+			</div>
 		</div>
-	</div>
+	</form>
 </dialog>
 
 <style>
