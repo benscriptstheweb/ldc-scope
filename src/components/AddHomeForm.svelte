@@ -67,11 +67,8 @@
 		}
 	}
 
-	function removeTag(e: any) {
-		const tagName = e.currentTarget?.parentElement.innerText;
-		homeownerAllergies = homeownerAllergies.filter(
-			(_e, i) => i !== homeownerAllergies.indexOf(tagName)
-		);
+	function removeTag(tagName: string) {
+		homeownerAllergies = homeownerAllergies.filter((e) => e !== tagName);
 	}
 </script>
 
@@ -125,7 +122,7 @@
 			{#each homeownerAllergies as tag}
 				<div class="badge badge-primary mr-1">
 					{tag}
-					<button onclick={(e) => removeTag(e)}>
+					<button onclick={() => removeTag(tag)}>
 						<Ex />
 					</button>
 				</div>
