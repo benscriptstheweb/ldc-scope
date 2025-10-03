@@ -39,7 +39,8 @@
 		distance_to_project: distanceToProject,
 		max_days_stay: maxDays,
 		amenities: multiSelectAmenities,
-		occupant_type: recommendedOccupant
+		occupant_type: recommendedOccupant,
+		allergies: homeownerAllergies
 	});
 
 	let hostName = $state('');
@@ -70,7 +71,7 @@
 	function removeTag(e: any) {
 		e.preventDefault(); 
 		const tagName = e.currentTarget?.parentElement.innerText;
-		homeownerAllergies.splice(homeownerAllergies.indexOf(tagName), 1);
+		homeownerAllergies = homeownerAllergies.filter((_e, i) => i !== homeownerAllergies.indexOf(tagName));
 	}
 </script>
 
