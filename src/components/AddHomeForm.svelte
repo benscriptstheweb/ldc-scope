@@ -123,7 +123,7 @@
 			</button>
 			<div class="allergies-list">
 				{#each homeownerAllergies as tag}
-				<div class="badge badge-xs badge-primary mr-1">
+				<div class="badge badge-primary mr-1">
 					{tag}
 					<button onclick={e => removeTag(e)}>
 						<Ex />
@@ -154,18 +154,20 @@
 			<input bind:value={hostPhone} type="number" placeholder="Phone" />
 			<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
 
-			<button
-				class="btn btn-soft"
-				onclick={() => (document.getElementById('add-home') as HTMLFormElement).reset()}
-				>Close</button
-			>
-			<button
-				class="btn btn-soft btn-success"
-				onclick={(e) => {
-					e.preventDefault();
-					addHome(newHomeDetails);
-				}}>Add</button
-			>
+			<div class="mt-30 mb-20">
+				<button
+					class="btn btn-soft"
+					onclick={() => (document.getElementById('add-home') as HTMLFormElement).reset()}
+					>Close</button
+				>
+				<button
+					class="btn btn-soft btn-success"
+					onclick={(e) => {
+						e.preventDefault();
+						addHome(newHomeDetails);
+					}}>Add</button
+				>
+			</div>
 		</form>
 	</div>
 </dialog>
