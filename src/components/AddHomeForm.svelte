@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { amenities } from '$lib/helpers/amenities';
 	import { getProjects } from '$lib/helpers/getProjects';
+	import Ex from '../icons/Ex.svelte';
+	import Plus from '../icons/Plus.svelte';
 
 	let { id } = $props();
 
@@ -15,6 +17,16 @@
 	let multiSelectAmenities = $state([]);
 	let projectId: null | number = $state(null);
 	let recommendedOccupant = $state('A');
+	let allergy = $state('');
+	let homeownerAllergies: string[] = $state([]);
+
+	function addAllergyToList(e: Event) {
+		e.preventDefault();
+		if (allergy.trim() !== '') {
+      		homeownerAllergies = [...homeownerAllergies, allergy];
+      		allergy = '';
+    	}
+	}
 
 	let newHomeDetails = $derived({
 		address1: address1,
@@ -34,7 +46,6 @@
 	let hostEmail = $state('');
 	let hostPhone: null | number = $state(null);
 
-	//TODO first insert home, then insert contact, then link contact to home by uuid
 	let newHomeContact = $derived({
 		name: hostName,
 		phone: hostPhone,
@@ -54,6 +65,12 @@
 		if (res.ok) {
 			window.location.reload();
 		}
+	}
+
+	function removeTag(e: any) {
+		e.preventDefault(); 
+		const tagName = e.currentTarget?.parentElement.innerText;
+		homeownerAllergies.splice(homeownerAllergies.indexOf(tagName), 1);
 	}
 </script>
 
@@ -98,6 +115,23 @@
 					</li>
 				{/each}
 			</ul>
+
+			<h3 class="subheading mt-7">Homeowner Allergies</h3>
+			<input type="text" bind:value={allergy}/>
+			<button class="btn btn-soft btn-primary" onclick={e => addAllergyToList(e)}>
+				<Plus />
+			</button>
+			<div class="allergies-list">
+				{#each homeownerAllergies as tag}
+				<div class="badge badge-xs badge-primary mr-1">
+					{tag}
+					<button onclick={e => removeTag(e)}>
+						<Ex />
+					</button>
+				</div>
+				{/each}
+			</div>
+
 
 			<div class="divider mt-7">2. Project</div>
 			<select class="select mb-7" bind:value={projectId}>
