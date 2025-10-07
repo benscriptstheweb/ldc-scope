@@ -36,7 +36,6 @@
 <div class="center-container">
 	<div class="logo">
 		<img width="120px" src="/Main.png" alt="logo" />
-		<p class="logo-title">Casa Morada</p>
 	</div>
 	<div class="login-card">
 		<h1 class="welcome-sign mb-2">Welcome home</h1>
@@ -54,14 +53,11 @@
 </div>
 
 <style>
-	.logo-title {
-		font-size: 35px;
-		font-family: Arial, Helvetica, sans-serif;
-	}
 	.logo {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		margin-bottom: 30px;
 	}
 
 	.center-container {
