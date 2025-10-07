@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import Link from '../../icons/Link.svelte';
 	import RecommendedOccupantBadge from '../../components/RecommendedOccupantBadge.svelte';
+	import DeleteConfirm from '../../components/DeleteConfirm.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -33,7 +34,7 @@
 		isAllSelected = !isAllSelected;
 
 		if (isAllSelected) {
-			multiSelectVolunteers = volunteers.map((row) => row.id);
+			multiSelectVolunteers = volunteers.map((row: any) => row.id);
 		} else {
 			multiSelectVolunteers = [];
 		}
@@ -82,6 +83,12 @@
 	}
 </script>
 
+<DeleteConfirm
+	id="batch-delete-confirm"
+	deleteFunction={deleteMultiple}
+	message={`Do you want to delete ${multiSelectVolunteers.length} volunteer(s)?`}
+/>
+
 {#if isLinkCopied}
 	<Toast
 		infoText="Link copied to clipboard!"
@@ -101,9 +108,17 @@
 	<button
 		class="btn btn-error btn-soft ml-2"
 		disabled={multiSelectVolunteers.length <= 0}
-		onclick={deleteMultiple}
+		onclick={() =>
+			(document.getElementById('batch-delete-confirm') as HTMLDialogElement).showModal()}
 	>
 		<Trash />
+		{#if multiSelectVolunteers.length !== 0}
+			{#if multiSelectVolunteers.length === 1}
+				<p>{multiSelectVolunteers.length} volunteer</p>
+			{:else}
+				<p>{multiSelectVolunteers.length} volunteers</p>
+			{/if}
+		{/if}
 	</button>
 </div>
 
