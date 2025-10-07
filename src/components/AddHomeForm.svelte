@@ -83,6 +83,7 @@
 			</div>
 
 			{#if modalPage === 1}
+				<h1 class="page-heading">1. Home Details</h1>
 				<input bind:value={address1} type="text" placeholder="Address 1" />
 				<input bind:value={address2} type="text" placeholder="Address 2" />
 
@@ -153,7 +154,7 @@
 			{/if}
 
 			{#if modalPage === 2}
-				<h1 class="page-heading">Project Details</h1>
+				<h1 class="page-heading">2. Project Details</h1>
 
 				<p>Select project</p>
 				<select class="select mb-7" bind:value={projectId}>
@@ -172,7 +173,7 @@
 			{/if}
 
 			{#if modalPage === 3}
-				<h1 class="page-heading">Contact Information</h1>
+				<h1 class="page-heading">3. Contact Information</h1>
 				<input bind:value={hostName} type="text" placeholder="Name" />
 				<input bind:value={hostEmail} type="text" placeholder="Email" />
 				<input bind:value={hostPhone} type="number" placeholder="Phone" />
