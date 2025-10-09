@@ -72,6 +72,12 @@
 	}
 
 	let modalPage = $state(1);
+
+	function moveIfValid(moveAction: any) {
+		if ((document.getElementById('add-form') as HTMLFormElement).reportValidity()) {
+			moveAction();
+		}
+	}
 </script>
 
 <dialog {id} class="modal">
@@ -79,19 +85,24 @@
 		<form id="add-form">
 			<div class="flex items-center justify-between mb-7 mt-4">
 				<h1 class="heading content-center">Add New Home</h1>
-				<button class="btn btn-soft btn-secondary">Close</button>
 			</div>
 
 			{#if modalPage === 1}
 				<h1 class="page-heading">1. Home Details</h1>
-				<input bind:value={address1} type="text" placeholder="Address 1" />
+				<input required bind:value={address1} type="text" placeholder="Address 1" />
 				<input bind:value={address2} type="text" placeholder="Address 2" />
 
-				<input bind:value={city} type="text" placeholder="City" />
+				<input required bind:value={city} type="text" placeholder="City" />
 
 				<div class="flex">
-					<input bind:value={addressState} type="text" placeholder="State" class="w-30 mr-3" />
-					<input bind:value={zip} type="text" placeholder="Zip" class="w-21" />
+					<input
+						required
+						bind:value={addressState}
+						type="text"
+						placeholder="State"
+						class="w-30 mr-3"
+					/>
+					<input required bind:value={zip} type="text" placeholder="Zip" class="w-21" />
 				</div>
 
 				<div>
@@ -102,7 +113,7 @@
 				</div>
 
 				<p>Recommended Occupant</p>
-				<select class="select" bind:value={recommendedOccupant}>
+				<select required class="select" bind:value={recommendedOccupant}>
 					<option value="S">Sister</option>
 					<option value="B">Brother</option>
 					<option value="C">Couple</option>
@@ -136,7 +147,7 @@
 				>
 					<Plus />
 				</button>
-				<div class="allergies-list mb-5">
+				<div class="allergies-list">
 					{#each homeownerAllergies as tag}
 						<div class="badge badge-primary mr-1">
 							{tag}
@@ -157,7 +168,7 @@
 				<h1 class="page-heading">2. Project Details</h1>
 
 				<p>Select project</p>
-				<select class="select mb-7" bind:value={projectId}>
+				<select required class="select mb-7" bind:value={projectId}>
 					<option disabled selected>Select project</option>
 					{#await getProjects() then projects}
 						{#each projects as project}
@@ -166,34 +177,29 @@
 					{/await}
 				</select>
 
-				<label class="label mb-5">
+				<label class="label">
 					<p>Distance to Project (in miles)</p>
-					<input bind:value={distanceToProject} type="number" class="w-15" />
+					<input required bind:value={distanceToProject} type="number" class="w-15" />
 				</label>
 			{/if}
 
 			{#if modalPage === 3}
-				<h1 class="page-heading">3. Contact Information</h1>
-				<input bind:value={hostName} type="text" placeholder="Name" />
-				<input bind:value={hostEmail} type="text" placeholder="Email" />
-				<input bind:value={hostPhone} type="number" placeholder="Phone" />
+				<h1 class="page-heading">3. Homeowner Info</h1>
+				<input required bind:value={hostName} type="text" placeholder="Name" />
+				<input required bind:value={hostEmail} type="text" placeholder="Email" />
+				<input required bind:value={hostPhone} type="number" placeholder="Phone" />
 				<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
-
-				<div class="mt-5">
-					<button
-						class="btn btn-soft"
-						onclick={(e) => {
-							e.preventDefault();
-							modalPage--;
-						}}>Back</button
-					>
-					<button class="btn btn-soft btn-success" onclick={() => addHome(newHomeDetails)}
-						>Add</button
-					>
-				</div>
 			{/if}
 
-			<div class="flex">
+			<div class="flex justify-between mt-5">
+				<button
+					class="btn btn-outline btn-secondary"
+					onclick={(e) => {
+						e.preventDefault();
+						(document.getElementById(id) as HTMLDialogElement).close();
+						(document.getElementById('add-form') as HTMLFormElement).reset();
+					}}>Close</button
+				>
 				{#if modalPage !== 3}
 					<div>
 						{#if modalPage !== 1}
@@ -206,11 +212,28 @@
 							>
 						{/if}
 						<button
+							class="btn btn-soft btn-primary"
+							onclick={(e) => {
+								e.preventDefault();
+								moveIfValid(() => modalPage++);
+							}}>Next</button
+						>
+					</div>
+				{:else if modalPage === 3}
+					<div>
+						<button
 							class="btn btn-soft"
 							onclick={(e) => {
 								e.preventDefault();
-								modalPage++;
-							}}>Next</button
+								modalPage--;
+							}}>Back</button
+						>
+						<button
+							class="btn btn-soft btn-success"
+							onclick={(e) => {
+								e.preventDefault();
+								moveIfValid(() => addHome(newHomeDetails));
+							}}>Add</button
 						>
 					</div>
 				{/if}
@@ -243,6 +266,11 @@
 		border-bottom: 1px solid white;
 		outline: none;
 	}
+
+	input:user-invalid {
+		border-bottom: 1px solid var(--color-error);
+	}
+
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
