@@ -20,11 +20,11 @@
 		});
 	}
 
-	const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+	const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 	let mapQuery = encodeURIComponent(`${home.address1},+${home.city},+${home.state}+${home.zip}`);
-	let mapLink = isMobile
-		? `geo:?q=${mapQuery}`
+	let mapLink = isIOS
+		? `maps://?q=${mapQuery}`
 		: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 </script>
 
