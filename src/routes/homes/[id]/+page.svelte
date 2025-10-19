@@ -30,7 +30,7 @@
 	<div class="address-container">
 		{#if home}
 			<div class="w-80">
-				<a href="geo:0,0?q={home.address1}+{home.city}+{home.state}+{home.zip}">
+				<a href="geo:0,0?q={home.address1},+{home.city},+{home.state}+{home.zip}">
 					Open Central Park
 				</a>
 
