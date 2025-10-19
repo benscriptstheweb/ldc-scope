@@ -20,8 +20,12 @@
 		});
 	}
 
-	let mapQuery = `${home.address1},+${home.city},+${home.state},+${home.zip}`;
-	let mapLink = `geo:0,0?q=${encodeURIComponent(mapQuery)}`;
+	const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+	let mapQuery = encodeURIComponent(`${home.address1},+${home.city},+${home.state}+${home.zip}`);
+	let mapLink = isMobile
+		? `geo:?q=${mapQuery}`
+		: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 </script>
 
 {#if data.user.isAdmin}
