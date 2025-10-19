@@ -8,10 +8,10 @@
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import Loading from '../components/Loading.svelte';
 
+	let { data, children } = $props();
+
 	// this sets a loading spinner to run when navigating between pages. that way we can
 	// remove the impression that the app is hanging or frozen.
-	let { data } = $props();
-
 	let loading = $state(false);
 	beforeNavigate(() => {
 		loading = true;
@@ -22,9 +22,6 @@
 
 	const publicRoutes = ['/signin', '/survey', '/survey/pass'];
 
-	// unlike the redirect in the +layout.server.ts or the user check in hooks.server.ts files
-	// this will move a person to signin if anywhere in the already preloaded pages (client)
-	// they hit the logout button
 	onMount(() => {
 		auth.onAuthStateChanged(async (u) => {
 			if (!u && !publicRoutes.includes(page.url.pathname)) {
@@ -42,7 +39,7 @@
 	<Loading />
 {:else}
 	<div class="body">
-		<slot />
+		{@render children()}
 	</div>
 {/if}
 
@@ -52,6 +49,6 @@
 		font-weight: bold;
 	}
 	.body {
-		padding-top: 80px;
+		padding-top: 70px;
 	}
 </style>

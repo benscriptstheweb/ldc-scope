@@ -29,7 +29,11 @@
 <div class="top-container">
 	<div class="address-container">
 		{#if home}
-			<div>
+			<div class="w-80">
+				<a href="geo:0,0?q={home.address1}+{home.city}+{home.state}+{home.zip}">
+					Open Central Park
+				</a>
+
 				<p class="heading header-address">{home.address1} {home.address2}</p>
 				<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
 			</div>
@@ -43,7 +47,7 @@
 				</label>
 			{/if}
 		</div>
-		<Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" />
+		<!-- <Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" /> -->
 		<p class="mt-2"><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
 	</div>
 
