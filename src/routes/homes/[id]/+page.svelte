@@ -2,7 +2,6 @@
 	import Assignments from '../../../components/Assignments.svelte';
 	import HomeEditDrawer from '../../../components/HomeEditDrawer.svelte';
 	import ContactsList from '../../../components/ContactsList.svelte';
-	import Map from '../../../components/Map.svelte';
 	import ContactsEditDrawer from '../../../components/ContactsEditDrawer.svelte';
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
@@ -36,24 +35,24 @@
 <div class="top-container">
 	<div class="address-container">
 		{#if home}
-			<div class="w-80">
-				<a href={mapLink}> Open Central Park </a>
+			<div class="w-80 flex items-center justify-between">
+				<div class="mb-8">
+					<p class="heading header-address">{home.address1} {home.address2}</p>
+					<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
+				</div>
 
-				<p class="heading header-address">{home.address1} {home.address2}</p>
-				<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
+				<a href={mapLink}>
+					<img class="map-pin" src="/pin.png" width="70px" alt="open-in-map" />
+				</a>
 			</div>
 		{/if}
 
-		<div class="badge-container">
-			{#if data.user.isAdmin}
-				<label for="edit-home-drawer" class="btn btn-soft btn-primary mb-8">
-					<Edit size="size-5" strokeWidth="2" />
-					Edit Home
-				</label>
-			{/if}
-		</div>
-		<!-- <Map address="${home.address1} ${home.address2}, ${home.city}, ${home.state} ${home.zip}" /> -->
-		<p class="mt-2"><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
+		{#if data.user.isAdmin}
+			<label for="edit-home-drawer" class="btn btn-soft btn-primary">
+				<Edit size="size-5" strokeWidth="2" />
+				Edit Home
+			</label>
+		{/if}
 	</div>
 
 	<div class="history flex flex-col">
@@ -71,19 +70,25 @@
 
 	<div class="self-center card bg-base-300 pt-9 w-90">
 		<h2 class="mb-5">Details</h2>
+
 		<div class="block details">
 			<div class="detail">
-				<strong>Host Congregation: </strong>
-				{home.congregation}
-			</div>
-			<div class="detail">
-				<strong>Project: </strong>
-				{home.project.friendly_name} - {home.project.id}
+				<p><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
 			</div>
 			<div class="detail">
 				<strong>Stay Duration: </strong>
 				{home.maxDays} days
 			</div>
+			<div class="detail">
+				<strong>Project: </strong>
+				{home.project.friendly_name} - {home.project.id}
+			</div>
+
+			<div class="detail">
+				<strong>Host Congregation: </strong>
+				{home.congregation}
+			</div>
+
 			<div class="flex detail mt-9">
 				<p class="mr-2">Recommended Occupant</p>
 				<RecommendedOccupantBadge occupantType={home.occupantType} />
@@ -100,9 +105,8 @@
 					{/if}
 				</div>
 			</div>
+			<div class="details">Has Pets?</div>
 		</div>
-
-		<div class="divider"></div>
 
 		<h2>What This Home Offers</h2>
 		<div class="block amenities">
@@ -137,17 +141,15 @@
 </div>
 
 <style>
+	.map-pin {
+		border-radius: 50%;
+	}
 	.heading {
 		padding-top: 30px;
 	}
 	.address-container {
 		margin: 0 auto;
 		margin-bottom: 50px;
-	}
-	.badge-container {
-		margin-top: 20px;
-		display: flex;
-		justify-content: space-between;
 	}
 	.top-container {
 		display: flex;

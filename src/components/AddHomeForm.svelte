@@ -19,6 +19,7 @@
 	let recommendedOccupant = $state('A');
 	let allergy = $state('');
 	let homeownerAllergies: string[] = $state([]);
+	let hasPets = $state(false);
 
 	function addAllergyToList() {
 		if (allergy.trim() !== '') {
@@ -39,7 +40,8 @@
 		max_days_stay: maxDays,
 		amenities: multiSelectAmenities,
 		occupant_type: recommendedOccupant,
-		allergies: homeownerAllergies
+		allergies: homeownerAllergies,
+		has_pets: hasPets
 	});
 
 	let hostName = $state('');
@@ -112,7 +114,12 @@
 					</label>
 				</div>
 
-				<p>Recommended Occupant</p>
+				<label>
+					Has pets?
+					<input bind:checked={hasPets} type="checkbox" />
+				</label>
+
+				<p class="mt-4">Recommended Occupant</p>
 				<select required class="select" bind:value={recommendedOccupant}>
 					<option value="S">Sister</option>
 					<option value="B">Brother</option>
@@ -135,6 +142,33 @@
 						</li>
 					{/each}
 				</ul>
+			{/if}
+
+			{#if modalPage === 2}
+				<h1 class="page-heading">2. Project Details</h1>
+
+				<p>Select project</p>
+				<select required class="select mb-7" bind:value={projectId}>
+					<option disabled selected>Select project</option>
+					{#await getProjects() then projects}
+						{#each projects as project}
+							<option value={project.id}>{project.friendly_name}</option>
+						{/each}
+					{/await}
+				</select>
+
+				<label class="label">
+					<p>Distance to Project (in miles)</p>
+					<input required bind:value={distanceToProject} type="number" class="w-15" />
+				</label>
+			{/if}
+
+			{#if modalPage === 3}
+				<h1 class="page-heading">3. Homeowner Info</h1>
+				<input required bind:value={hostName} type="text" placeholder="Name" />
+				<input required bind:value={hostEmail} type="text" placeholder="Email" />
+				<input required bind:value={hostPhone} type="number" placeholder="Phone" />
+				<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
 
 				<h3 class="subheading mt-7">Homeowner Allergies</h3>
 				<input type="text" bind:value={allergy} />
@@ -164,40 +198,13 @@
 				</div>
 			{/if}
 
-			{#if modalPage === 2}
-				<h1 class="page-heading">2. Project Details</h1>
-
-				<p>Select project</p>
-				<select required class="select mb-7" bind:value={projectId}>
-					<option disabled selected>Select project</option>
-					{#await getProjects() then projects}
-						{#each projects as project}
-							<option value={project.id}>{project.friendly_name}</option>
-						{/each}
-					{/await}
-				</select>
-
-				<label class="label">
-					<p>Distance to Project (in miles)</p>
-					<input required bind:value={distanceToProject} type="number" class="w-15" />
-				</label>
-			{/if}
-
-			{#if modalPage === 3}
-				<h1 class="page-heading">3. Homeowner Info</h1>
-				<input required bind:value={hostName} type="text" placeholder="Name" />
-				<input required bind:value={hostEmail} type="text" placeholder="Email" />
-				<input required bind:value={hostPhone} type="number" placeholder="Phone" />
-				<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
-			{/if}
-
 			<div class="flex justify-between mt-5">
 				<button
 					class="btn btn-outline btn-secondary"
 					onclick={(e) => {
 						e.preventDefault();
-						(document.getElementById(id) as HTMLDialogElement).close();
 						(document.getElementById('add-form') as HTMLFormElement).reset();
+						(document.getElementById(id) as HTMLDialogElement).close();
 					}}>Close</button
 				>
 				{#if modalPage !== 3}
