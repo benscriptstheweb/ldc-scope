@@ -1,5 +1,4 @@
 import { supabase } from "$lib/supabase/supabaseClient";
-import { json } from "@sveltejs/kit";
 
 type Volunteer = {
     volunteer_id: {

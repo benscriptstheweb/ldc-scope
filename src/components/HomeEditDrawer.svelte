@@ -1,28 +1,22 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { Contact, HomeAddress } from '$lib/types/homes';
 	import { goto } from '$app/navigation';
 	import DeleteConfirm from './DeleteConfirm.svelte';
 
 	let { home, id } = $props();
 
-	let newContact: Partial<Contact> = $state({
-		name: '',
-		phone: null,
-		email: '',
-		isPrimary: false
-	});
+	type HomeAddress = {
+		id: string;
+		address1: string;
+		address2: string;
+		city: string;
+		state: string;
+		zip: string;
+	};
 
 	let isDrawerOpen = $state(false);
 
 	onMount(() => {
-		newContact = {
-			name: '',
-			phone: null,
-			email: '',
-			isPrimary: false
-		};
-
 		homeFields = {
 			address1: home.address1,
 			address2: home.address2,

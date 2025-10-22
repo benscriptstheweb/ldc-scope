@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Plus from '../icons/Plus.svelte';
-	import type { Contact } from '$lib/types/homes';
 	import Trash from '../icons/Trash.svelte';
 	import DeleteConfirm from './DeleteConfirm.svelte';
 
 	let { home, id } = $props();
+
+	type Contact = {
+		id: string;
+		name: string;
+		email: string;
+		phone: number | null;
+		isPrimary: boolean;
+	};
 
 	let newContact: Partial<Contact> = $state({
 		name: '',
