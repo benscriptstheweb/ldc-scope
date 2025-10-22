@@ -5,6 +5,7 @@
 	import ContactsEditDrawer from '../../../components/ContactsEditDrawer.svelte';
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
+	import Paw from '../../../icons/Paw.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -69,15 +70,25 @@
 	</div>
 
 	<div class="self-center card bg-base-300 pt-9 w-90">
-		<h2 class="mb-5">Details</h2>
+		<h2>Details</h2>
+
+		<div class="detail flex items-center justify-center mb-5">
+			<div class="custom-badge badge badge-warning">
+				<strong>{home.maxDays}</strong>
+			</div>
+			<div class="recommended-occupant">
+				<RecommendedOccupantBadge occupantType={home.occupantType} />
+			</div>
+			{#if home.hasPets}
+				<div class="custom-badge badge badge-secondary">
+					<strong><Paw /></strong>
+				</div>
+			{/if}
+		</div>
 
 		<div class="block details">
 			<div class="detail">
 				<p><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
-			</div>
-			<div class="detail">
-				<strong>Stay Duration: </strong>
-				{home.maxDays} days
 			</div>
 			<div class="detail">
 				<strong>Project: </strong>
@@ -89,10 +100,6 @@
 				{home.congregation}
 			</div>
 
-			<div class="flex detail mt-9">
-				<p class="mr-2">Recommended Occupant</p>
-				<RecommendedOccupantBadge occupantType={home.occupantType} />
-			</div>
 			<div class="detail mt-9">
 				Homeowner is allergic to:
 				<div class="allergies">
@@ -105,7 +112,6 @@
 					{/if}
 				</div>
 			</div>
-			<div class="details">Has Pets?</div>
 		</div>
 
 		<h2>What This Home Offers</h2>
@@ -141,6 +147,10 @@
 </div>
 
 <style>
+	.custom-badge {
+		border-radius: 25px;
+		width: 20px;
+	}
 	.map-pin {
 		border-radius: 50%;
 	}
