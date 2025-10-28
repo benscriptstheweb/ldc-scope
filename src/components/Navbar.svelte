@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { auth } from '$lib/firebase/client';
 	import { signOut } from 'firebase/auth';
+	import Person from '../icons/Person.svelte';
 
 	let { userData } = $props();
 
@@ -17,14 +18,17 @@
 </script>
 
 <div class="navbar bg-base-100 shadow-sm">
-	<div class="flex-1">
+	<div class="flex items-center flex-1">
 		<a href="/">
 			<img width="41px" src="/Vari1.png" alt="The Purple House" class="title" />
 		</a>
+		<span class="badge badge-outline ml-5">
+			Region {userData.assignedRegion}
+		</span>
 	</div>
 
 	<div class="flex-none">
-		<ul class="menu menu-horizontal px-1">
+		<ul class="menu menu-horizontal">
 			<li>
 				<a href="/">
 					<svg
@@ -63,7 +67,7 @@
 								d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
 							/>
 						</svg>
-						<p class="menu-text">Volunteers</p>
+						<p class="menu-text ml-2">Volunteers</p>
 						{#await getUnassignedCount() then count}
 							<span class="badge badge-xs badge-secondary indicator-item">{count}</span>
 						{/await}
@@ -71,38 +75,10 @@
 				</a>
 			</li>
 			<li>
-				<details class="dropdown">
-					<summary>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="size-6"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-							/>
-						</svg>
-						<span class="menu-text">Account</span>
-					</summary>
-
-					<ul class="bg-base-100 rounded-t-none p-2 dropdown-content menu">
-						<li><button onclick={logout}>Logout</button></li>
-						<li class="menu-disabled"><button>Settings</button></li>
-						<div class="divider"></div>
-						<div class="user-privilege">
-							{#if userData.isAdmin}
-								<span class="badge badge-soft badge-success">Admin</span>
-							{:else}
-								<span class="badge badge-soft badge-info">Agent</span>
-							{/if}
-						</div>
-					</ul>
-				</details>
+				<button onclick={logout}>
+					<Person />
+					<p class="menu-text">Logout</p>
+				</button>
 			</li>
 		</ul>
 	</div>
@@ -129,16 +105,6 @@
 			display: inline;
 		}
 	}
-
-	@media (max-width: 766px) {
-		ul.bg-base-100 {
-			margin-left: -20px;
-		}
-	}
-	ul.bg-base-100 {
-		z-index: 100;
-	}
-
 	.title {
 		margin-left: 10px;
 	}
