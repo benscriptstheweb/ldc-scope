@@ -20,7 +20,11 @@ export async function PATCH({ locals, params, request }) {
             address2: body.address2,
             city: body.city,
             state: body.state,
-            zip: body.zip
+            zip: body.zip,
+            distance_to_project: body.distanceToProject,
+            amenities: body.amenities,
+            occupant_type: body.occupantType,
+            has_pets: body.hasPets
         })
         .eq('id', homeId);
 

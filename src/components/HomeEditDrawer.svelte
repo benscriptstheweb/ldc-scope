@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import DeleteConfirm from './DeleteConfirm.svelte';
+	import { amenities } from '$lib/helpers/amenities';
 
 	let { home, id } = $props();
 
@@ -12,6 +13,7 @@
 		city: string;
 		state: string;
 		zip: string;
+		distanceToProject: number;
 	};
 
 	let isDrawerOpen = $state(false);
@@ -22,7 +24,11 @@
 			address2: home.address2,
 			city: home.city,
 			state: home.state,
-			zip: home.zip
+			zip: home.zip,
+			distanceToProject: home.distanceToProject,
+			amenities: home.amenities,
+			occupantType: home.occupantType,
+			hasPets: home.hasPets
 		};
 
 		isDrawerOpen = false;
@@ -33,7 +39,11 @@
 		address2: home.address2,
 		city: home.city,
 		state: home.state,
-		zip: home.zip
+		zip: home.zip,
+		distanceToProject: home.distanceToProject,
+		amenities: home.amenities,
+		occupantType: home.occupantType,
+		hasPets: home.hasPets
 	});
 
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
@@ -67,29 +77,80 @@
 	<div class="drawer-side">
 		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<h1>Edit Home</h1>
+			<form>
+				<h1>Edit Home</h1>
 
-			<h2 class="edit-heading">Address</h2>
-			<input type="text" placeholder="Address 1" bind:value={homeFields.address1} />
-			<input type="text" placeholder="Address 2" bind:value={homeFields.address2} />
+				<h2 class="edit-heading">Address</h2>
+				<input required type="text" placeholder="Address 1" bind:value={homeFields.address1} />
+				<input type="text" placeholder="Address 2" bind:value={homeFields.address2} />
 
-			<input type="text" placeholder="City" bind:value={homeFields.city} />
+				<input required type="text" placeholder="City" bind:value={homeFields.city} />
 
-			<div class="state-zip">
-				<input class="w-20" type="text" placeholder="State" bind:value={homeFields.state} />
-				<input class="w-50" type="text" placeholder="Zip" bind:value={homeFields.zip} />
-			</div>
-			<div class="flex justify-between">
-				<button onclick={() => updateHome(homeFields)} class="btn btn-primary"
-					>Update Address</button
-				>
-				<button
-					class="btn btn-dash btn-error"
-					onclick={() =>
-						(document.getElementById('delete-confirm') as HTMLDialogElement).showModal()}
-					>Delete Home</button
-				>
-			</div>
+				<div class="state-zip">
+					<input
+						required
+						class="w-20"
+						type="text"
+						placeholder="State"
+						bind:value={homeFields.state}
+					/>
+					<input required class="w-30" type="text" placeholder="Zip" bind:value={homeFields.zip} />
+				</div>
+
+				<label class="label">
+					Distance to project:
+					<input required bind:value={homeFields.distanceToProject} type="number" class="w-10" />
+				</label>
+
+				<div class="divider"></div>
+				<i>
+					<h2 class="edit-heading mb-3">Amenities</h2>
+				</i>
+				<ul>
+					{#each amenities as amenity}
+						<div class="flex flex-row">
+							<label>
+								<input
+									class="mr-2"
+									type="checkbox"
+									value={amenity.type}
+									bind:group={homeFields.amenities}
+								/>
+								{amenity.type}
+							</label>
+						</div>
+					{/each}
+				</ul>
+				<div class="flex flex-row mt-3">
+					<label>
+						<input class="mr-2" bind:checked={homeFields.hasPets} type="checkbox" />
+						Pet(s)
+					</label>
+				</div>
+
+				<div class="divider"></div>
+				<h2 class="edit-heading">Occupant Type</h2>
+				<select required class="select" bind:value={homeFields.occupantType}>
+					<option value="S">Sister</option>
+					<option value="B">Brother</option>
+					<option value="C">Couple</option>
+					<option value="F">Family</option>
+					<option value="A">Any</option>
+				</select>
+
+				<div class="pt-10 flex justify-between">
+					<button onclick={() => updateHome(homeFields)} class="btn btn-primary"
+						>Update Details</button
+					>
+					<button
+						class="btn btn-dash btn-error"
+						onclick={(e) => {
+							e.preventDefault();
+							(document.getElementById('delete-confirm') as HTMLDialogElement).showModal();
+						}}>Delete Home</button
+					>
+				</div>
+			</form>
 		</ul>
 	</div>
 </div>
@@ -117,6 +178,11 @@
 		margin: 0;
 	}
 
+	/* Firefox */
+	input[type='number'] {
+		-moz-appearance: textfield;
+	}
+
 	input {
 		border: none;
 		border-bottom: 1px solid rgba(110, 109, 112, 0.589);
@@ -129,5 +195,9 @@
 		border: none;
 		border-bottom: 1px solid white;
 		outline: none;
+	}
+
+	input:user-invalid {
+		border-bottom: 1px solid var(--color-error);
 	}
 </style>
