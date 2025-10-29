@@ -90,11 +90,6 @@
 
 			<div class="contact-edit-list">
 				{#each home.contacts as contact}
-					<DeleteConfirm
-						id="delete-contact-confirm"
-						deleteFunction={(e: any) => deleteContact(contact.id)}
-					/>
-
 					{#if editingId === contact.id}
 						<div class="mb-9 mt-9">
 							<input type="text" placeholder="Name" bind:value={updatedDetails.name} />
@@ -106,6 +101,10 @@
 								<button class="btn btn-soft flex-4" onclick={() => (editingId = null)}>
 									Cancel
 								</button>
+								<DeleteConfirm
+									id="delete-contact-confirm"
+									deleteFunction={() => deleteContact(contact.id)}
+								/>
 								<button
 									class="btn btn-soft btn-primary"
 									onclick={() => updateContact(contact.id, updatedDetails)}
