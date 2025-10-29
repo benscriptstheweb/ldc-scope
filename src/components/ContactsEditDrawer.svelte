@@ -80,8 +80,6 @@
 	}
 </script>
 
-<DeleteConfirm id="delete-confirm" deleteFunction={deleteContact} />
-
 <div class="drawer">
 	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
 
@@ -92,6 +90,11 @@
 
 			<div class="contact-edit-list">
 				{#each home.contacts as contact}
+					<DeleteConfirm
+						id="delete-contact-confirm"
+						deleteFunction={(e: any) => deleteContact(contact.id)}
+					/>
+
 					{#if editingId === contact.id}
 						<div class="mb-9 mt-9">
 							<input type="text" placeholder="Name" bind:value={updatedDetails.name} />
@@ -112,7 +115,9 @@
 								<button
 									class="btn btn-dash btn-error ml-10"
 									onclick={() =>
-										(document.getElementById('delete-confirm') as HTMLDialogElement).showModal()}
+										(
+											document.getElementById('delete-contact-confirm') as HTMLDialogElement
+										).showModal()}
 								>
 									<Trash /></button
 								>

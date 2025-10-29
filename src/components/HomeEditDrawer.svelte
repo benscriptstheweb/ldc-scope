@@ -69,7 +69,7 @@
 	}
 </script>
 
-<DeleteConfirm id="delete-confirm" deleteFunction={deleteHome} />
+<DeleteConfirm id="delete-home-confirm" deleteFunction={deleteHome} />
 
 <div class="drawer">
 	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
@@ -146,7 +146,7 @@
 						class="btn btn-dash btn-error"
 						onclick={(e) => {
 							e.preventDefault();
-							(document.getElementById('delete-confirm') as HTMLDialogElement).showModal();
+							(document.getElementById('delete-home-confirm') as HTMLDialogElement).showModal();
 						}}>Delete Home</button
 					>
 				</div>

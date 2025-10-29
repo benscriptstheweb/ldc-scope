@@ -6,13 +6,11 @@ export async function DELETE({ locals, params }) {
         return new Response('Forbidden', { status: 403 });
     }
 
-    const { homeId, contactId } = params;
-
+    const { contactId } = params;
     const { error } = await supabase
         .from('contacts')
         .delete()
         .eq('id', contactId)
-        .eq('home_id', homeId);
 
     if (error) {
         console.error('Failed to delete contact:', error);

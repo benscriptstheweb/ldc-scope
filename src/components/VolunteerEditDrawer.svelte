@@ -51,7 +51,7 @@
 	}
 </script>
 
-<DeleteConfirm id="delete-confirm" deleteFunction={deleteVolunteer} />
+<DeleteConfirm id="delete-volunteer-confirm" deleteFunction={deleteVolunteer} />
 
 <div class="drawer">
 	<input {id} type="checkbox" class="drawer-toggle" bind:checked={isDrawerOpen} />
@@ -94,7 +94,8 @@
 			</div>
 			<button
 				class="delete-btn btn btn-soft btn-error"
-				onclick={() => (document.getElementById('delete-confirm') as HTMLDialogElement).showModal()}
+				onclick={() =>
+					(document.getElementById('delete-volunteer-confirm') as HTMLDialogElement).showModal()}
 				>Delete Volunteer</button
 			>
 		</ul>

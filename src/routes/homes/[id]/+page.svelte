@@ -6,6 +6,7 @@
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import Paw from '../../../icons/Paw.svelte';
+	import Building from '../../../icons/Building.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -123,6 +124,12 @@
 					<div class="badge badge-soft badge-info">{amenity}</div>
 				{/each}
 			{/if}
+		</div>
+		<h2>Parking Type</h2>
+		<div class="block mt-4">
+			<div class="flex detail">
+				<Building /> <span class="ml-2">Parking Garage</span>
+			</div>
 		</div>
 	</div>
 

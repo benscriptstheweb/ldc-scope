@@ -111,7 +111,6 @@ export async function GET({ locals }) {
 
 export async function DELETE({ request }) {
     const homeId = await request.json();
-
     const { error } = await supabase
         .from('homes')
         .delete()
@@ -132,8 +131,6 @@ export async function POST({ request }) {
     if (!body) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
-
-    console.log(body.home)
 
     const { data, error } = await supabase.from('homes')
         .insert([body.home])
