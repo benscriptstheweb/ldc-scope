@@ -31,7 +31,7 @@
 		<ul class="menu menu-horizontal">
 			<li>
 				<a href="/">
-					<House active={page.url.pathname === '/'} />
+					<House active={page.url.pathname === '/' || page.url.pathname.startsWith('/homes')} />
 					<span class="menu-text">Inventory</span>
 				</a>
 			</li>
@@ -40,7 +40,7 @@
 			<li>
 				<a href="/volunteers">
 					<div class="indicator">
-						<Volunteers active={page.url.pathname === '/volunteers'} />
+						<Volunteers active={page.url.pathname.startsWith('/volunteers')} />
 						<p class="menu-text ml-2">Volunteers</p>
 						{#await getUnassignedCount() then count}
 							<span class="badge badge-xs badge-secondary indicator-item">{count}</span>
