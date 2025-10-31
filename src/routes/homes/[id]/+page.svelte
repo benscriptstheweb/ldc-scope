@@ -7,6 +7,8 @@
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import Paw from '../../../icons/Paw.svelte';
 	import Building from '../../../icons/Building.svelte';
+	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
+	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -128,7 +130,11 @@
 		<h2>Parking Type</h2>
 		<div class="block mt-4">
 			<div class="flex detail">
-				<Building /> <span class="ml-2">Parking Garage</span>
+				{#if home.parkingType === 'garage'}
+					<ParkingStructure /><span class="ml-2">Garage</span>
+				{:else}
+					<ParkingStreet /><span class="ml-2">Street</span>
+				{/if}
 			</div>
 		</div>
 	</div>
