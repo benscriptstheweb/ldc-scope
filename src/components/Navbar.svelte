@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { auth } from '$lib/firebase/client';
 	import { signOut } from 'firebase/auth';
-	import Person from '../icons/Person.svelte';
 	import House from '../icons/House.svelte';
 	import Volunteers from '../icons/Volunteers.svelte';
 	import Logout from '../icons/Logout.svelte';
+	import { page } from '$app/state';
 
 	let { userData } = $props();
 
@@ -22,9 +22,6 @@
 
 <div class="navbar bg-base-100 shadow-sm">
 	<div class="flex items-center flex-1">
-		<a href="/">
-			<img width="41px" src="/Vari1.png" alt="The Purple House" class="title" />
-		</a>
 		<span class="badge badge-outline ml-5">
 			Region {userData.assignedRegion}
 		</span>
@@ -34,7 +31,7 @@
 		<ul class="menu menu-horizontal">
 			<li>
 				<a href="/">
-					<House />
+					<House active={page.url.pathname === '/'} />
 					<span class="menu-text">Inventory</span>
 				</a>
 			</li>
@@ -43,7 +40,7 @@
 			<li>
 				<a href="/volunteers">
 					<div class="indicator">
-						<Volunteers />
+						<Volunteers active={page.url.pathname === '/volunteers'} />
 						<p class="menu-text ml-2">Volunteers</p>
 						{#await getUnassignedCount() then count}
 							<span class="badge badge-xs badge-secondary indicator-item">{count}</span>
