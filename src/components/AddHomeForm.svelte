@@ -20,6 +20,7 @@
 	let allergy = $state('');
 	let homeownerAllergies: string[] = $state([]);
 	let hasPets = $state(false);
+	let parkingType = $state('street');
 
 	function addAllergyToList() {
 		if (allergy.trim() !== '') {
@@ -41,7 +42,8 @@
 		amenities: multiSelectAmenities,
 		occupant_type: recommendedOccupant,
 		allergies: homeownerAllergies,
-		has_pets: hasPets
+		has_pets: hasPets,
+		parking_type: parkingType
 	});
 
 	let hostName = $state('');
@@ -126,6 +128,12 @@
 					<option value="C">Couple</option>
 					<option value="F">Family</option>
 					<option value="A">Any</option>
+				</select>
+
+				<p class="mt-4">Parking Type</p>
+				<select required class="select" bind:value={parkingType}>
+					<option value="street">Street</option>
+					<option value="garage">Garage</option>
 				</select>
 
 				<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>

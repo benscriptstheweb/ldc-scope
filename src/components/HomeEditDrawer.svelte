@@ -28,7 +28,8 @@
 			distanceToProject: home.distanceToProject,
 			amenities: home.amenities,
 			occupantType: home.occupantType,
-			hasPets: home.hasPets
+			hasPets: home.hasPets,
+			parkingType: home.parkingType
 		};
 
 		isDrawerOpen = false;
@@ -43,7 +44,8 @@
 		distanceToProject: home.distanceToProject,
 		amenities: home.amenities,
 		occupantType: home.occupantType,
-		hasPets: home.hasPets
+		hasPets: home.hasPets,
+		parkingType: home.parkingType
 	});
 
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
@@ -127,6 +129,15 @@
 						Pet(s)
 					</label>
 				</div>
+
+				<div class="divider"></div>
+				<i>
+					<h2 class="edit-heading mb-3">Parking Type</h2>
+				</i>
+				<select required class="select" bind:value={homeFields.parkingType}>
+					<option value="street">Street</option>
+					<option value="garage">Garage</option>
+				</select>
 
 				<div class="divider"></div>
 				<h2 class="edit-heading">Occupant Type</h2>
