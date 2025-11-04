@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Paw from '../icons/Paw.svelte';
 	import RecommendedOccupantBadge from './RecommendedOccupantBadge.svelte';
 
 	let { home } = $props();
@@ -50,10 +51,15 @@
 				</div>
 
 				<div class="flex">
-					<RecommendedOccupantBadge occupantType={home.occupantType} />
-					<div class="custom-badge badge badge-warning">
+					<div class="custom-badge badge badge-warning mr-0.5">
 						<strong>{home.maxDaysStay}</strong>
 					</div>
+					<RecommendedOccupantBadge occupantType={home.occupantType} />
+					{#if home.hasPets}
+						<div class="custom-badge badge badge-secondary ml-0.5">
+							<strong><Paw /></strong>
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>

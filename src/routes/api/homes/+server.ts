@@ -59,7 +59,8 @@ export async function GET({ locals }) {
             ),
             congregation,
             occupant_type,
-            distance_to_project
+            distance_to_project,
+            has_pets
         `)
         .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<Home[]>();
@@ -102,7 +103,8 @@ export async function GET({ locals }) {
             project: home.project.friendly_name,
             occupantType: home.occupant_type,
             maxDaysStay: home.max_days_stay,
-            distanceToProject: home.distance_to_project
+            distanceToProject: home.distance_to_project,
+            hasPets: home.has_pets
         };
     });
 
