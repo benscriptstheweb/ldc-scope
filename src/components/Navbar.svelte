@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { auth } from '$lib/firebase/client';
 	import { signOut } from 'firebase/auth';
-	import House from '../icons/House.svelte';
-	import Volunteers from '../icons/Volunteers.svelte';
-	import Logout from '../icons/Logout.svelte';
-	import { page } from '$app/state';
 
 	let { userData } = $props();
 
@@ -31,7 +27,21 @@
 		<ul class="menu menu-horizontal">
 			<li>
 				<a href="/">
-					<House active={page.url.pathname === '/' || page.url.pathname.startsWith('/homes')} />
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-house-icon lucide-house"
+						><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path
+							d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+						/></svg
+					>
 					<span class="menu-text">Inventory</span>
 				</a>
 			</li>
@@ -40,7 +50,21 @@
 			<li>
 				<a href="/volunteers">
 					<div class="indicator">
-						<Volunteers active={page.url.pathname.startsWith('/volunteers')} />
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="lucide lucide-users-icon lucide-users"
+							><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path
+								d="M16 3.128a4 4 0 0 1 0 7.744"
+							/><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" /></svg
+						>
 						<p class="menu-text ml-2">Volunteers</p>
 						{#await getUnassignedCount() then count}
 							<span class="badge badge-xs badge-secondary indicator-item">{count}</span>
@@ -50,7 +74,21 @@
 			</li>
 			<li>
 				<button onclick={logout}>
-					<Logout />
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-log-out-icon lucide-log-out"
+						><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /><path
+							d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+						/></svg
+					>
 					<p class="menu-text">Logout</p>
 				</button>
 			</li>
