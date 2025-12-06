@@ -6,9 +6,10 @@
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import Paw from '../../../icons/Paw.svelte';
-	import Building from '../../../icons/Building.svelte';
 	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
 	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
+	import { supabase } from '$lib/supabase/supabaseClient';
+	import { onMount } from 'svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -29,22 +30,36 @@
 	let mapLink = isIOS
 		? `maps://?q=${mapQuery}`
 		: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
+	let photoUrls: { images: string[] } = $state({ images: [] });
+
+	onMount(async () => {
+		const res = await fetch(`/api/homes/${home.id}/photos`);
+		photoUrls = await res.json();
+	});
 </script>
 
 {#if data.user.isAdmin}
-	<HomeEditDrawer id="edit-home-drawer" {home} />
+	<HomeEditDrawer id="edit-home-drawer" {home} photoUrls={photoUrls.images} />
 	<ContactsEditDrawer id="edit-contacts-drawer" {home} />
 {/if}
 
 <div class="top-container">
-	<div class="address-container">
+	<div class="flex flex-col items-center address-container">
+		<div class="flex w-full carousel">
+			{#each photoUrls.images as url}
+				<div class="flex carousel-item h-full">
+					<img src={url} alt="" />
+				</div>
+			{/each}
+		</div>
+
 		{#if home}
 			<div class="w-80 flex items-center justify-between">
 				<div class="mb-8">
 					<p class="heading header-address">{home.address1} {home.address2}</p>
 					<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
 				</div>
-
 				<a href={mapLink}>
 					<img class="map-pin" src="/pin.png" width="70px" alt="open-in-map" />
 				</a>

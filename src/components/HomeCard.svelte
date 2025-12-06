@@ -13,12 +13,12 @@
 <div class="cards-container">
 	<button
 		type="button"
-		class="card card-side shadow-md cursor-pointer w-70 text-left m-3"
+		class="card shadow-md cursor-pointer w-70 text-left m-3"
 		onclick={visitHome}
 	>
 		<figure>
 			<!-- img goes here -->
-			<!-- <div class="color-block" style="background-color: {color};"></div> -->
+			<img src="/screen.png" alt="" />
 		</figure>
 		<div class="card-body bg-base-200">
 			<h2 class="card-title flex justify-between">

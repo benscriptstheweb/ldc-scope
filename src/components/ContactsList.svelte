@@ -1,7 +1,4 @@
 <script lang="ts">
-	import Mail from '../icons/Mail.svelte';
-	import Phone from '../icons/Phone.svelte';
-
 	let { contact } = $props();
 </script>
 

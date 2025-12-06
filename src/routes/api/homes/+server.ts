@@ -155,5 +155,5 @@ export async function POST({ request }) {
         return json({ error: 'Failed to add contact to new home' }, { status: 500 });
     }
 
-    return json({ success: true }, { status: 201 });
+    return json({ success: true, createdHomeId: data.id }, { status: 201 });
 }
