@@ -18,7 +18,7 @@
 
 <div class="navbar bg-base-100 shadow-sm">
 	<div class="flex items-center flex-1">
-		<span class="badge badge-outline ml-5">
+		<span class="badge badge-outline ml-5 badge-success">
 			Region {userData.assignedRegion}
 		</span>
 	</div>
@@ -29,12 +29,11 @@
 				<a href="/">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
+						width="22"
 						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"
-						stroke-width="2"
+						stroke-width="3"
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						class="lucide lucide-house-icon lucide-house"
@@ -52,12 +51,11 @@
 					<div class="indicator">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
+							width="22"
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
-							stroke-width="2"
+							stroke-width="3"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							class="lucide lucide-users-icon lucide-users"
@@ -76,12 +74,11 @@
 				<button onclick={logout}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
+						width="22"
 						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"
-						stroke-width="2"
+						stroke-width="3"
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						class="lucide lucide-log-out-icon lucide-log-out"

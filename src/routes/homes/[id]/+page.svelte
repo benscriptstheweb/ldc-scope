@@ -8,7 +8,6 @@
 	import Paw from '../../../icons/Paw.svelte';
 	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
 	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
-	import { supabase } from '$lib/supabase/supabaseClient';
 	import { onMount } from 'svelte';
 
 	const { data } = $props();
