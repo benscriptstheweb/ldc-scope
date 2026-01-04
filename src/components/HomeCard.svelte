@@ -16,10 +16,6 @@
 		class="card shadow-md cursor-pointer w-70 text-left m-3"
 		onclick={visitHome}
 	>
-		<figure>
-			<!-- img goes here -->
-			<img src="/screen.png" alt="" />
-		</figure>
 		<div class="card-body bg-base-200">
 			<h2 class="card-title flex justify-between">
 				{home.address1}
