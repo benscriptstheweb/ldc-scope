@@ -1,31 +1,22 @@
 import sharp from "sharp";
 
 export async function compressTo10kb(buffer: Buffer) {
-    console.log('inside compressor! starting size: ', buffer.length)
     let output = buffer;
 
-    // starting quality
-    let quality = 80;
-    let maxSize = 10 * 1024;
+    let resolution = 900;
+    let maxSize = 50 * 1024;
 
     while (output.length > maxSize) {
         output = await sharp(output)
-            .resize(800, null)
-            .webp({ quality })
+            .resize(resolution)
+            .webp({ quality: 70 })
             .toBuffer();
 
-        quality -= 10;
+        resolution -= 20;
 
-        if (quality < 10) {
-            // hail mary this thing
-            output = await sharp(buffer)
-                .resize(300, null)
-                .webp({ quality: 10 })
-                .toBuffer();
-            console.log('hail mary: ', output.length)
+        if (resolution < 500) {
+            // TBD: error that the file is too large
             break;
-        } else {
-            console.log(output.length)
         }
     }
 
