@@ -49,7 +49,14 @@
 		parkingType: home.parkingType
 	});
 
+	let imagesUploading = $state(false);
+	let images: File[] = $state([]);
+
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
+		if (images.length !== 0) {
+			uploadImages();
+		}
+
 		const res = await fetch(`/api/homes/${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
@@ -71,16 +78,19 @@
 		}
 	}
 
-	async function uploadImages(files: File[]) {
+	async function uploadImages() {
 		const form = new FormData();
-		files.forEach((file) => form.append('images', file));
+		images.forEach((imageFile) => form.append('images', imageFile));
 
 		const res = await fetch(`/api/homes/${home.id}/photos`, {
 			method: 'POST',
 			body: form
 		});
 
+		imagesUploading = true;
+
 		if (res.ok) {
+			imagesUploading = false;
 			window.location.reload();
 		}
 	}
@@ -98,6 +108,8 @@
 			window.location.reload();
 		}
 	}
+
+	let formChanged = $state(false);
 </script>
 
 <DeleteConfirm id="delete-home-confirm" deleteFunction={deleteHome} />
@@ -108,7 +120,11 @@
 	<div class="drawer-side">
 		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<form>
+			<form
+				onchange={() => {
+					formChanged = true;
+				}}
+			>
 				<h1>Edit Home</h1>
 
 				<h2 class="edit-heading">Address</h2>
@@ -194,6 +210,10 @@
 
 				{#if photoUrls.length < 10}
 					<h2 class="edit-heading mt-10">Add New Images</h2>
+					{#if imagesUploading}
+						Compressing images..
+						<progress class="progress progress-info w-full" value="20" max="100"></progress>
+					{/if}
 					<input
 						class="file-input"
 						type="file"
@@ -201,7 +221,7 @@
 						onchange={(e) => {
 							const target = e.target as HTMLInputElement;
 							const files = Array.from(target.files ?? []);
-							uploadImages(files);
+							images = files;
 						}}
 					/>
 				{/if}
@@ -214,8 +234,11 @@
 							(document.getElementById('delete-home-confirm') as HTMLDialogElement).showModal();
 						}}>Delete Home</button
 					>
-					<button onclick={() => updateHome(homeFields)} class="btn btn-primary"
-						>Update Details</button
+
+					<button
+						onclick={() => updateHome(homeFields)}
+						class="btn btn-primary"
+						disabled={!formChanged}>Update Details</button
 					>
 				</div>
 			</form>
