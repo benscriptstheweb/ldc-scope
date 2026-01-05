@@ -91,8 +91,6 @@
 		const form = new FormData();
 		files.forEach((file) => form.append('images', file));
 
-		console.log('FORM: ', form);
-
 		const res = await fetch(`/api/homes/${createdHomeId}/photos`, {
 			method: 'POST',
 			body: form

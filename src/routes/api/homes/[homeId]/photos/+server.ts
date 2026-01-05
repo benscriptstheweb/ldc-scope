@@ -7,10 +7,7 @@ export async function POST({ request, params }) {
     const images = form.getAll("images") as File[];
     const { homeId } = params;
 
-    console.log('homeId: ', homeId);
-    console.log('images: ', images);
-
-    if (!images.length || !homeId)
+    if (images.length !== 0 || !homeId)
         return new Response("Missing images or homeId", { status: 400 });
 
     const uploaded = [];
