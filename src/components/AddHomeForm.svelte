@@ -57,6 +57,8 @@
 		isPrimary: true
 	});
 
+	let createdHomeId = $state('');
+
 	async function addHome(newHome: any) {
 		const res = await fetch(`/api/homes`, {
 			method: 'POST',
@@ -67,7 +69,9 @@
 		});
 
 		if (res.ok) {
-			window.location.reload();
+			const responseObject = await res.json();
+			createdHomeId = responseObject.createdHomeId;
+			modalPage = 4;
 		}
 	}
 
@@ -80,6 +84,20 @@
 	function moveIfValid(moveAction: any) {
 		if ((document.getElementById('add-form') as HTMLFormElement).reportValidity()) {
 			moveAction();
+		}
+	}
+
+	async function uploadImages(files: File[]) {
+		const form = new FormData();
+		files.forEach((file) => form.append('images', file));
+
+		const res = await fetch(`/api/homes/${createdHomeId}/photos`, {
+			method: 'POST',
+			body: form
+		});
+
+		if (res.ok) {
+			window.location.reload();
 		}
 	}
 </script>
@@ -204,6 +222,18 @@
 						</div>
 					{/each}
 				</div>
+			{/if}
+
+			{#if modalPage === 4}
+				<input
+					type="file"
+					multiple
+					onchange={(e) => {
+						const target = e.target as HTMLInputElement;
+						const files = Array.from(target.files ?? []);
+						uploadImages(files);
+					}}
+				/>
 			{/if}
 
 			<div class="flex justify-between mt-5">

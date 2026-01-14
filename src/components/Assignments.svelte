@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { getParsedDate } from '$lib/helpers/getParsedDate';
+
 	let { sortedVolunteers } = $props();
 
 	function isPastDate(date: Date) {
@@ -10,7 +12,7 @@
 	{#each sortedVolunteers as { name, date_end }, index}
 		<li>
 			<div class="timeline-end">
-				{date_end}
+				{getParsedDate(date_end)}
 			</div>
 
 			{#if index !== 0}

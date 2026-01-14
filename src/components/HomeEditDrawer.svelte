@@ -3,8 +3,9 @@
 	import { goto } from '$app/navigation';
 	import DeleteConfirm from './DeleteConfirm.svelte';
 	import { amenities } from '$lib/helpers/amenities';
+	import Trash from '../icons/Trash.svelte';
 
-	let { home, id } = $props();
+	let { home, id, photoUrls } = $props();
 
 	type HomeAddress = {
 		id: string;
@@ -48,7 +49,14 @@
 		parkingType: home.parkingType
 	});
 
+	let imagesUploading = $state(false);
+	let images: File[] = $state([]);
+
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
+		if (images.length !== 0) {
+			uploadImages();
+		}
+
 		const res = await fetch(`/api/homes/${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
@@ -69,6 +77,39 @@
 			goto('/');
 		}
 	}
+
+	async function uploadImages() {
+		const form = new FormData();
+		images.forEach((imageFile) => form.append('images', imageFile));
+
+		const res = await fetch(`/api/homes/${home.id}/photos`, {
+			method: 'POST',
+			body: form
+		});
+
+		imagesUploading = true;
+
+		if (res.ok) {
+			imagesUploading = false;
+			window.location.reload();
+		}
+	}
+
+	async function deleteImages(url: string) {
+		const imageUrlSplit = url.split('/');
+		const imageName = imageUrlSplit.at(-1);
+
+		const res = await fetch(`/api/homes/${home.id}/photos`, {
+			method: 'DELETE',
+			body: JSON.stringify(imageName)
+		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
+	}
+
+	let formChanged = $state(false);
 </script>
 
 <DeleteConfirm id="delete-home-confirm" deleteFunction={deleteHome} />
@@ -79,7 +120,11 @@
 	<div class="drawer-side">
 		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<form>
+			<form
+				onchange={() => {
+					formChanged = true;
+				}}
+			>
 				<h1>Edit Home</h1>
 
 				<h2 class="edit-heading">Address</h2>
@@ -149,16 +194,51 @@
 					<option value="A">Any</option>
 				</select>
 
+				<div class="divider"></div>
+				<h2 class="edit-heading">Images</h2>
+
+				<ul class="list bg-base-100 rounded-box shadow-md">
+					{#each photoUrls as url}
+						<div class="flex list-row items-center justify-between">
+							<img src={url} alt="" width={150} />
+							<button class="btn btn-error btn-dash" onclick={() => deleteImages(url)}>
+								<Trash />
+							</button>
+						</div>
+					{/each}
+				</ul>
+
+				{#if photoUrls.length < 10}
+					<h2 class="edit-heading mt-10">Add New Images</h2>
+					{#if imagesUploading}
+						Compressing images..
+						<progress class="progress progress-info w-full" value="20" max="100"></progress>
+					{/if}
+					<input
+						class="file-input"
+						type="file"
+						multiple
+						onchange={(e) => {
+							const target = e.target as HTMLInputElement;
+							const files = Array.from(target.files ?? []);
+							images = files;
+						}}
+					/>
+				{/if}
+
 				<div class="pt-10 flex justify-between">
-					<button onclick={() => updateHome(homeFields)} class="btn btn-primary"
-						>Update Details</button
-					>
 					<button
 						class="btn btn-dash btn-error"
 						onclick={(e) => {
 							e.preventDefault();
 							(document.getElementById('delete-home-confirm') as HTMLDialogElement).showModal();
 						}}>Delete Home</button
+					>
+
+					<button
+						onclick={() => updateHome(homeFields)}
+						class="btn btn-primary"
+						disabled={!formChanged}>Update Details</button
 					>
 				</div>
 			</form>

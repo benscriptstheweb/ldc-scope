@@ -6,9 +6,10 @@
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import Paw from '../../../icons/Paw.svelte';
-	import Building from '../../../icons/Building.svelte';
 	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
 	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
+	import { onMount } from 'svelte';
+	import { getParsedDate } from '$lib/helpers/getParsedDate';
 
 	const { data } = $props();
 	const home = data;
@@ -29,22 +30,38 @@
 	let mapLink = isIOS
 		? `maps://?q=${mapQuery}`
 		: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
+	let photoUrls: { images: string[] } = $state({ images: [] });
+
+	let dateAvailable: string = $state('');
+
+	onMount(async () => {
+		const res = await fetch(`/api/homes/${home.id}/photos`);
+		photoUrls = await res.json();
+	});
 </script>
 
 {#if data.user.isAdmin}
-	<HomeEditDrawer id="edit-home-drawer" {home} />
+	<HomeEditDrawer id="edit-home-drawer" {home} photoUrls={photoUrls.images} />
 	<ContactsEditDrawer id="edit-contacts-drawer" {home} />
 {/if}
 
 <div class="top-container">
-	<div class="address-container">
+	<div class="flex flex-col items-center address-container">
+		<div class="flex w-full carousel">
+			{#each photoUrls.images as url}
+				<div class="flex carousel-item h-60">
+					<img src={url} alt="" />
+				</div>
+			{/each}
+		</div>
+
 		{#if home}
 			<div class="w-80 flex items-center justify-between">
 				<div class="mb-8">
 					<p class="heading header-address">{home.address1} {home.address2}</p>
 					<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
 				</div>
-
 				<a href={mapLink}>
 					<img class="map-pin" src="/pin.png" width="70px" alt="open-in-map" />
 				</a>
@@ -76,20 +93,25 @@
 		<h2>Details</h2>
 
 		<div class="detail flex items-center justify-center mb-5">
-			<div class="custom-badge badge badge-warning">
-				<strong>{home.maxDays}</strong>
-			</div>
-			<div class="recommended-occupant">
-				<RecommendedOccupantBadge occupantType={home.occupantType} />
-			</div>
 			{#if home.hasPets}
 				<div class="custom-badge badge badge-secondary">
 					<strong><Paw /></strong>
 				</div>
 			{/if}
+			<div class="custom-badge badge badge-warning">
+				<strong>{home.maxDays}</strong>
+			</div>
+			<div class="custom-badge recommended-occupant">
+				<RecommendedOccupantBadge occupantType={home.occupantType} />
+			</div>
 		</div>
 
 		<div class="block details">
+			<div class="detail">
+				<p>
+					<strong>Date available</strong>: {getParsedDate(home.dateAvailable)}
+				</p>
+			</div>
 			<div class="detail">
 				<p><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
 			</div>
@@ -163,6 +185,7 @@
 	.custom-badge {
 		border-radius: 25px;
 		width: 20px;
+		margin: 5px;
 	}
 	.map-pin {
 		border-radius: 50%;

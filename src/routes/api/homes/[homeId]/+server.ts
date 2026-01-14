@@ -78,7 +78,8 @@ export async function GET({ params }) {
         allergies: home.allergies,
         distanceToProject: home.distance_to_project,
         hasPets: home.has_pets,
-        parkingType: home.parking_type
+        parkingType: home.parking_type,
+        dateAvailable: home.date_available
     };
 
     return json(result);

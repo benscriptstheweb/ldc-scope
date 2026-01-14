@@ -6,9 +6,8 @@ declare global {
 				email: string | undefined;
 				isAdmin: boolean;
 				assignedRegion: number;
-			} | null
+			} | null;
 		}
 	}
 }
-
 export { };
