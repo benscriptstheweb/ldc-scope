@@ -9,6 +9,7 @@
 	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
 	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
 	import { onMount } from 'svelte';
+	import { getParsedDate } from '$lib/helpers/getParsedDate';
 
 	const { data } = $props();
 	const home = data;
@@ -31,6 +32,8 @@
 		: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 
 	let photoUrls: { images: string[] } = $state({ images: [] });
+
+	let dateAvailable: string = $state('');
 
 	onMount(async () => {
 		const res = await fetch(`/api/homes/${home.id}/photos`);
@@ -104,6 +107,11 @@
 		</div>
 
 		<div class="block details">
+			<div class="detail">
+				<p>
+					<strong>Date available</strong>: {getParsedDate(home.dateAvailable)}
+				</p>
+			</div>
 			<div class="detail">
 				<p><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
 			</div>

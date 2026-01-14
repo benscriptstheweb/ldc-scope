@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import Paw from '../icons/Paw.svelte';
 	import RecommendedOccupantBadge from './RecommendedOccupantBadge.svelte';
 
@@ -26,8 +27,7 @@
 						{/if}
 					</h2>
 					<p class="half-address">{home.city}, {home.state} {home.zip}</p>
-					<!-- <p>{home.distanceToProject} miles away</p> -->
-					{home.dateAvailable}
+					{getParsedDate(home.dateAvailable)}
 				</div>
 
 				<!-- INDICATORS -->
