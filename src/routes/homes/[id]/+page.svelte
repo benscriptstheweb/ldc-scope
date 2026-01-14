@@ -90,17 +90,17 @@
 		<h2>Details</h2>
 
 		<div class="detail flex items-center justify-center mb-5">
-			<div class="custom-badge badge badge-warning">
-				<strong>{home.maxDays}</strong>
-			</div>
-			<div class="recommended-occupant">
-				<RecommendedOccupantBadge occupantType={home.occupantType} />
-			</div>
 			{#if home.hasPets}
 				<div class="custom-badge badge badge-secondary">
 					<strong><Paw /></strong>
 				</div>
 			{/if}
+			<div class="custom-badge badge badge-warning">
+				<strong>{home.maxDays}</strong>
+			</div>
+			<div class="custom-badge recommended-occupant">
+				<RecommendedOccupantBadge occupantType={home.occupantType} />
+			</div>
 		</div>
 
 		<div class="block details">
@@ -177,6 +177,7 @@
 	.custom-badge {
 		border-radius: 25px;
 		width: 20px;
+		margin: 5px;
 	}
 	.map-pin {
 		border-radius: 50%;
