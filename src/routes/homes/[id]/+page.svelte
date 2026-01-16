@@ -33,8 +33,6 @@
 
 	let photoUrls: { images: string[] } = $state({ images: [] });
 
-	let dateAvailable: string = $state('');
-
 	onMount(async () => {
 		const res = await fetch(`/api/homes/${home.id}/photos`);
 		photoUrls = await res.json();
@@ -48,9 +46,9 @@
 
 <div class="top-container">
 	<div class="flex flex-col items-center address-container">
-		<div class="flex w-full carousel">
+		<div class="flex carousel carousel-center h-60">
 			{#each photoUrls.images as url}
-				<div class="flex carousel-item h-60">
+				<div class="flex carousel-item">
 					<img src={url} alt="" />
 				</div>
 			{/each}
