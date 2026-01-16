@@ -1,8 +1,8 @@
 import sharp from "sharp";
 
-export async function compressTo10kb(buffer: Buffer) {
+export async function compressor(buffer: Buffer) {
     let output = buffer;
-
+    let status = '';
     let resolution = 900;
     let maxSize = 50 * 1024;
 
@@ -14,11 +14,19 @@ export async function compressTo10kb(buffer: Buffer) {
 
         resolution -= 20;
 
+        // keep resolution good
         if (resolution < 500) {
-            // TBD: error that the file is too large
             break;
         }
     }
 
-    return output;
+    // if after compressor still over upload limit, complain to frontend
+    status = output.length > maxSize
+        ? 'oversize'
+        : 'ok'
+
+    return {
+        output: output,
+        status: status
+    };
 }

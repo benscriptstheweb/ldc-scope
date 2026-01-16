@@ -49,12 +49,11 @@
 		parkingType: home.parkingType
 	});
 
-	let imagesUploading = $state(false);
 	let images: File[] = $state([]);
 
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
 		if (images.length !== 0) {
-			uploadImages();
+			await uploadImages();
 		}
 
 		const res = await fetch(`/api/homes/${home.id}`, {
@@ -78,6 +77,8 @@
 		}
 	}
 
+	let fileTooLarge = $state(false);
+
 	async function uploadImages() {
 		const form = new FormData();
 		images.forEach((imageFile) => form.append('images', imageFile));
@@ -87,11 +88,14 @@
 			body: form
 		});
 
-		imagesUploading = true;
-
-		if (res.ok) {
-			imagesUploading = false;
-			window.location.reload();
+		const compressorResult = await res.json();
+		if (compressorResult.message !== 'oversize') {
+			return;
+		} else {
+			fileTooLarge = true;
+			setTimeout(() => {
+				fileTooLarge = false;
+			}, 3000);
 		}
 	}
 
@@ -209,11 +213,9 @@
 				</ul>
 
 				{#if photoUrls.length < 10}
-					<h2 class="edit-heading mt-10">Add New Images</h2>
-					{#if imagesUploading}
-						Compressing images..
-						<progress class="progress progress-info w-full" value="20" max="100"></progress>
-					{/if}
+					<div class="flex justify-center">
+						<h2 class="edit-heading mt-10">Add New Images</h2>
+					</div>
 					<input
 						class="file-input"
 						type="file"
@@ -224,6 +226,9 @@
 							images = files;
 						}}
 					/>
+					{#if fileTooLarge}
+						<div role="alert" class="alert alert-error">Image is too large!</div>
+					{/if}
 				{/if}
 
 				<div class="pt-10 flex justify-between">
@@ -236,7 +241,10 @@
 					>
 
 					<button
-						onclick={() => updateHome(homeFields)}
+						onclick={(e) => {
+							e.preventDefault();
+							updateHome(homeFields);
+						}}
 						class="btn btn-primary"
 						disabled={!formChanged}>Update Details</button
 					>
