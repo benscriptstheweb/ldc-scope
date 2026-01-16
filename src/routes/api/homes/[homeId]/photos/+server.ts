@@ -1,4 +1,4 @@
-import { compressTo10kb } from "$lib/imageCompressor";
+import { compressor } from "$lib/imageCompressor";
 import { supabase } from "$lib/supabase/supabaseClient";
 import { json } from "@sveltejs/kit";
 
@@ -7,20 +7,26 @@ export async function POST({ request, params }) {
     const images = form.getAll("images") as File[];
     const { homeId } = params;
 
-    if (images.length !== 0 || !homeId)
+    if (!images.length || !homeId) {
         return new Response("Missing images or homeId", { status: 400 });
+    }
 
     const uploaded = [];
 
     for (const image of images) {
         const buffer = Buffer.from(await image.arrayBuffer());
-        const compressed = await compressTo10kb(buffer);
+        const compressedImageBuffer = (await compressor(buffer)).output;
+        const compressedImageStatus = (await compressor(buffer)).status;
+
+        if (compressedImageStatus === 'oversize') {
+            return json({ message: 'oversize' })
+        }
 
         const fileName = `housing/${homeId}/${crypto.randomUUID()}.webp`;
 
         const { error } = await supabase.storage
             .from("photos")
-            .upload(fileName, compressed, {
+            .upload(fileName, compressedImageBuffer, {
                 contentType: "image/webp",
                 upsert: false
             });
