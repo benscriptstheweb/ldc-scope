@@ -15,6 +15,6 @@
 
 <style>
 	.toast {
-		z-index: 99;
+		z-index: 100;
 	}
 </style>
