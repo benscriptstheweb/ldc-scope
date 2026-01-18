@@ -30,7 +30,7 @@
 	});
 
 	async function updateInfo() {
-		const res = await fetch(`/api/volunteers/${volunteerDetail.id}`, {
+		const res = await fetch(`/api/volunteers?id=${volunteerDetail.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newVolunteerDetails)
 		});

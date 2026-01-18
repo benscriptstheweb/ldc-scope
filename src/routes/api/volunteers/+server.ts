@@ -2,7 +2,33 @@ import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
 import type { Volunteer } from '$lib/supabase/types/volunteer.js';
 
-export async function GET({ locals }) {
+export async function GET({ locals, url }) {
+    const volunteerId = url.searchParams.get('id');
+
+    if (volunteerId) {
+        const { data, error } = await supabase
+            .from('volunteers')
+            .select(`
+                *,
+                project!inner ( * ),
+                assignments ( home_id ( * ))
+            `)
+            .eq('project.region', locals.user?.assignedRegion)
+            .eq('id', volunteerId)
+            .single();
+
+        if (error) {
+            console.error('Error fetching individual volunteer:', error);
+        }
+
+        const individualVolunteer = {
+            ...data,
+            assignedHome: data.assignments.length > 0 ? data.assignments[0].home_id ?? null : null,
+        };
+
+        return json(individualVolunteer);
+    }
+
     const { data, error } = await supabase
         .from('volunteers')
         .select(`
@@ -48,7 +74,25 @@ export async function POST({ request }) {
     return json({ success: true }, { status: 201 });
 }
 
-export async function DELETE({ request }) {
+export async function DELETE({ request, url }) {
+    // single delete from detail page
+    const volunteerId = url.searchParams.get('id');
+
+    if (volunteerId) {
+        const { error } = await supabase
+            .from('volunteers')
+            .delete()
+            .eq('id', [volunteerId]);
+
+        if (error) {
+            console.error('Error deleting volunteer:', error);
+            throw error;
+        }
+
+        return json({ status: 'deleted individual' });
+    }
+
+    // batch delete
     const body = await request.json();
 
     const { error } = await supabase
@@ -61,5 +105,38 @@ export async function DELETE({ request }) {
         throw error;
     }
 
-    return json({ status: 'deleted' });
+    return json({ status: 'deleted multiple' });
+}
+
+export async function PATCH({ locals, url, request }) {
+    if (!locals.user?.isAdmin) {
+        return new Response('Forbidden', { status: 403 });
+    }
+
+    const volunteerId = url.searchParams.get('id');
+    const body = await request.json();
+
+    if (!body.name || !body.phone || !body.project || !body.date_start || !body.date_end) {
+        return json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+        .from('volunteers')
+        .update({
+            name: body.name,
+            phone: body.phone,
+            email: body.email,
+            project: body.project,
+            date_start: body.date_start,
+            date_end: body.date_end
+        })
+        .eq('id', volunteerId)
+        .single();
+
+    if (error) {
+        console.error(error);
+        return json({ error: 'Failed to update volunteer' }, { status: 500 });
+    }
+
+    return json({ success: true }, { status: 200 });
 }
