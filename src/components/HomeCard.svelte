@@ -27,7 +27,7 @@
 						{/if}
 					</h2>
 					<p class="half-address">{home.city}, {home.state} {home.zip}</p>
-					{getParsedDate(home.dateAvailable)}
+					{getParsedDate(home.date_available)}
 				</div>
 
 				<!-- INDICATORS -->
@@ -38,9 +38,9 @@
 						</div>
 					{/if}
 					<div class="custom-badge badge badge-warning mr-0.5">
-						<strong>{home.maxDaysStay}</strong>
+						<strong>{home.max_days_stay}</strong>
 					</div>
-					<RecommendedOccupantBadge occupantType={home.occupantType} />
+					<RecommendedOccupantBadge occupantType={home.occupant_type} />
 				</div>
 			</div>
 		</div>

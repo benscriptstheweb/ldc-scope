@@ -11,16 +11,16 @@
 	let city = $state('');
 	let addressState = $state('');
 	let zip = $state('');
-	let hostCongregation = $state('');
-	let distanceToProject: null | number = $state(null);
-	let maxDays: null | number = $state(null);
+	let congregation = $state('');
+	let distance_to_project: null | number = $state(null);
+	let max_days_stay: null | number = $state(null);
 	let multiSelectAmenities = $state([]);
 	let projectId: null | number = $state(null);
-	let recommendedOccupant = $state('A');
+	let occupant_type = $state('A');
 	let allergy = $state('');
 	let homeownerAllergies: string[] = $state([]);
-	let hasPets = $state(false);
-	let parkingType = $state('street');
+	let has_pets = $state(false);
+	let parking_type = $state('street');
 
 	function addAllergyToList() {
 		if (allergy.trim() !== '') {
@@ -30,20 +30,20 @@
 	}
 
 	let newHomeDetails = $derived({
-		address1: address1,
-		address2: address2,
-		city: city,
+		address1,
+		address2,
+		city,
 		state: addressState,
-		zip: zip,
-		congregation: hostCongregation,
+		zip,
+		congregation,
 		project: projectId,
-		distance_to_project: distanceToProject,
-		max_days_stay: maxDays,
+		distance_to_project,
+		max_days_stay,
 		amenities: multiSelectAmenities,
-		occupant_type: recommendedOccupant,
+		occupant_type,
 		allergies: homeownerAllergies,
-		has_pets: hasPets,
-		parking_type: parkingType
+		has_pets,
+		parking_type
 	});
 
 	let hostName = $state('');
@@ -130,17 +130,17 @@
 				<div>
 					<label class="label mb-5">
 						<p>Stay Duration</p>
-						<input bind:value={maxDays} type="number" class="w-15" />
+						<input bind:value={max_days_stay} type="number" class="w-15" />
 					</label>
 				</div>
 
 				<label>
 					Has pets?
-					<input bind:checked={hasPets} type="checkbox" />
+					<input bind:checked={has_pets} type="checkbox" />
 				</label>
 
 				<p class="mt-4">Recommended Occupant</p>
-				<select required class="select" bind:value={recommendedOccupant}>
+				<select required class="select" bind:value={occupant_type}>
 					<option value="S">Sister</option>
 					<option value="B">Brother</option>
 					<option value="C">Couple</option>
@@ -149,7 +149,7 @@
 				</select>
 
 				<p class="mt-4">Parking Type</p>
-				<select required class="select" bind:value={parkingType}>
+				<select required class="select" bind:value={parking_type}>
 					<option value="street">Street</option>
 					<option value="garage">Garage</option>
 				</select>
@@ -185,7 +185,7 @@
 
 				<label class="label">
 					<p>Distance to Project (in miles)</p>
-					<input required bind:value={distanceToProject} type="number" class="w-15" />
+					<input required bind:value={distance_to_project} type="number" class="w-15" />
 				</label>
 			{/if}
 
@@ -194,7 +194,7 @@
 				<input required bind:value={hostName} type="text" placeholder="Name" />
 				<input required bind:value={hostEmail} type="text" placeholder="Email" />
 				<input required bind:value={hostPhone} type="number" placeholder="Phone" />
-				<input bind:value={hostCongregation} type="text" placeholder="Congregation" />
+				<input bind:value={congregation} type="text" placeholder="Congregation" />
 
 				<h3 class="subheading mt-7">Homeowner Allergies</h3>
 				<input type="text" bind:value={allergy} />

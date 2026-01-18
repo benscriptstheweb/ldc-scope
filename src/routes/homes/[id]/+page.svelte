@@ -97,17 +97,17 @@
 				</div>
 			{/if}
 			<div class="custom-badge badge badge-warning">
-				<strong>{home.maxDays}</strong>
+				<strong>{home.max_days_stay}</strong>
 			</div>
 			<div class="custom-badge recommended-occupant">
-				<RecommendedOccupantBadge occupantType={home.occupantType} />
+				<RecommendedOccupantBadge occupantType={home.occupant_type} />
 			</div>
 		</div>
 
 		<div class="block details">
 			<div class="detail">
 				<p>
-					<strong>Date available</strong>: {getParsedDate(home.dateAvailable)}
+					<strong>Date available</strong>: {getParsedDate(home.date_available)}
 				</p>
 			</div>
 			<div class="detail">

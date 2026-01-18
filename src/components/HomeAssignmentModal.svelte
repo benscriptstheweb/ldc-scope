@@ -4,7 +4,6 @@
 	import Info from '../icons/Info.svelte';
 	import { supabase } from '$lib/supabase/supabaseClient';
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
-	import { onMount } from 'svelte';
 
 	let { volunteerToAssign, id } = $props();
 

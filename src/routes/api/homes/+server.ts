@@ -1,68 +1,51 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
+import { type Home } from '$lib/supabase/types/home.js';
+import type { Assignment } from '$lib/supabase/types/assignment.js';
 
-type Home = {
-    id: string;
-    address1: string;
-    address2: string
-    city: string;
-    state: string;
-    zip: string;
-    contacts: {
-        isPrimary: boolean;
-        name: string;
-    }[];
-    max_days_stay: number;
-    project: {
-        id: string;
-        friendly_name: string;
-        full_address: string;
-        region: number;
+export async function GET({ locals, url }) {
+    const id = url.searchParams.get('id');
+
+    if (id) {
+        const { data, error } = await supabase
+            .from('homes')
+            .select(`
+            *,
+            contacts ( * ),
+            project!inner ( * ),
+            assignments ( volunteer_id ( * ))
+        `)
+            .eq('project.region', locals.user?.assignedRegion)
+            .eq('id', id)
+            .single();
+
+        if (error) {
+            return json({ error: 'Error retrieving single home' }, { status: 400 });
+        };
+
+        const singleHome = {
+            ...data,
+            id: data.id,
+            assignments: data.assignments.map((a: Assignment) => a.volunteer_id),
+            distanceToProject: data.distance_to_project,
+            hasPets: data.has_pets,
+            parkingType: data.parking_type
+        };
+
+        console.log(singleHome.assignments)
+
+        return json(singleHome);
     }
-    assignments: Assignment[];
-    congregation: string;
-    occupant_type: string | null;
-    distance_to_project: number;
-    date_available: Date;
-}
 
-type Assignment = {
-    volunteer: Volunteer;
-}
-
-type Volunteer = {
-    id: string;
-    name: string;
-    date_start: string;
-    date_end: string;
-}
-
-export async function GET({ locals }) {
     const { data, error } = await supabase
         .from('homes')
         .select(`
-            id,
-            address1,
-            address2,
-            city,
-            state,
-            zip,
-            contacts ( isPrimary, name ),
-            max_days_stay,
-            project!inner ( id, friendly_name, full_address, region ),
+            *,
+            contacts ( * ),
+            project!inner ( * ),
             assignments (
-                volunteer:volunteers (
-                    id,
-                    name,
-                    date_start,
-                    date_end
-                )
-            ),
-            congregation,
-            occupant_type,
-            distance_to_project,
-            has_pets,
-            date_available
+                volunteers ( * )
+            )
         `)
         .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<Home[]>();
@@ -72,13 +55,8 @@ export async function GET({ locals }) {
         return json({ error: error.message }, { status: 500 });
     }
 
-    // Filter only primary contacts for each home
     const homes = data.map(home => {
-        const primaryContacts = home.contacts
-            .filter(contact => contact.isPrimary)
-            .map(contact => contact.name);
-
-        let sortedAssignments: Assignment[] = home.assignments.length
+        let sortedAssignments = home.assignments.length
             ? home.assignments.sort((a: any, b: any) => {
                 const dateA = new Date(a.date_end);
                 const dateB = new Date(b.date_end);
@@ -89,25 +67,16 @@ export async function GET({ locals }) {
         const today = new Date();
 
         let hasAssignmentNow = sortedAssignments[0]
-            ? today >= new Date(sortedAssignments[0].volunteer.date_start) && today <= new Date(sortedAssignments[0].volunteer.date_end)
+            ? today >= new Date(sortedAssignments[0].volunteers.date_start) && today <= new Date(sortedAssignments[0].volunteers.date_end)
             : false
 
+        // what gets returned to frontend
         return {
-            id: home.id,
-            address1: home.address1,
-            address2: home.address2,
-            city: home.city,
-            state: home.state,
-            zip: home.zip,
-            primaryContacts,
-            congregation: home.congregation,
+            ...home,
             hasAssignmentNow,
             project: home.project.friendly_name,
-            occupantType: home.occupant_type,
-            maxDaysStay: home.max_days_stay,
             distanceToProject: home.distance_to_project,
             hasPets: home.has_pets,
-            dateAvailable: home.date_available
         };
     });
 
@@ -128,7 +97,6 @@ export async function DELETE({ request }) {
 
     return json({ status: 'deleted' });
 }
-
 
 export async function POST({ request }) {
     const body = await request.json();
@@ -159,4 +127,39 @@ export async function POST({ request }) {
     }
 
     return json({ success: true, createdHomeId: data.id }, { status: 201 });
+}
+
+export async function PATCH({ locals, url, request }) {
+    if (!locals.user?.isAdmin) {
+        return new Response('Forbidden', { status: 403 });
+    }
+
+    const id = url.searchParams.get('id');
+    const body = await request.json();
+
+    if (!body.address1 || !body.city || !body.state || !body.zip) {
+        return json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const { error } = await supabase
+        .from('homes')
+        .update({
+            address1: body.address1,
+            address2: body.address2,
+            city: body.city,
+            state: body.state,
+            zip: body.zip,
+            distance_to_project: body.distanceToProject,
+            amenities: body.amenities,
+            occupant_type: body.occupantType,
+            has_pets: body.hasPets
+        })
+        .eq('id', id);
+
+    if (error) {
+        console.error(error);
+        return json({ error: 'Failed to update home' }, { status: 500 });
+    }
+
+    return json({ success: true }, { status: 200 });
 }

@@ -28,7 +28,7 @@
 			zip: home.zip,
 			distanceToProject: home.distanceToProject,
 			amenities: home.amenities,
-			occupantType: home.occupantType,
+			occupantType: home.occupant_type,
 			hasPets: home.hasPets,
 			parkingType: home.parkingType
 		};
@@ -44,7 +44,7 @@
 		zip: home.zip,
 		distanceToProject: home.distanceToProject,
 		amenities: home.amenities,
-		occupantType: home.occupantType,
+		occupantType: home.occupant_type,
 		hasPets: home.hasPets,
 		parkingType: home.parkingType
 	});
@@ -56,7 +56,7 @@
 			await uploadImages();
 		}
 
-		const res = await fetch(`/api/homes/${home.id}`, {
+		const res = await fetch(`/api/homes?id=${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
 		});
