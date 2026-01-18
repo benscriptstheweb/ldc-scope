@@ -1,49 +1,17 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
-
-type DBAssignment = {
-    home_id: {
-        address1: string;
-        address2: string | null;
-        city: string;
-        state: string;
-        zip: string;
-    } | null;
-};
-
-type DBVolunteer = {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    date_start: string | null;
-    date_end: string | null;
-    project: {
-        id: number;
-        friendly_name: string;
-    }
-    assignments: DBAssignment[];
-    type: string;
-};
+import type { Volunteer } from '$lib/supabase/types/volunteer.js';
 
 export async function GET({ locals }) {
     const { data, error } = await supabase
         .from('volunteers')
         .select(`
-            id,
-            name,
-            email,
-            phone,
-            date_start,
-            date_end,
-            project!inner ( id, friendly_name, full_address ),
-            assignments (
-                home_id ( address1, address2, city, state, zip )
-            ),
-            type
+            *,
+            project!inner ( * ),
+            assignments ( home_id ( * ))
         `)
         .eq('project.region', locals.user?.assignedRegion)
-        .overrideTypes<DBVolunteer[]>();
+        .overrideTypes<Volunteer[]>();
 
     if (error) {
         console.error('Error fetching volunteers with assignments:', error);
@@ -51,23 +19,19 @@ export async function GET({ locals }) {
 
     const volunteers = data?.map((v) => {
         // supabase always returns array, mitigate by getting just the [0] index
-        const singleHomeAssignment = v.assignments[0];
-
+        // return 1 or 0 for isAssigned to sort them later in the frontend
         return {
             ...v,
-            assignedHome: v.assignments.length > 0 ? singleHomeAssignment.home_id ?? null : null,
+            assignedHome: v.assignments.length > 0 ? v.assignments[0].home_id ?? null : null,
             isAssigned: v.assignments.length > 0 ? 1 : 0,
             assignedProject: v.project
         }
     });
+
     return json(volunteers);
 }
 
-export async function POST({ locals, request }) {
-    if (!locals.user?.isAdmin) {
-        return new Response('Forbidden', { status: 403 });
-    }
-
+export async function POST({ request }) {
     const body = await request.json();
 
     if (!body.project || !body.name || !body.phone) {
