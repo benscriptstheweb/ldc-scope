@@ -194,7 +194,6 @@
 					<option value="S">Sister</option>
 					<option value="B">Brother</option>
 					<option value="C">Couple</option>
-					<option value="F">Family</option>
 					<option value="A">Any</option>
 				</select>
 

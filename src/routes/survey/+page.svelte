@@ -3,40 +3,29 @@
 	import Toast from '../../components/Toast.svelte';
 	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
-	import Trash from '../../icons/Trash.svelte';
 	import { getProjects } from '$lib/helpers/getProjects';
+	import { type Volunteer } from '$lib/supabase/types/volunteer';
+	import { OccupantType } from '$lib/supabase/types/occupantType';
 
-	let householdType = $state('brother');
-
-	let newVolunteer = $state({
+	let newVolunteer: Partial<Volunteer> = $state({
 		email: '',
 		phone: null,
-		project: null,
-		date_start: new Date(),
-		date_end: new Date()
+		date_start: new Date().toDateString(),
+		date_end: new Date().toDateString()
 	});
 
-	const mapping: Record<string, string> = {
-		brother: 'B',
-		sister: 'S',
-		family: 'F',
-		couple: 'C'
-	};
+	let occupantType = $state('');
 
-	let occupantType = $derived(mapping[householdType]);
+	// for single people, just one name
 	let singleName = $state('');
 
-	let spouse1 = $state();
-	let spouse2 = $state();
+	// for couples, combined name
+	let spouse1 = $state('');
+	let spouse2 = $state('');
 	let coupleName = $derived(`${spouse1} & ${spouse2}`);
 
-	let familyMembers: string[] = $state([]);
-	let familyNames = $derived(familyMembers.join(', '));
-
 	let newVolunteerName = $derived.by(() => {
-		if (occupantType === 'F') {
-			return familyNames;
-		} else if (occupantType === 'C') {
+		if (occupantType === 'C') {
 			return coupleName;
 		} else {
 			return singleName;
@@ -44,17 +33,18 @@
 	});
 
 	let submitted = $state(false);
+
 	async function addVolunteer(name: string, details: any, type: string) {
 		const res = await fetch('/api/volunteers', {
 			method: 'POST',
 			body: JSON.stringify({
-				name: name,
+				name,
+				type,
 				email: details.email,
 				phone: details.phone,
 				project: details.project,
 				date_start: details.date_start,
-				date_end: details.date_end,
-				type: type
+				date_end: details.date_end
 			})
 		});
 
@@ -73,7 +63,7 @@
 {/if}
 
 <div class="flex flex-col items-center mb-10">
-	<h2 class="heading mb-3">Housing Request Form</h2>
+	<h2 class="heading mb-3">Housing Request</h2>
 	<div class="form flex flex-col h-full w-80">
 		<div class="p-5 bg-base-200 message-block w-65 self-center">
 			<p class="message">
@@ -81,39 +71,35 @@
 				during your visit, please provide the following information.
 			</p>
 			<p class="message">
-				<i><strong>Note</strong></i>💡: To fulfill a housing request in the best possible way,
-				please submit this form no later than one week before your visit.
+				To fulfill a housing request in the best possible way, please submit this form no later than
+				one week before your visit.
 			</p>
 		</div>
 		<Spacer spacing="mt-15" />
-		<p class="subheading">1. 👷‍♀️ Basic info:</p>
+		<p class="subheading">1. Basic info:</p>
 
 		<div class="mt-5 mb-5 occupant-type flex justify-between">
 			<label>
-				<input type="radio" value="brother" bind:group={householdType} />
+				<input type="radio" value={OccupantType.Brother} bind:group={occupantType} />
 				Brother
 			</label>
 			<label>
-				<input type="radio" value="sister" bind:group={householdType} />
+				<input type="radio" value={OccupantType.Sister} bind:group={occupantType} />
 				Sister
 			</label>
 			<label>
-				<input type="radio" value="couple" bind:group={householdType} />
+				<input type="radio" value={OccupantType.Couple} bind:group={occupantType} />
 				Couple
-			</label>
-			<label>
-				<input type="radio" value="family" bind:group={householdType} />
-				Family
 			</label>
 		</div>
 
-		{#if householdType === 'brother' || householdType === 'sister'}
+		{#if occupantType === OccupantType.Brother || occupantType === OccupantType.Sister}
 			<div class="info flex flex-col">
 				<input bind:value={singleName} type="text" placeholder="Name" />
 				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
 				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
 			</div>
-		{:else if householdType === 'couple'}
+		{:else if occupantType === OccupantType.Couple}
 			<div class="info flex flex-col">
 				<div class="flex">
 					<input class="w-35" bind:value={spouse1} type="text" placeholder="Spouse 1" />
@@ -123,35 +109,10 @@
 				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
 				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
 			</div>
-		{:else if householdType === 'family'}
-			<div class="info flex flex-col">
-				{#each familyMembers as family, idx}
-					<div class="flex justify-between items-center">
-						<button
-							onclick={() => familyMembers.splice(idx, 1)}
-							class="btn btn-error btn-soft btn-xs"
-						>
-							<Trash />
-						</button>
-						<input
-							class="w-70"
-							id={`${idx}`}
-							type="text"
-							bind:value={familyMembers[idx]}
-							placeholder={`Member #${idx + 1}`}
-						/>
-					</div>
-				{/each}
-				<button class="btn btn-soft btn-success" onclick={() => familyMembers.push('')}
-					><Plus /></button
-				>
-				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
-				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
-			</div>
 		{/if}
 
 		<Spacer spacing="mt-10" />
-		<p class="subheading">2. 📍 Project you are attending:</p>
+		<p class="subheading">2. Project you are assigned to:</p>
 		<select bind:value={newVolunteer.project} class="select">
 			<option disabled selected>Select project</option>
 			{#await getProjects() then projects}
@@ -162,7 +123,7 @@
 		</select>
 
 		<Spacer spacing="mt-10" />
-		<p class="subheading">3. 📅 Start and end date:</p>
+		<p class="subheading">3. Start and end date:</p>
 		<div class="flex justify-center items-center">
 			<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
 			<Arrow />
@@ -172,7 +133,10 @@
 		<Spacer spacing="mt-10" />
 		<button
 			onclick={() => addVolunteer(newVolunteerName, newVolunteer, occupantType)}
-			class="btn btn-success">Submit Request</button
+			class="btn btn-success"
+		>
+			<Plus />
+			Submit Request</button
 		>
 	</div>
 </div>
