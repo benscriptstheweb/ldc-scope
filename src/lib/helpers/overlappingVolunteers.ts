@@ -20,8 +20,6 @@ export async function isOverlapping(volunteerId: string, homeId: string) {
     const arrStartDates = preAssignedVolunteers?.map(assignment => new Date(assignment.volunteer_id.date_start).getTime());
     const arrEndDates = preAssignedVolunteers?.map(assignment => new Date(assignment.volunteer_id.date_end).getTime());
 
-    console.log(arrStartDates)
-
     // 4. if any start date before another volunteer's end date and...
     // 5. ...if any end date is after another volunteer's start date...
     // ...then it is overlapping.

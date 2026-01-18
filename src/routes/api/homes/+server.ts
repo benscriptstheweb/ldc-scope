@@ -4,9 +4,9 @@ import { type Home } from '$lib/supabase/types/home.js';
 import type { Assignment } from '$lib/supabase/types/assignment.js';
 
 export async function GET({ locals, url }) {
-    const id = url.searchParams.get('id');
+    const homeId = url.searchParams.get('id');
 
-    if (id) {
+    if (homeId) {
         const { data, error } = await supabase
             .from('homes')
             .select(`
@@ -16,7 +16,7 @@ export async function GET({ locals, url }) {
             assignments ( volunteer_id ( * ))
         `)
             .eq('project.region', locals.user?.assignedRegion)
-            .eq('id', id)
+            .eq('id', homeId)
             .single();
 
         if (error) {
@@ -31,8 +31,6 @@ export async function GET({ locals, url }) {
             hasPets: data.has_pets,
             parkingType: data.parking_type
         };
-
-        console.log(singleHome.assignments)
 
         return json(singleHome);
     }
