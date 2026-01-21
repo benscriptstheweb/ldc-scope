@@ -46,10 +46,10 @@
 
 <div class="top-container">
 	<div class="flex flex-col items-center address-container">
-		<div class="flex carousel carousel-center h-60">
+		<div class="flex carousel carousel-center">
 			{#each photoUrls.images as url}
 				<div class="flex carousel-item">
-					<img src={url} alt="" />
+					<img src={url} alt="" class="h-60" />
 				</div>
 			{/each}
 		</div>
