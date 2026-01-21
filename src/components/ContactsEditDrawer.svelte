@@ -61,7 +61,7 @@
 	}
 
 	async function updateContact(contactId: string, fieldsToEdit: Partial<Contact>) {
-		const res = await fetch(`/api/homes/${home.id}/contacts/${contactId}`, {
+		const res = await fetch(`/api/homes/${home.id}/contacts?contact=${contactId}`, {
 			method: 'PATCH',
 			body: JSON.stringify(fieldsToEdit)
 		});
@@ -72,7 +72,9 @@
 	}
 
 	async function deleteContact(contactId: string) {
-		const res = await fetch(`/api/homes/${home.id}/contacts/${contactId}`, { method: 'DELETE' });
+		const res = await fetch(`/api/homes/${home.id}/contacts?contact=${contactId}`, {
+			method: 'DELETE'
+		});
 
 		if (res.ok) {
 			window.location.reload();
