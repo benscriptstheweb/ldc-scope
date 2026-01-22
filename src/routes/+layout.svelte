@@ -23,7 +23,10 @@
 	const publicRoutes = ['/signin', '/survey', '/survey/pass'];
 
 	onMount(() => {
+		// track authentication status:
 		auth.onAuthStateChanged(async (u) => {
+			// if there is no user, or the session is currently not in any of the determined
+			// public routes, then redirect to the signin page
 			if (!u && !publicRoutes.includes(page.url.pathname)) {
 				goto('/signin');
 			}
@@ -32,7 +35,7 @@
 </script>
 
 {#if !publicRoutes.includes(page.url.pathname)}
-	<Navbar userData={data.user} />
+	<Navbar />
 {/if}
 
 {#if loading}

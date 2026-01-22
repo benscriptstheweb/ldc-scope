@@ -2,8 +2,6 @@
 	import { auth } from '$lib/firebase/client';
 	import { signOut } from 'firebase/auth';
 
-	let { userData } = $props();
-
 	async function logout() {
 		await fetch('/api/sessionLogout', { method: 'POST' });
 		await signOut(auth);
@@ -18,9 +16,7 @@
 
 <div class="navbar bg-base-100 shadow-sm">
 	<div class="flex items-center flex-1">
-		<span class="badge badge-outline ml-5 badge-success">
-			Region {userData.assignedRegion}
-		</span>
+		<img src="/Vari1.png" alt="logo" class="w-12 ml-4" />
 	</div>
 
 	<div class="flex-none">
