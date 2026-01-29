@@ -21,6 +21,7 @@
 	let homeownerAllergies: string[] = $state([]);
 	let has_pets = $state(false);
 	let parking_type = $state('street');
+	let date_available = $state('');
 
 	function addAllergyToList() {
 		if (allergy.trim() !== '') {
@@ -43,7 +44,8 @@
 		occupant_type,
 		allergies: homeownerAllergies,
 		has_pets,
-		parking_type
+		parking_type,
+		date_available
 	});
 
 	let hostName = $state('');
@@ -59,6 +61,8 @@
 
 	let createdHomeId = $state('');
 
+	let images: File[] = $state([]);
+
 	async function addHome(newHome: any) {
 		const res = await fetch(`/api/homes`, {
 			method: 'POST',
@@ -73,6 +77,12 @@
 			createdHomeId = responseObject.createdHomeId;
 			modalPage = 4;
 		}
+
+		if (images.length !== 0) {
+			await uploadImages(images);
+		}
+
+		window.location.reload();
 	}
 
 	function removeTag(tagName: string) {
@@ -87,17 +97,25 @@
 		}
 	}
 
-	async function uploadImages(files: File[]) {
+	let fileTooLarge = $state(false);
+
+	async function uploadImages(imageFiles: File[]) {
 		const form = new FormData();
-		files.forEach((file) => form.append('images', file));
+		imageFiles.forEach((file) => form.append('images', file));
 
 		const res = await fetch(`/api/homes/${createdHomeId}/photos`, {
 			method: 'POST',
 			body: form
 		});
 
-		if (res.ok) {
-			window.location.reload();
+		const compressorResult = await res.json();
+		if (compressorResult.message !== 'oversize') {
+			return;
+		} else {
+			fileTooLarge = true;
+			setTimeout(() => {
+				fileTooLarge = false;
+			}, 3000);
 		}
 	}
 </script>
@@ -221,18 +239,35 @@
 						</div>
 					{/each}
 				</div>
+
+				{#if fileTooLarge}
+					<div role="alert" class="alert alert-error">Image is too large!</div>
+				{/if}
+
+				<div class="mb-15 mt-7">
+					<h1 class="page-heading">4. Add Images (Optional)</h1>
+					<input
+						class="file-input flex"
+						type="file"
+						multiple
+						onchange={(e) => {
+							const target = e.target as HTMLInputElement;
+							images = Array.from(target.files ?? []);
+						}}
+					/>
+					<ul>
+						{#each images as image, idx}
+							<li>{idx + 1}. {image.name}</li>
+						{/each}
+					</ul>
+				</div>
 			{/if}
 
 			{#if modalPage === 4}
-				<input
-					type="file"
-					multiple
-					onchange={(e) => {
-						const target = e.target as HTMLInputElement;
-						const files = Array.from(target.files ?? []);
-						uploadImages(files);
-					}}
-				/>
+				<div class="dates flex mb-10 items-center mt-6">
+					<strong class="mr-3">Available as of</strong>
+					<input bind:value={date_available} type="date" />
+				</div>
 			{/if}
 
 			<div class="flex justify-between mt-5">
@@ -244,7 +279,7 @@
 						(document.getElementById(id) as HTMLDialogElement).close();
 					}}>Close</button
 				>
-				{#if modalPage !== 3}
+				{#if modalPage !== 4}
 					<div>
 						{#if modalPage !== 1}
 							<button
@@ -263,7 +298,7 @@
 							}}>Next</button
 						>
 					</div>
-				{:else if modalPage === 3}
+				{:else if modalPage === 4}
 					<div>
 						<button
 							class="btn btn-soft"
@@ -277,8 +312,10 @@
 							onclick={(e) => {
 								e.preventDefault();
 								moveIfValid(() => addHome(newHomeDetails));
-							}}>Add</button
+							}}
 						>
+							<Plus />Add Home
+						</button>
 					</div>
 				{/if}
 			</div>

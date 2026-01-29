@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import DeleteConfirm from './DeleteConfirm.svelte';
 	import { amenities } from '$lib/helpers/amenities';
@@ -18,23 +17,6 @@
 	};
 
 	let isDrawerOpen = $state(false);
-
-	onMount(() => {
-		homeFields = {
-			address1: home.address1,
-			address2: home.address2,
-			city: home.city,
-			state: home.state,
-			zip: home.zip,
-			distanceToProject: home.distanceToProject,
-			amenities: home.amenities,
-			occupantType: home.occupant_type,
-			hasPets: home.hasPets,
-			parkingType: home.parkingType
-		};
-
-		isDrawerOpen = false;
-	});
 
 	let homeFields = $state({
 		address1: home.address1,
@@ -201,9 +183,9 @@
 				<h2 class="edit-heading">Images</h2>
 
 				<ul class="list bg-base-100 rounded-box shadow-md">
-					{#each photoUrls as url}
+					{#each photoUrls.filenames as filenames}
 						<div class="flex list-row items-center justify-between">
-							<img src={url} alt="" width={150} />
+							<p>{filenames}</p>
 							<button class="btn btn-error btn-dash" onclick={() => deleteImages(url)}>
 								<Trash />
 							</button>
@@ -211,7 +193,7 @@
 					{/each}
 				</ul>
 
-				{#if photoUrls.length < 10}
+				{#if photoUrls.urls.length < 10}
 					<div class="flex justify-center">
 						<h2 class="edit-heading mt-10">Add New Images</h2>
 					</div>

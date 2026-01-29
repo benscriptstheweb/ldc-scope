@@ -22,6 +22,8 @@ export async function POST({ request, params }) {
             return json({ message: 'oversize' })
         }
 
+        // TODO 5: custom file name is BRANCH MANDATE
+        // replace in place of the randomUUID()
         const fileName = `housing/${homeId}/${crypto.randomUUID()}.webp`;
 
         const { error } = await supabase.storage
@@ -58,14 +60,20 @@ export async function GET({ params }) {
         return new Response(error.message, { status: 500 });
     }
 
-    const urls = data.map((image) =>
-        supabase.storage
+    let urls: any[] = [];
+    let filenames: any[] = [];
+
+    data.forEach((image) => {
+        filenames.push(image.name);
+        urls.push(supabase.storage
             .from("photos")
             .getPublicUrl(`housing/${homeId}/${image.name}`).data
             .publicUrl
+        )
+    }
     );
 
-    return json({ images: urls })
+    return json({ urls, filenames })
 }
 
 export async function DELETE({ params, request }) {

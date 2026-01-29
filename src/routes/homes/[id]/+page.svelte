@@ -31,7 +31,7 @@
 		? `maps://?q=${mapQuery}`
 		: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 
-	let photoUrls: { images: string[] } = $state({ images: [] });
+	let photoUrls = $state({ urls: [] });
 
 	onMount(async () => {
 		const res = await fetch(`/api/homes/${home.id}/photos`);
@@ -40,16 +40,16 @@
 </script>
 
 {#if data.user.isAdmin}
-	<HomeEditDrawer id="edit-home-drawer" {home} photoUrls={photoUrls.images} />
+	<HomeEditDrawer id="edit-home-drawer" {home} {photoUrls} />
 	<ContactsEditDrawer id="edit-contacts-drawer" {home} />
 {/if}
 
 <div class="top-container">
 	<div class="flex flex-col items-center address-container">
 		<div class="flex carousel carousel-center">
-			{#each photoUrls.images as url}
+			{#each photoUrls.urls as url}
 				<div class="flex carousel-item">
-					<img src={url} alt="" class="h-60" />
+					<img src={url} alt="home" class="h-60" />
 				</div>
 			{/each}
 		</div>
