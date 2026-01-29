@@ -6,8 +6,6 @@
 
 	let { home } = $props();
 
-	console.log(home);
-
 	function visitHome() {
 		goto(`/homes/${home.id}`);
 	}
