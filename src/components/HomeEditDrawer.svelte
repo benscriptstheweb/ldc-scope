@@ -81,10 +81,7 @@
 		}
 	}
 
-	async function deleteImages(url: string) {
-		const imageUrlSplit = url.split('/');
-		const imageName = imageUrlSplit.at(-1);
-
+	async function deleteImages(imageName: string) {
 		const res = await fetch(`/api/homes/${home.id}/photos`, {
 			method: 'DELETE',
 			body: JSON.stringify(imageName)
@@ -183,10 +180,10 @@
 				<h2 class="edit-heading">Images</h2>
 
 				<ul class="list bg-base-100 rounded-box shadow-md">
-					{#each photoUrls.filenames as filenames}
+					{#each photoUrls.filenames as filename}
 						<div class="flex list-row items-center justify-between">
-							<p>{filenames}</p>
-							<button class="btn btn-error btn-dash" onclick={() => deleteImages(url)}>
+							<p>{filename}</p>
+							<button class="btn btn-error btn-dash" onclick={() => deleteImages(filename)}>
 								<Trash />
 							</button>
 						</div>
