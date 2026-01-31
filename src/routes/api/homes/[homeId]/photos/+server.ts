@@ -8,44 +8,36 @@ export async function POST({ request, params }) {
     const { homeId } = params;
 
     if (!images.length || !homeId) {
-        return new Response("Missing images or homeId", { status: 400 });
+        return json({ message: "No images or missing homeId" }, { status: 400 });
     }
 
-    const uploaded = [];
+    // status code 415: unsupported file type
+    if (images.some((e) => !e.type.startsWith('image/'))) {
+        return json({ message: "Invalid file types detected" }, { status: 415 })
+    }
 
     for (const image of images) {
         const buffer = Buffer.from(await image.arrayBuffer());
-        const compressedImageBuffer = (await compressor(buffer)).output;
-        const compressedImageStatus = (await compressor(buffer)).status;
 
-        if (compressedImageStatus === 'oversize') {
-            return json({ message: 'oversize' })
+        // status code 413: content too large
+        let compressedImageBuffer: Buffer<ArrayBufferLike>;
+        try {
+            compressedImageBuffer = await compressor(buffer);
+        } catch (error) {
+            return json({ message: "File too large" }, { status: 413 });
         }
 
-        // TODO 5: custom file name is BRANCH MANDATE
-        // replace in place of the randomUUID()
         const fileName = `housing/${homeId}/${image.name}`;
 
-        const { error } = await supabase.storage
+        await supabase.storage
             .from("photos")
             .upload(fileName, compressedImageBuffer, {
                 contentType: "image/webp",
                 upsert: false
             });
-
-        if (error) {
-            console.error(error);
-            continue;
-        }
-
-        const publicURL = supabase.storage
-            .from("photos")
-            .getPublicUrl(fileName).data.publicUrl;
-
-        uploaded.push({ url: publicURL, path: fileName });
     }
 
-    return json({ status: 'uploaded' });
+    return json({ message: "Uploaded" }, { status: 200 });
 }
 
 export async function GET({ params }) {

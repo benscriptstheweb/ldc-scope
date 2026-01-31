@@ -249,6 +249,7 @@
 					<input
 						class="file-input flex"
 						type="file"
+						accept="image/*"
 						multiple
 						onchange={(e) => {
 							const target = e.target as HTMLInputElement;

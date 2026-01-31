@@ -3,6 +3,7 @@
 	import DeleteConfirm from './DeleteConfirm.svelte';
 	import { amenities } from '$lib/helpers/amenities';
 	import Trash from '../icons/Trash.svelte';
+	import { fade } from 'svelte/transition';
 
 	let { home, id, photoUrls } = $props();
 
@@ -34,18 +35,16 @@
 	let images: File[] = $state([]);
 
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
-		if (images.length !== 0) {
-			await uploadImages();
-		}
+		await uploadImages();
 
 		const res = await fetch(`/api/homes?id=${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
 		});
 
-		if (res.ok) {
-			window.location.reload();
-		}
+		// if (res.ok) {
+		// 	window.location.reload();
+		// }
 	}
 
 	async function deleteHome() {
@@ -60,20 +59,30 @@
 	}
 
 	let fileTooLarge = $state(false);
+	let fileIsInvalid = $state(false);
 
 	async function uploadImages() {
 		const form = new FormData();
-		images.forEach((imageFile) => form.append('images', imageFile));
+
+		images.forEach((imageFile) => {
+			form.append('images', imageFile);
+		});
 
 		const res = await fetch(`/api/homes/${home.id}/photos`, {
 			method: 'POST',
 			body: form
 		});
 
-		const compressorResult = await res.json();
-		if (compressorResult.message !== 'oversize') {
-			return;
-		} else {
+		// 415: file type unsupported
+		if (res.status === 415) {
+			fileIsInvalid = true;
+			setTimeout(() => {
+				fileIsInvalid = false;
+			}, 3000);
+		}
+
+		// 413: file too large
+		if (res.status === 413) {
 			fileTooLarge = true;
 			setTimeout(() => {
 				fileTooLarge = false;
@@ -197,6 +206,7 @@
 					<input
 						class="file-input"
 						type="file"
+						accept="image/*"
 						multiple
 						onchange={(e) => {
 							const target = e.target as HTMLInputElement;
@@ -205,7 +215,10 @@
 						}}
 					/>
 					{#if fileTooLarge}
-						<div role="alert" class="alert alert-error">Image is too large!</div>
+						<div transition:fade class="alert alert-error">File is too large</div>
+					{/if}
+					{#if fileIsInvalid}
+						<div transition:fade class="alert alert-error">Unsupported file type detected</div>
 					{/if}
 				{/if}
 

@@ -1,8 +1,8 @@
 import sharp from "sharp";
+import { error } from "@sveltejs/kit";
 
 export async function compressor(buffer: Buffer) {
     let output = buffer;
-    let status = '';
     let resolution = 900;
     let maxSize = 50 * 1024;
 
@@ -20,13 +20,10 @@ export async function compressor(buffer: Buffer) {
         }
     }
 
-    // if after compressor still over upload limit, complain to frontend
-    status = output.length > maxSize
-        ? 'oversize'
-        : 'ok'
+    // if after compressor still over upload limit, don't return anything!
+    if (output.length > maxSize) {
+        error(413, 'Image is too large!');
+    }
 
-    return {
-        output: output,
-        status: status
-    };
+    return output;
 }
