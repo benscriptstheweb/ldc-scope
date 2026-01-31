@@ -42,9 +42,9 @@
 			body: JSON.stringify(newHomeDetails)
 		});
 
-		// if (res.ok) {
-		// 	window.location.reload();
-		// }
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 
 	async function deleteHome() {
