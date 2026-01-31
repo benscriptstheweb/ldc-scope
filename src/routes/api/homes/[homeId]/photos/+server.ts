@@ -24,7 +24,7 @@ export async function POST({ request, params }) {
 
         // TODO 5: custom file name is BRANCH MANDATE
         // replace in place of the randomUUID()
-        const fileName = `housing/${homeId}/${crypto.randomUUID()}.webp`;
+        const fileName = `housing/${homeId}/${image.name}`;
 
         const { error } = await supabase.storage
             .from("photos")
