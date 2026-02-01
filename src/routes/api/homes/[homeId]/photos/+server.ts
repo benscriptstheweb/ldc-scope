@@ -13,7 +13,7 @@ export async function POST({ request, params }) {
 
     // status code 415: unsupported file type
     if (images.some((e) => !e.type.startsWith('image/'))) {
-        return json({ message: "Invalid file types detected" }, { status: 415 })
+        return json({ message: "Invalid file types detected" }, { status: 415 });
     }
 
     for (const image of images) {
@@ -77,8 +77,8 @@ export async function DELETE({ params, request }) {
         .remove([`housing/${homeId}/${imageName}`]);
 
     if (error) {
-        return new Response(error.message, { status: 500 });
+        return json(error.message, { status: 500 });
     }
 
-    return json({ status: 'deleted' });
+    return json({ message: 'Image successfully deleted', }, { status: 200 });
 }

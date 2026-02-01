@@ -59,12 +59,8 @@
 		isPrimary: true
 	});
 
-	let createdHomeId = $state('');
-
-	let images: File[] = $state([]);
-
 	async function addHome(newHome: any) {
-		const res = await fetch(`/api/homes`, {
+		const homeApiResponse = await fetch(`/api/homes`, {
 			method: 'POST',
 			body: JSON.stringify({
 				home: newHome,
@@ -72,17 +68,9 @@
 			})
 		});
 
-		if (res.ok) {
-			const responseObject = await res.json();
-			createdHomeId = responseObject.createdHomeId;
-			modalPage = 4;
+		if (homeApiResponse.ok) {
+			window.location.reload();
 		}
-
-		if (images.length !== 0) {
-			await uploadImages(images);
-		}
-
-		window.location.reload();
 	}
 
 	function removeTag(tagName: string) {
@@ -94,28 +82,6 @@
 	function moveIfValid(moveAction: any) {
 		if ((document.getElementById('add-form') as HTMLFormElement).reportValidity()) {
 			moveAction();
-		}
-	}
-
-	let fileTooLarge = $state(false);
-
-	async function uploadImages(imageFiles: File[]) {
-		const form = new FormData();
-		imageFiles.forEach((file) => form.append('images', file));
-
-		const res = await fetch(`/api/homes/${createdHomeId}/photos`, {
-			method: 'POST',
-			body: form
-		});
-
-		const compressorResult = await res.json();
-		if (compressorResult.message !== 'oversize') {
-			return;
-		} else {
-			fileTooLarge = true;
-			setTimeout(() => {
-				fileTooLarge = false;
-			}, 3000);
 		}
 	}
 </script>
@@ -239,38 +205,13 @@
 						</div>
 					{/each}
 				</div>
-
-				{#if fileTooLarge}
-					<div role="alert" class="alert alert-error">Image is too large!</div>
-				{/if}
-
-				<div class="mb-15 mt-7">
-					<h1 class="page-heading">4. Add Images (Optional)</h1>
-					<input
-						class="file-input flex"
-						type="file"
-						accept="image/*"
-						multiple
-						onchange={(e) => {
-							const target = e.target as HTMLInputElement;
-							images = Array.from(target.files ?? []);
-						}}
-					/>
-					<ul>
-						{#each images as image, idx}
-							<li>{idx + 1}. {image.name}</li>
-						{/each}
-					</ul>
-				</div>
-			{/if}
-
-			{#if modalPage === 4}
 				<div class="dates flex mb-10 items-center mt-6">
-					<strong class="mr-3">Available as of</strong>
+					<strong class="mr-3">4. Available as of</strong>
 					<input bind:value={date_available} type="date" />
 				</div>
 			{/if}
 
+			<!-- NEXT PREVIOUS BUTTONS -->
 			<div class="flex justify-between mt-5">
 				<button
 					class="btn btn-outline btn-secondary"
@@ -280,26 +221,7 @@
 						(document.getElementById(id) as HTMLDialogElement).close();
 					}}>Close</button
 				>
-				{#if modalPage !== 4}
-					<div>
-						{#if modalPage !== 1}
-							<button
-								class="btn btn-soft"
-								onclick={(e) => {
-									e.preventDefault();
-									modalPage--;
-								}}>Back</button
-							>
-						{/if}
-						<button
-							class="btn btn-soft btn-primary"
-							onclick={(e) => {
-								e.preventDefault();
-								moveIfValid(() => modalPage++);
-							}}>Next</button
-						>
-					</div>
-				{:else if modalPage === 4}
+				{#if modalPage === 3}
 					<div>
 						<button
 							class="btn btn-soft"
@@ -317,6 +239,25 @@
 						>
 							<Plus />Add Home
 						</button>
+					</div>
+				{:else}
+					<div>
+						{#if modalPage !== 1}
+							<button
+								class="btn btn-soft"
+								onclick={(e) => {
+									e.preventDefault();
+									modalPage--;
+								}}>Back</button
+							>
+						{/if}
+						<button
+							class="btn btn-soft btn-primary"
+							onclick={(e) => {
+								e.preventDefault();
+								moveIfValid(() => modalPage++);
+							}}>Next</button
+						>
 					</div>
 				{/if}
 			</div>

@@ -3,7 +3,8 @@
 	import DeleteConfirm from './DeleteConfirm.svelte';
 	import { amenities } from '$lib/helpers/amenities';
 	import Trash from '../icons/Trash.svelte';
-	import { fade } from 'svelte/transition';
+	import { uploadImages } from '$lib/helpers/images';
+	import Toast from './Toast.svelte';
 
 	let { home, id, photoUrls } = $props();
 
@@ -33,16 +34,34 @@
 	});
 
 	let images: File[] = $state([]);
+	let fileIsTooLarge = $state(false);
+	let fileIsInvalid = $state(false);
 
 	async function updateHome(newHomeDetails: Partial<HomeAddress>) {
-		await uploadImages();
+		if (images.length !== 0) {
+			const imagesApiResponse = await uploadImages(images, home.id);
 
-		const res = await fetch(`/api/homes?id=${home.id}`, {
+			// 415: file type unsupported
+			if (imagesApiResponse.status === 415) {
+				fileIsInvalid = true;
+				setTimeout(() => (fileIsInvalid = false), 3000);
+				return;
+			}
+
+			// 413: file too large
+			else if (imagesApiResponse.status === 413) {
+				fileIsTooLarge = true;
+				setTimeout(() => (fileIsTooLarge = false), 3000);
+				return;
+			}
+		}
+
+		const homesApiResponse = await fetch(`/api/homes?id=${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(newHomeDetails)
 		});
 
-		if (res.ok) {
+		if (homesApiResponse.ok) {
 			window.location.reload();
 		}
 	}
@@ -58,45 +77,13 @@
 		}
 	}
 
-	let fileTooLarge = $state(false);
-	let fileIsInvalid = $state(false);
-
-	async function uploadImages() {
-		const form = new FormData();
-
-		images.forEach((imageFile) => {
-			form.append('images', imageFile);
-		});
-
-		const res = await fetch(`/api/homes/${home.id}/photos`, {
-			method: 'POST',
-			body: form
-		});
-
-		// 415: file type unsupported
-		if (res.status === 415) {
-			fileIsInvalid = true;
-			setTimeout(() => {
-				fileIsInvalid = false;
-			}, 3000);
-		}
-
-		// 413: file too large
-		if (res.status === 413) {
-			fileTooLarge = true;
-			setTimeout(() => {
-				fileTooLarge = false;
-			}, 3000);
-		}
-	}
-
 	async function deleteImages(imageName: string) {
-		const res = await fetch(`/api/homes/${home.id}/photos`, {
+		const deleteImageResponse = await fetch(`/api/homes/${home.id}/photos`, {
 			method: 'DELETE',
 			body: JSON.stringify(imageName)
 		});
 
-		if (res.ok) {
+		if (deleteImageResponse.ok) {
 			window.location.reload();
 		}
 	}
@@ -214,11 +201,19 @@
 							images = files;
 						}}
 					/>
-					{#if fileTooLarge}
-						<div transition:fade class="alert alert-error">File is too large</div>
+					{#if fileIsTooLarge}
+						<Toast
+							infoText={'File is too large'}
+							alertType={'alert-error'}
+							verticalPos={'toast-bottom'}
+						/>
 					{/if}
 					{#if fileIsInvalid}
-						<div transition:fade class="alert alert-error">Unsupported file type detected</div>
+						<Toast
+							infoText={'Unsupported file type detected'}
+							alertType={'alert-error'}
+							verticalPos={'toast-bottom'}
+						/>
 					{/if}
 				{/if}
 
