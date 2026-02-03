@@ -111,17 +111,10 @@
 					<input required bind:value={zip} type="text" placeholder="Zip" class="w-21" />
 				</div>
 
-				<div>
-					<label class="label mb-5">
-						<p>Stay Duration</p>
-						<input bind:value={max_days_stay} type="number" class="w-15" />
-					</label>
-				</div>
-
-				<label>
+				<div class="mt-3">
+					<input class="mr-2" type="checkbox" bind:checked={has_pets} />
 					Has pets?
-					<input bind:checked={has_pets} type="checkbox" />
-				</label>
+				</div>
 
 				<p class="mt-4">Recommended Occupant</p>
 				<select required class="select" bind:value={occupant_type}>
@@ -168,7 +161,7 @@
 
 				<label class="label">
 					<p>Distance to Project (in miles)</p>
-					<input required bind:value={distance_to_project} type="number" class="w-15" />
+					<input required bind:value={distance_to_project} type="number" class="w-10 text-center" />
 				</label>
 			{/if}
 
@@ -188,9 +181,9 @@
 						addAllergyToList();
 					}}
 				>
-					<Plus />
+					<Plus />Add
 				</button>
-				<div class="allergies-list">
+				<div class="allergies-list mb-10">
 					{#each homeownerAllergies as tag}
 						<div class="badge badge-primary mr-1">
 							{tag}
@@ -205,13 +198,22 @@
 						</div>
 					{/each}
 				</div>
-				<div class="dates flex mb-10 items-center mt-6">
-					<strong class="mr-3">4. Available as of</strong>
-					<input bind:value={date_available} type="date" />
-				</div>
 			{/if}
 
-			<!-- NEXT PREVIOUS BUTTONS -->
+			{#if modalPage === 4}
+				<h1 class="page-heading">4. Availability</h1>
+				<label class="label">
+					Stay Duration (in days)
+					<input required bind:value={max_days_stay} type="number" class="w-10 text-center" />
+				</label>
+
+				<label class="label flex mb-10 items-center">
+					Available as of
+					<input required bind:value={date_available} type="date" />
+				</label>
+			{/if}
+
+			<!-- NEXT + PREVIOUS BUTTONS -->
 			<div class="flex justify-between mt-5">
 				<button
 					class="btn btn-outline btn-secondary"
@@ -221,7 +223,7 @@
 						(document.getElementById(id) as HTMLDialogElement).close();
 					}}>Close</button
 				>
-				{#if modalPage === 3}
+				{#if modalPage === 4}
 					<div>
 						<button
 							class="btn btn-soft"
