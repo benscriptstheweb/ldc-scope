@@ -4,7 +4,7 @@ import { error } from "@sveltejs/kit";
 export async function compressor(buffer: Buffer) {
     let output = buffer;
     let resolution = 900;
-    let maxSize = 50 * 1024;
+    let maxSize = 30 * 1024;
 
     while (output.length > maxSize) {
         output = await sharp(output)
