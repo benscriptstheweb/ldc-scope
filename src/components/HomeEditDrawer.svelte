@@ -30,7 +30,9 @@
 		amenities: home.amenities,
 		occupantType: home.occupant_type,
 		hasPets: home.hasPets,
-		parkingType: home.parkingType
+		parkingType: home.parkingType,
+		dateAvailable: home.date_available,
+		maxDaysStay: home.max_days_stay
 	});
 
 	let images: File[] = $state([]);
@@ -120,12 +122,17 @@
 						placeholder="State"
 						bind:value={homeFields.state}
 					/>
-					<input required class="w-30" type="text" placeholder="Zip" bind:value={homeFields.zip} />
+					<input required class="w-25" type="text" placeholder="Zip" bind:value={homeFields.zip} />
 				</div>
 
 				<label class="label">
 					Distance to project:
-					<input required bind:value={homeFields.distanceToProject} type="number" class="w-10" />
+					<input
+						required
+						bind:value={homeFields.distanceToProject}
+						type="number"
+						class="w-10 text-center"
+					/>
 				</label>
 
 				<div class="divider"></div>
@@ -170,6 +177,22 @@
 					<option value="B">Brother</option>
 					<option value="C">Couple</option>
 				</select>
+
+				<div class="divider"></div>
+				<h2 class="edit-heading">Availability</h2>
+				<label class="label">
+					Max days stay
+					<input
+						required
+						bind:value={homeFields.maxDaysStay}
+						type="number"
+						class="w-10 text-center"
+					/>
+				</label>
+				<label class="label">
+					Available as of
+					<input required bind:value={homeFields.dateAvailable} type="date" />
+				</label>
 
 				<div class="divider"></div>
 				<h2 class="edit-heading">Images</h2>

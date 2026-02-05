@@ -150,7 +150,9 @@ export async function PATCH({ locals, url, request }) {
             distance_to_project: body.distanceToProject,
             amenities: body.amenities,
             occupant_type: body.occupantType,
-            has_pets: body.hasPets
+            has_pets: body.hasPets,
+            max_days_stay: body.maxDaysStay,
+            date_available: body.dateAvailable
         })
         .eq('id', id);
 
