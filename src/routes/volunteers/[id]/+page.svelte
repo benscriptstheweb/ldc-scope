@@ -1,5 +1,6 @@
 <script lang="ts">
 	import HomeAssignmentModal from '../../../components/HomeAssignmentModal.svelte';
+	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import VolunteerEditDrawer from '../../../components/VolunteerEditDrawer.svelte';
 	import Arrow from '../../../icons/Arrow.svelte';
 	import Plus from '../../../icons/Plus.svelte';
@@ -26,7 +27,10 @@
 
 <div class="top-container flex flex-col items-center">
 	<div class="w-80 mt-5">
-		<p class="heading header-name">{data.name}</p>
+		<div class="flex items-center">
+			<RecommendedOccupantBadge occupantType={data.type} />
+			<p class="heading header-name ml-2">{data.name}</p>
+		</div>
 		Contact
 		<div class="mt-2 flex flex-row">
 			<a href="tel:{data.phone}" aria-label="telephone" class="phone btn btn-soft mr-2">
@@ -82,7 +86,6 @@
 
 	<div class="mt-9 mb-5 w-80">
 		<h2 class="subheading">Assignment</h2>
-
 		<div class="project-container">
 			Project:
 			<div class="badge">
@@ -140,10 +143,6 @@
 	.card {
 		box-shadow: 0px 6px 35px -12px #00000033;
 	}
-	/* img {
-		max-height: 130px;
-		object-fit: cover;
-	} */
 	.top-container {
 		display: flex;
 		flex-direction: column;

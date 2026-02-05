@@ -169,7 +169,6 @@
 					<option value="S">Sister</option>
 					<option value="B">Brother</option>
 					<option value="C">Couple</option>
-					<option value="A">Any</option>
 				</select>
 
 				<div class="divider"></div>

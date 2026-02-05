@@ -121,7 +121,6 @@
 					<option value="S">Sister</option>
 					<option value="B">Brother</option>
 					<option value="C">Couple</option>
-					<option value="A">Any</option>
 				</select>
 
 				<p class="mt-4">Parking Type</p>
