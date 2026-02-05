@@ -93,9 +93,10 @@
 			<div class="contact-edit-list">
 				{#each home.contacts as contact}
 					{#if editingId === contact.id}
-						<div class="mb-9 mt-9">
+						<div class="contact-border p-3 bg-base-300 mb-9 mt-9">
 							<input type="text" placeholder="Name" bind:value={updatedDetails.name} />
-							<input class="ml-5" type="checkbox" bind:checked={updatedDetails.isPrimary} /> Primary
+							<input class="ml-5" type="checkbox" bind:checked={updatedDetails.isPrimary} />
+							Primary
 							<input type="number" placeholder="Phone" bind:value={updatedDetails.phone} />
 							<input type="text" placeholder="Email" bind:value={updatedDetails.email} />
 
@@ -134,16 +135,19 @@
 							</div>
 
 							<button class="btn btn-soft btn-xs" onclick={() => startEditing(contact)}>
-								<Plus />
+								View
 							</button>
 						</div>
 					{/if}
 				{/each}
 			</div>
 
-			<div class="divider">
-				<button onclick={() => (isAddingNew = !isAddingNew)}>
-					<Plus size="size-4.5" />
+			<div class="divider mt-20">
+				<button class="btn btn-xs btn-soft" onclick={() => (isAddingNew = !isAddingNew)}>
+					<div class="flex items-center">
+						<Plus size="size-4.5" />
+						<p class="ml-2">New contact</p>
+					</div>
 				</button>
 			</div>
 
@@ -157,8 +161,8 @@
 					<span>Primary</span>
 				</div>
 
-				<button class="btn btn-success" onclick={() => addContact(newContact)}>
-					<Plus /> Add New Contact
+				<button class="btn btn-soft btn-success" onclick={() => addContact(newContact)}>
+					<Plus /> Add contact
 				</button>
 			{/if}
 		</ul>
@@ -166,6 +170,10 @@
 </div>
 
 <style>
+	.contact-border {
+		border-radius: 10px;
+	}
+
 	.custom-badge {
 		border-radius: 25px;
 		width: 20px;
