@@ -162,10 +162,6 @@
 		border-radius: 10px;
 	}
 
-	.custom-badge {
-		border-radius: 25px;
-		width: 20px;
-	}
 	.drawer {
 		z-index: 99;
 	}

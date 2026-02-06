@@ -6,6 +6,7 @@
 	import Link from '../../icons/Link.svelte';
 	import RecommendedOccupantBadge from '../../components/RecommendedOccupantBadge.svelte';
 	import DeleteConfirm from '../../components/DeleteConfirm.svelte';
+	import CustomBadge from '../../components/CustomBadge.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -158,16 +159,15 @@
 					</td>
 					<td class="info-status flex justify-end">
 						{#if volunteer.assignedHome === null}
-							<div class="custom-badge badge badge-secondary">U</div>
+							<CustomBadge type="unassigned" />
 						{/if}
 						<RecommendedOccupantBadge occupantType={volunteer.type} />
-						<div class="custom-badge badge badge-warning">
-							<strong
-								>{(new Date(volunteer.date_end).getTime() -
-									new Date(volunteer.date_start).getTime()) /
-									(1000 * 60 * 60 * 24)}</strong
-							>
-						</div>
+						<CustomBadge
+							type="days"
+							days={(new Date(volunteer.date_end).getTime() -
+								new Date(volunteer.date_start).getTime()) /
+								(1000 * 60 * 60 * 24)}
+						/>
 					</td>
 				</tr>
 			{/each}
@@ -178,10 +178,6 @@
 <style>
 	.info-status {
 		font-weight: bold;
-	}
-	.custom-badge {
-		border-radius: 25px;
-		width: 20px;
 	}
 	.add-btn-container {
 		display: flex;

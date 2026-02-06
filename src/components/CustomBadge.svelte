@@ -11,6 +11,8 @@
 	<div class="custom-badge badge badge-warning {spacer}">
 		<strong>{days}</strong>
 	</div>
+{:else if type === 'unassigned'}
+	<div class="custom-badge badge badge-soft badge-secondary">U</div>
 {/if}
 
 <style>
