@@ -16,7 +16,7 @@
 	let max_days_stay: null | number = $state(null);
 	let multiSelectAmenities = $state([]);
 	let projectId: null | number = $state(null);
-	let occupant_type = $state('A');
+	let occupant_type = $state('B');
 	let allergy = $state('');
 	let homeownerAllergies: string[] = $state([]);
 	let has_pets = $state(false);
