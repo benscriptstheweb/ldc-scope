@@ -64,14 +64,14 @@ export async function GET({ locals, url }) {
 
         const today = new Date();
 
-        let hasAssignmentNow = sortedAssignments[0]
+        let isHosting = sortedAssignments[0]
             ? today >= new Date(sortedAssignments[0].volunteers.date_start) && today <= new Date(sortedAssignments[0].volunteers.date_end)
             : false
 
         // what gets returned to frontend
         return {
             ...home,
-            hasAssignmentNow,
+            isHosting,
             project: home.project.friendly_name,
             distanceToProject: home.distance_to_project,
             hasPets: home.has_pets,

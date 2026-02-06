@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
-	import Paw from '../icons/Paw.svelte';
+	import CustomBadge from './CustomBadge.svelte';
 	import RecommendedOccupantBadge from './RecommendedOccupantBadge.svelte';
 
 	let { home } = $props();
@@ -18,28 +18,24 @@
 		onclick={visitHome}
 	>
 		<div class="card-body bg-base-200">
+			{#if home.isHosting}
+				<div class="badge badge-sm badge-error badge-soft">Hosting</div>
+			{/if}
 			<div class="flex justify-between">
 				<div>
-					<h2 class="card-title justify-between">
+					<div class="indicator card-title">
 						{home.address1}
-						{#if home.hasAssignmentNow}
-							<div class="badge badge-error badge-soft">Hosting</div>
-						{/if}
-					</h2>
+					</div>
 					<p class="half-address">{home.city}, {home.state} {home.zip}</p>
-					{getParsedDate(home.date_available)}
+					Available: {getParsedDate(home.date_available)}
 				</div>
 
 				<!-- INDICATORS -->
 				<div class="flex items-center justify-between">
 					{#if home.hasPets}
-						<div class="custom-badge badge badge-secondary mr-0.5">
-							<strong><Paw /></strong>
-						</div>
+						<CustomBadge type="pet" />
 					{/if}
-					<div class="custom-badge badge badge-warning mr-0.5">
-						<strong>{home.max_days_stay}</strong>
-					</div>
+					<CustomBadge type="days" days={home.max_days_stay} />
 					<RecommendedOccupantBadge occupantType={home.occupant_type} />
 				</div>
 			</div>
@@ -48,18 +44,10 @@
 </div>
 
 <style>
-	.custom-badge {
-		border-radius: 25px;
-		width: 20px;
-	}
 	.half-address {
 		font-style: italic;
 	}
 	.card-title {
 		font-weight: 800;
-	}
-	.badge {
-		font-weight: normal !important;
-		align-items: center;
 	}
 </style>
