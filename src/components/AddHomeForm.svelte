@@ -55,8 +55,7 @@
 	let newHomeContact = $derived({
 		name: hostName,
 		phone: hostPhone,
-		email: hostEmail,
-		isPrimary: true
+		email: hostEmail
 	});
 
 	async function addHome(newHome: any) {

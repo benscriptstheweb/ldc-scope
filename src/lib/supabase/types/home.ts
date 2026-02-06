@@ -17,7 +17,6 @@ export type Home = {
 
     // foreign key relations
     contacts: {
-        isPrimary: boolean;
         name: string;
     }[];
     project: Project;

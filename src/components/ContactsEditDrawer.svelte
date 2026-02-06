@@ -11,14 +11,12 @@
 		name: string;
 		email: string;
 		phone: number | null;
-		isPrimary: boolean;
 	};
 
 	let newContact: Partial<Contact> = $state({
 		name: '',
 		phone: null,
-		email: '',
-		isPrimary: false
+		email: ''
 	});
 
 	let isDrawerOpen = $state(false);
@@ -27,8 +25,7 @@
 		newContact = {
 			name: '',
 			phone: null,
-			email: '',
-			isPrimary: false
+			email: ''
 		};
 
 		isDrawerOpen = false;
@@ -49,8 +46,7 @@
 	let updatedDetails: Partial<Contact> = $state({
 		name: '',
 		phone: null,
-		email: '',
-		isPrimary: false
+		email: ''
 	});
 
 	let editingId: string | null = $state(null);
@@ -95,8 +91,6 @@
 					{#if editingId === contact.id}
 						<div class="contact-border p-3 bg-base-300 mb-9 mt-9">
 							<input type="text" placeholder="Name" bind:value={updatedDetails.name} />
-							<input class="ml-5" type="checkbox" bind:checked={updatedDetails.isPrimary} />
-							Primary
 							<input type="number" placeholder="Phone" bind:value={updatedDetails.phone} />
 							<input type="text" placeholder="Email" bind:value={updatedDetails.email} />
 
@@ -128,10 +122,9 @@
 					{:else}
 						<div class="flex justify-between mb-5">
 							<div class="flex contents-center">
-								{contact.name}
-								{#if contact.isPrimary}
-									<div class="custom-badge badge badge-info ml-2">P</div>
-								{/if}
+								<div class="indicator">
+									{contact.name}
+								</div>
 							</div>
 
 							<button class="btn btn-soft btn-xs" onclick={() => startEditing(contact)}>
@@ -155,11 +148,6 @@
 				<input bind:value={newContact.name} placeholder="Name" />
 				<input bind:value={newContact.phone} placeholder="Phone" />
 				<input bind:value={newContact.email} placeholder="Email" />
-
-				<div class="primary-checkbox">
-					<input type="checkbox" bind:checked={newContact.isPrimary} />
-					<span>Primary</span>
-				</div>
 
 				<button class="btn btn-soft btn-success" onclick={() => addContact(newContact)}>
 					<Plus /> Add contact

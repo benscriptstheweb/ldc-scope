@@ -117,7 +117,6 @@ export async function POST({ request }) {
         name: body.contact.name,
         phone: body.contact.phone,
         email: body.contact.email,
-        isPrimary: true
     }]);
 
     if (contactsError) {

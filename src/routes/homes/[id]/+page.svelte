@@ -5,11 +5,11 @@
 	import ContactsEditDrawer from '../../../components/ContactsEditDrawer.svelte';
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
-	import Paw from '../../../icons/Paw.svelte';
 	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
 	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
 	import { onMount } from 'svelte';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
+	import CustomBadge from '../../../components/CustomBadge.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -88,18 +88,14 @@
 	</div>
 
 	<div class="self-center card bg-base-300 pt-9 w-90">
-		<h2>Details</h2>
+		<div class="flex items-center justify-between mr-8 mb-8">
+			<h2>Details</h2>
 
-		<div class="detail flex items-center justify-center mb-5">
-			{#if home.hasPets}
-				<div class="custom-badge badge badge-secondary">
-					<strong><Paw /></strong>
-				</div>
-			{/if}
-			<div class="custom-badge badge badge-warning">
-				<strong>{home.max_days_stay}</strong>
-			</div>
-			<div class="custom-badge recommended-occupant">
+			<div class="detail flex items-center justify-center">
+				{#if home.hasPets}
+					<CustomBadge type="pet" />
+				{/if}
+				<CustomBadge type="days" days={home.max_days_stay} />
 				<RecommendedOccupantBadge occupantType={home.occupant_type} />
 			</div>
 		</div>
@@ -180,11 +176,6 @@
 </div>
 
 <style>
-	.custom-badge {
-		border-radius: 25px;
-		width: 20px;
-		margin: 5px;
-	}
 	.map-pin {
 		border-radius: 50%;
 	}

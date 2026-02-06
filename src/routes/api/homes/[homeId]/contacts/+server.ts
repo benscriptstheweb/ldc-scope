@@ -17,8 +17,7 @@ export async function POST({ locals, params, request }) {
         home_id: homeId,
         name: body.name,
         phone: body.phone,
-        email: body.email,
-        isPrimary: body.isPrimary ?? false,
+        email: body.email
     }]);
 
     if (error) {
