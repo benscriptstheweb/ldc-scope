@@ -1,19 +1,45 @@
 <script lang="ts">
-	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+	import {
+		createUserWithEmailAndPassword,
+		getAuth,
+		signInWithEmailAndPassword
+	} from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
 	import Eye from '../../icons/Eye.svelte';
 
 	let email = $state('');
 	let password = $state('');
+	let makePassVisible = $state(false);
+
 	let isWrongPassword = $state(false);
+	let isAccountCreated = $state(false);
+	let accountExists = $state(false);
+
+	const auth = getAuth();
+
+	async function createAccount() {
+		createUserWithEmailAndPassword(auth, email, password)
+			.then(() => {
+				isAccountCreated = true;
+				setTimeout(() => {
+					isAccountCreated = false;
+				}, 5000);
+			})
+			.catch((e) => {
+				if (e.code === 'auth/email-already-in-use') {
+					accountExists = true;
+					setTimeout(() => {
+						accountExists = false;
+					}, 3000);
+				}
+			});
+	}
 
 	async function login() {
 		if (email === '' || password === '') {
 			return;
 		}
-
-		const auth = getAuth();
 
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(async (credentials) => {
@@ -28,19 +54,27 @@
 					goto('/');
 				}
 			})
-			.catch((e) => {
+			.catch(() => {
 				isWrongPassword = true;
 				setTimeout(() => {
 					isWrongPassword = false;
 				}, 3000);
 			});
 	}
-
-	let makePassVisible = $state(false);
 </script>
 
+{#if isAccountCreated}
+	<Toast
+		infoText={'Account created! Please allow some time for your account to be approved'}
+		alertType={'alert-success'}
+	/>
+{/if}
+{#if accountExists}
+	<Toast infoText={'Email already in use'} alertType={'alert-error'} />
+{/if}
+
 {#if isWrongPassword}
-	<Toast infoText={'Wrong credentials. Please try again...'} alertType={'alert-error'} />
+	<Toast infoText={'Wrong credentials. Please try again'} alertType={'alert-error'} />
 {/if}
 
 <div class="center-container">
@@ -82,6 +116,13 @@
 					</span>
 				</div>
 				<button class="btn btn-soft btn-primary mt-2" type="submit" onclick={login}>Login</button>
+				<button
+					class="btn btn-ghost mt-2"
+					onclick={(e) => {
+						e.preventDefault();
+						createAccount();
+					}}>Create Account</button
+				>
 			</div>
 		</form>
 	</div>
