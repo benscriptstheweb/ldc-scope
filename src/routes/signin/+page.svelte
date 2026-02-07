@@ -115,14 +115,16 @@
 						<Eye style={makePassVisible ? 'closed' : 'open'} />
 					</span>
 				</div>
-				<button class="btn btn-soft btn-primary mt-2" type="submit" onclick={login}>Login</button>
-				<button
-					class="btn btn-ghost mt-2"
-					onclick={(e) => {
-						e.preventDefault();
-						createAccount();
-					}}>Create Account</button
-				>
+				<div>
+					<button class="btn btn-soft btn-primary mt-2" type="submit" onclick={login}>Login</button>
+					<button
+						class="btn btn-ghost mt-2"
+						onclick={(e) => {
+							e.preventDefault();
+							createAccount();
+						}}>Create Account</button
+					>
+				</div>
 			</div>
 		</form>
 	</div>
