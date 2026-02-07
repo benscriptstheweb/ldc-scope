@@ -1,37 +1,45 @@
-<script>
-	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+<script lang="ts">
+	import { getAuth, signInWithEmailAndPassword, type UserCredential } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
+	import { preventDefault } from 'svelte/legacy';
 
-	let email = '';
-	let password = '';
+	let email = $state('');
+	let password = $state('');
+	let isWrongPassword = $state(false);
 
-	const login = async () => {
-		const auth = getAuth();
-		const userCredential = await signInWithEmailAndPassword(auth, email, password);
-		const idToken = await userCredential.user.getIdToken();
-
-		const res = await fetch('/api/sessionLogin', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ idToken })
-		});
-
-		if (res.ok) {
-			goto('/');
-		} else {
-			alert('Login failed');
+	async function login() {
+		if (email === '' || password === '') {
+			return;
 		}
-	};
 
-	let isInfoRequested = false;
-	const showInfoRequestToast = () => {
-		isInfoRequested = true;
-		setTimeout(() => {
-			isInfoRequested = false;
-		}, 3000);
-	};
+		const auth = getAuth();
+
+		await signInWithEmailAndPassword(auth, email, password)
+			.then(async (credentials) => {
+				const idToken = await credentials.user.getIdToken();
+				const res = await fetch('/api/sessionLogin', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ idToken })
+				});
+
+				if (res.ok) {
+					goto('/');
+				}
+			})
+			.catch((e) => {
+				isWrongPassword = true;
+				setTimeout(() => {
+					isWrongPassword = false;
+				}, 3000);
+			});
+	}
 </script>
+
+{#if isWrongPassword}
+	<Toast infoText={'Wrong credentials. Please try again...'} alertType={'alert-error'} />
+{/if}
 
 <div class="center-container">
 	<div class="logo">
@@ -39,17 +47,28 @@
 	</div>
 	<div class="login-card">
 		<h1 class="welcome-sign mb-2">Welcome home</h1>
-		<div class="mb-5 flex flex-col">
-			<input class="input mb-2" type="text" bind:value={email} placeholder="username" />
-			<input class="input" type="password" bind:value={password} placeholder="password" />
-		</div>
-		<button class="btn btn-soft btn-primary mr-2" type="submit" onclick={login}>Login</button>
-		<button class="btn btn-ghost" onclick={showInfoRequestToast}>Request Account</button>
+		<form onsubmit={(e) => e.preventDefault()}>
+			<div class="mb-5 flex flex-col">
+				<input
+					required
+					class="input mb-2"
+					type="text"
+					bind:value={email}
+					placeholder="username"
+					autocomplete="username"
+				/>
+				<input
+					required
+					class="input"
+					type="password"
+					bind:value={password}
+					placeholder="password"
+					autocomplete="current-password"
+				/>
+			</div>
+			<button class="btn btn-soft btn-primary mr-2" type="submit" onclick={login}>Login</button>
+		</form>
 	</div>
-
-	{#if isInfoRequested}
-		<Toast infoText={'Please request an account through your project oveseer.'} />
-	{/if}
 </div>
 
 <style>

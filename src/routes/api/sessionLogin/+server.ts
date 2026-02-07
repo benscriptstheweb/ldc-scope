@@ -16,5 +16,5 @@ export const POST = async ({ request, cookies }) => {
         maxAge: expiresIn / 1000
     });
 
-    return json({ status: 'success' });
+    return json({ message: 'success' }, { status: 200 });
 };

@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
 
-
 export const POST = async ({ cookies }) => {
     cookies.set('__session', '', {
         httpOnly: true,
@@ -9,5 +8,5 @@ export const POST = async ({ cookies }) => {
         maxAge: 0
     });
 
-    return json({ status: 'logged out' });
+    return json({ message: 'logged out' }, { status: 200 });
 };
