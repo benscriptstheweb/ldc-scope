@@ -2,9 +2,9 @@
 	import HomeAssignmentModal from '../../../components/HomeAssignmentModal.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import VolunteerEditDrawer from '../../../components/VolunteerEditDrawer.svelte';
-	import Arrow from '../../../icons/Arrow.svelte';
 	import Plus from '../../../icons/Plus.svelte';
 	import Trash from '../../../icons/Trash.svelte';
+	import { getParsedDate } from '$lib/helpers/getParsedDate';
 
 	export let data;
 
@@ -86,62 +86,47 @@
 
 	<div class="mt-9 mb-5 w-80">
 		<h2 class="subheading">Assignment</h2>
-		<div class="project-container">
-			Project:
-			<div class="badge">
-				{data.project.friendly_name} - {data.project.id}
-			</div>
-		</div>
-
-		<div class="flex items-center">
-			Date:
-			<div class="badge badge-success badge-soft">
-				{data.date_start}
-				<Arrow />
-				{data.date_end}
-			</div>
-		</div>
+		<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
+		<p class="project-info">
+			Dates: {getParsedDate(data.date_start)} to {getParsedDate(data.date_end)}
+		</p>
 	</div>
 
 	<div class="mt-4 w-80">
 		<h2 class="subheading">Stay</h2>
-		<div class="stay-container flex flex-col justify-center items-center">
-			{#if data.assignedHome !== null}
-				<div class="card card-border bg-base-200 mb-9 w-80">
-					<div class="flex flex-row items-center card-body justify-between">
-						<div class="address">
-							<h2 class="card-title">{data.assignedHome.address1}, {data.assignedHome.address2}</h2>
-							<p>
-								{data.assignedHome.city}, {data.assignedHome.state}
-								{data.assignedHome.zip}
-							</p>
-						</div>
-						<button class="btn btn-soft btn-error" onclick={deleteHomeAssignment}>
-							<Trash />
-						</button>
-					</div>
+		{#if data.assignedHome !== null}
+			<div class="flex flex-row items-center justify-between">
+				<div class="address">
+					<h2 class="card-title">{data.assignedHome.address1}, {data.assignedHome.address2}</h2>
+					<p>
+						{data.assignedHome.city}, {data.assignedHome.state}
+						{data.assignedHome.zip}
+					</p>
 				</div>
-			{:else}
-				<div class="flex w-80">
-					<p class="message">This volunteer has not been assigned a home yet 🥲</p>
+				<button class="btn btn-soft btn-error" onclick={deleteHomeAssignment}>
+					<Trash />
+				</button>
+			</div>
+		{:else}
+			<div class="flex w-80">
+				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
 
-					<button
-						onclick={() =>
-							(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
-						class="btn btn-soft btn-primary"><Plus />Assign</button
-					>
-				</div>
-			{/if}
-		</div>
+				<button
+					onclick={() =>
+						(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
+					class="btn btn-soft btn-primary"><Plus />Assign</button
+				>
+			</div>
+		{/if}
 	</div>
 </div>
 
 <style>
-	.message {
+	.project-info {
 		font-size: 0.9em;
 	}
-	.card {
-		box-shadow: 0px 6px 35px -12px #00000033;
+	.message {
+		font-size: 0.9em;
 	}
 	.top-container {
 		display: flex;
