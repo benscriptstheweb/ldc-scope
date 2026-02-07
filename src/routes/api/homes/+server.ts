@@ -151,7 +151,8 @@ export async function PATCH({ locals, url, request }) {
             occupant_type: body.occupantType,
             has_pets: body.hasPets,
             max_days_stay: body.maxDaysStay,
-            date_available: body.dateAvailable
+            date_available: body.dateAvailable,
+            comfort_rating: body.comfortRating
         })
         .eq('id', id);
 

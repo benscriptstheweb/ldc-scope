@@ -32,7 +32,8 @@
 		hasPets: home.hasPets,
 		parkingType: home.parkingType,
 		dateAvailable: home.date_available,
-		maxDaysStay: home.max_days_stay
+		maxDaysStay: home.max_days_stay,
+		comfortRating: home.comfort_rating
 	});
 
 	let images: File[] = $state([]);
@@ -160,6 +161,16 @@
 						Pet(s)
 					</label>
 				</div>
+
+				<i>
+					<h2 class="edit-heading mt-3">Comfort Rating</h2>
+				</i>
+				<select required class="select" bind:value={homeFields.comfortRating}>
+					<option value="excellent">Excellent</option>
+					<option value="good">Good</option>
+					<option value="acceptable">Acceptable</option>
+					<option value="unacceptable">Uncceptable</option>
+				</select>
 
 				<div class="divider"></div>
 				<i>

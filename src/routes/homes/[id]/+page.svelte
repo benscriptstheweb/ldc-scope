@@ -119,6 +119,11 @@
 				{home.congregation}
 			</div>
 
+			<div class="detail">
+				<strong>Comfort rating: </strong>
+				<div class="badge">{home.comfort_rating}</div>
+			</div>
+
 			<div class="detail mt-9">
 				Homeowner is allergic to:
 				<div class="allergies">

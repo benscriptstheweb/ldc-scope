@@ -22,6 +22,7 @@
 	let has_pets = $state(false);
 	let parking_type = $state('street');
 	let date_available = $state('');
+	let comfort_rating = $state('good');
 
 	function addAllergyToList() {
 		if (allergy.trim() !== '') {
@@ -45,7 +46,8 @@
 		allergies: homeownerAllergies,
 		has_pets,
 		parking_type,
-		date_available
+		date_available,
+		comfort_rating
 	});
 
 	let hostName = $state('');
@@ -142,6 +144,14 @@
 						</li>
 					{/each}
 				</ul>
+
+				<p class="mt-4">Comfort Rating</p>
+				<select required class="select" bind:value={comfort_rating}>
+					<option value="excellent">Excellent</option>
+					<option value="good">Good</option>
+					<option value="acceptable">Acceptable</option>
+					<option value="unacceptable">Uncceptable</option>
+				</select>
 			{/if}
 
 			{#if modalPage === 2}
