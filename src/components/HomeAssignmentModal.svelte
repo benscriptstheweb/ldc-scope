@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Plus from '../icons/Plus.svelte';
-	import Info from '../icons/Info.svelte';
 	import { supabase } from '$lib/supabase/supabaseClient';
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
 
@@ -76,13 +74,12 @@
 							<li class="list-row">
 								{home.address1}
 								<div>
-									<button
-										onclick={() => visitHome(home.id)}
-										class="mr-4 btn btn-xs btn-circle btn-info"><Info /></button
+									<button onclick={() => visitHome(home.id)} class="mr-2 btn btn-xs btn-soft"
+										>View</button
 									>
 									<button
 										onclick={() => confirmAssignment(home.id)}
-										class="btn btn-xs btn-circle btn-success"><Plus /></button
+										class="btn btn-xs btn-success btn-soft">Assign</button
 									>
 								</div>
 							</li>
@@ -100,7 +97,6 @@
 									</div>
 
 									<div class="flex flex-col mb-10">
-										Meets the following criteria:
 										<label>
 											<input
 												type="checkbox"
@@ -127,7 +123,7 @@
 												checked={!hasOverlap}
 												onclick={(e) => e.preventDefault()}
 											/>
-											No overlapping assignment
+											Not currently hosting
 										</label>
 									</div>
 

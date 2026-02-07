@@ -11,7 +11,7 @@ export async function GET({ locals, url }) {
             .select(`
                 *,
                 project!inner ( * ),
-                assignments ( home_id ( * ))
+                assignments ( id, home_id ( * ))
             `)
             .eq('project.region', locals.user?.assignedRegion)
             .eq('id', volunteerId)
