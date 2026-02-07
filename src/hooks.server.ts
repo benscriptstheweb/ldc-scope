@@ -2,7 +2,7 @@ import type { Handle } from '@sveltejs/kit';
 import { adminAuth } from '$lib/firebase/admin';
 
 export const handle: Handle = async ({ event, resolve }) => {
-    // Firebase Auth token stored in cookie from login at /signin page
+    // Firebase Auth id token stored in cookie from login at /signin page
     const sessionCookie = event.cookies.get('__session');
 
     // if there is a cookie... 
@@ -10,13 +10,18 @@ export const handle: Handle = async ({ event, resolve }) => {
         try {
             const decodedToken = await adminAuth.verifySessionCookie(sessionCookie, true);
 
-            // ...locals will be saved with the custom claims in a user object...
-            event.locals.user = {
-                uid: decodedToken.uid,
-                email: decodedToken.email,
-                isAdmin: decodedToken.isAdmin,
-                assignedRegion: decodedToken.assignedRegion
-            };
+            if (decodedToken.role !== 'authenticated') {
+                event.locals.user = null;
+            } else {
+                // ...locals will be saved with the custom claims in a user object...
+                event.locals.user = {
+                    uid: decodedToken.uid,
+                    email: decodedToken.email,
+                    isAdmin: decodedToken.isAdmin,
+                    assignedRegion: decodedToken.assignedRegion
+                };
+            }
+
         } catch (err) {
             // ...otherwise, if the cookie is bad from a bad login attempt....
             event.locals.user = null;

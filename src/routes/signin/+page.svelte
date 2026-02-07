@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getAuth, signInWithEmailAndPassword, type UserCredential } from 'firebase/auth';
+	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
 	import Eye from '../../icons/Eye.svelte';
