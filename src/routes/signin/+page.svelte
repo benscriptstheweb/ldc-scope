@@ -2,7 +2,7 @@
 	import { getAuth, signInWithEmailAndPassword, type UserCredential } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
-	import { preventDefault } from 'svelte/legacy';
+	import Eye from '../../icons/Eye.svelte';
 
 	let email = $state('');
 	let password = $state('');
@@ -35,6 +35,8 @@
 				}, 3000);
 			});
 	}
+
+	let makePassVisible = $state(false);
 </script>
 
 {#if isWrongPassword}
@@ -57,21 +59,40 @@
 					placeholder="username"
 					autocomplete="username"
 				/>
-				<input
-					required
-					class="input"
-					type="password"
-					bind:value={password}
-					placeholder="password"
-					autocomplete="current-password"
-				/>
+				<div class="relative">
+					<input
+						required
+						class="input join-item"
+						type={makePassVisible ? 'text' : 'password'}
+						bind:value={password}
+						placeholder="password"
+						autocomplete="current-password"
+					/>
+					<span
+						class="absolute view-pass-text"
+						tabindex={-1}
+						role="button"
+						onkeydown={(e) => e.preventDefault()}
+						onclick={(e) => {
+							e.preventDefault();
+							makePassVisible = !makePassVisible;
+						}}
+					>
+						<Eye style={makePassVisible ? 'closed' : 'open'} />
+					</span>
+				</div>
+				<button class="btn btn-soft btn-primary mt-2" type="submit" onclick={login}>Login</button>
 			</div>
-			<button class="btn btn-soft btn-primary mr-2" type="submit" onclick={login}>Login</button>
 		</form>
 	</div>
 </div>
 
 <style>
+	.view-pass-text {
+		right: 5%;
+		top: 25%;
+	}
+
 	.logo {
 		display: flex;
 		flex-direction: column;
