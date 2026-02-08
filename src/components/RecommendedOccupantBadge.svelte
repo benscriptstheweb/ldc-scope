@@ -1,20 +1,22 @@
 <script lang="ts">
 	let { occupantType } = $props();
 
-	function setColors() {
-		return occupantType === 'S'
+	function setColors(occupant: string) {
+		return occupant === 'S'
 			? 'color: var(--color-secondary); background-color: var(--color-secondary-content)'
-			: occupantType === 'B'
+			: occupant === 'B'
 				? 'color: var(--color-info-content); background-color: var(--color-info)'
-				: occupantType === 'C'
+				: occupant === 'C'
 					? 'color: #2d055c; background-color: #ddbfff'
 					: 'color: #003632; background-color: #4afff3';
 	}
 </script>
 
-<div class="custom-badge-type" style={setColors()}>
-	{occupantType}
-</div>
+{#each occupantType as occupant}
+	<div class="custom-badge-type" style={setColors(occupant)}>
+		{occupant}
+	</div>
+{/each}
 
 <style>
 	.custom-badge-type {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { amenities } from '$lib/helpers/amenities';
 	import { getProjects } from '$lib/helpers/getProjects';
+	import { occupantTypes } from '$lib/helpers/occupantTypes';
 	import Ex from '../icons/Ex.svelte';
 	import Plus from '../icons/Plus.svelte';
 
@@ -118,11 +119,21 @@
 				</div>
 
 				<p class="mt-4">Recommended Occupant</p>
-				<select required class="select" bind:value={occupant_type}>
-					<option value="S">Sister</option>
-					<option value="B">Brother</option>
-					<option value="C">Couple</option>
-				</select>
+				<ul>
+					{#each occupantTypes as occupant}
+						<div class="flex flex-row">
+							<label>
+								<input
+									class="mr-2"
+									type="checkbox"
+									value={occupant}
+									bind:group={newHomeDetails.occupant_type}
+								/>
+								{occupant}
+							</label>
+						</div>
+					{/each}
+				</ul>
 
 				<p class="mt-4">Parking Type</p>
 				<select required class="select" bind:value={parking_type}>

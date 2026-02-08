@@ -5,6 +5,7 @@
 	import Trash from '../icons/Trash.svelte';
 	import { uploadImages } from '$lib/helpers/images';
 	import Toast from './Toast.svelte';
+	import { occupantTypes } from '$lib/helpers/occupantTypes';
 
 	let { home, id, photoUrls } = $props();
 
@@ -183,11 +184,21 @@
 
 				<div class="divider"></div>
 				<h2 class="edit-heading">Occupant Type</h2>
-				<select required class="select" bind:value={homeFields.occupantType}>
-					<option value="S">Sister</option>
-					<option value="B">Brother</option>
-					<option value="C">Couple</option>
-				</select>
+				<ul>
+					{#each occupantTypes as occupant}
+						<div class="flex flex-row">
+							<label>
+								<input
+									class="mr-2"
+									type="checkbox"
+									value={occupant}
+									bind:group={homeFields.occupantType}
+								/>
+								{occupant}
+							</label>
+						</div>
+					{/each}
+				</ul>
 
 				<div class="divider"></div>
 				<h2 class="edit-heading">Availability</h2>

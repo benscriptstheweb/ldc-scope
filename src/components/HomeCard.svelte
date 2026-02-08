@@ -14,24 +14,25 @@
 <div class="cards-container">
 	<button
 		type="button"
-		class="card shadow-md cursor-pointer w-70 text-left m-3"
+		class="card shadow-md cursor-pointer w-85 text-left m-3"
 		onclick={visitHome}
 	>
 		<div class="card-body bg-base-200">
-			{#if home.isHosting}
-				<div class="badge badge-sm badge-error badge-soft">Hosting</div>
-			{/if}
 			<div class="flex justify-between">
 				<div>
 					<div class="indicator card-title">
 						{home.address1}
 					</div>
 					<p class="half-address">{home.city}, {home.state} {home.zip}</p>
-					Available: {getParsedDate(home.date_available)}
+					{#if home.isHosting}
+						<div class="badge badge-sm badge-error badge-soft mt-1">Hosting</div>
+					{:else}
+						Available: {getParsedDate(home.date_available)}
+					{/if}
 				</div>
 
 				<!-- INDICATORS -->
-				<div class="flex items-center justify-between">
+				<div class="flex items-center">
 					{#if home.hasPets}
 						<CustomBadge type="pet" />
 					{/if}
