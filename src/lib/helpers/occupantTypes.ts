@@ -1,5 +1,5 @@
 export const occupantTypes = [
-    "B",
-    "C",
-    "S"
+    { type: "B", desc: "Brother" },
+    { type: "C", desc: "Couple" },
+    { type: "S", desc: "Sister" }
 ]

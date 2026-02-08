@@ -191,10 +191,10 @@
 								<input
 									class="mr-2"
 									type="checkbox"
-									value={occupant}
+									value={occupant.type}
 									bind:group={homeFields.occupantType}
 								/>
-								{occupant}
+								{occupant.desc}
 							</label>
 						</div>
 					{/each}
