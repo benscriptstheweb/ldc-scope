@@ -127,7 +127,7 @@
 									class="mr-2"
 									type="checkbox"
 									value={occupant.type}
-									bind:group={newHomeDetails.occupant_type}
+									bind:group={occupant_type}
 								/>
 								{occupant.desc}
 							</label>
