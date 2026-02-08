@@ -1,40 +1,24 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import Plus from '../icons/Plus.svelte';
 	import Trash from '../icons/Trash.svelte';
 	import DeleteConfirm from './DeleteConfirm.svelte';
+	import { type Hosts } from '$lib/supabase/types/hosts';
 
 	let { home, id } = $props();
 
-	type Contact = {
-		id: string;
-		name: string;
-		email: string;
-		phone: number | null;
-	};
-
-	let newContact: Partial<Contact> = $state({
-		name: '',
-		phone: null,
-		email: ''
+	let newContact: Partial<Hosts> = $state({
+		name_secondary: '',
+		phone_secondary: null,
+		email_secondary: ''
 	});
 
 	let isDrawerOpen = $state(false);
 
-	onMount(() => {
-		newContact = {
-			name: '',
-			phone: null,
-			email: ''
-		};
-
-		isDrawerOpen = false;
-	});
-
 	let isAddingNew = $state(false);
-	async function addContact(newContact: Partial<Contact>) {
-		const res = await fetch(`/api/homes/${home.id}/contacts`, {
-			method: 'POST',
+
+	async function addSecondaryContact(contactId: string, newContact: Partial<Hosts>) {
+		const res = await fetch(`/api/homes/${home.id}/contacts?contact=${contactId}`, {
+			method: 'PATCH',
 			body: JSON.stringify(newContact)
 		});
 
@@ -43,7 +27,7 @@
 		}
 	}
 
-	let updatedDetails: Partial<Contact> = $state({
+	let updatedDetails: Partial<Hosts> = $state({
 		name: '',
 		phone: null,
 		email: ''
@@ -51,12 +35,12 @@
 
 	let editingId: string | null = $state(null);
 
-	function startEditing(contact: Contact) {
+	function startEditing(contact: Hosts) {
 		updatedDetails = contact;
 		editingId = contact.id;
 	}
 
-	async function updateContact(contactId: string, fieldsToEdit: Partial<Contact>) {
+	async function updateContact(contactId: string, fieldsToEdit: Partial<Hosts>) {
 		const res = await fetch(`/api/homes/${home.id}/contacts?contact=${contactId}`, {
 			method: 'PATCH',
 			body: JSON.stringify(fieldsToEdit)
@@ -87,70 +71,71 @@
 			<h1>Edit Contacts</h1>
 
 			<div class="contact-edit-list">
-				{#each home.contacts as contact}
-					{#if editingId === contact.id}
-						<div class="contact-border p-3 bg-base-300 mb-9 mt-9">
-							<input type="text" placeholder="Name" bind:value={updatedDetails.name} />
-							<input type="number" placeholder="Phone" bind:value={updatedDetails.phone} />
-							<input type="text" placeholder="Email" bind:value={updatedDetails.email} />
+				{#if editingId === home.hosts.id}
+					<div class="contact-border p-3 bg-base-300 mb-9 mt-9">
+						<input type="text" placeholder="Name" bind:value={updatedDetails.name} />
+						<input type="number" placeholder="Phone" bind:value={updatedDetails.phone} />
+						<input type="text" placeholder="Email" bind:value={updatedDetails.email} />
 
-							<div class="button-container">
-								<button class="btn btn-soft flex-4" onclick={() => (editingId = null)}>
-									Cancel
-								</button>
-								<DeleteConfirm
-									id="delete-contact-confirm"
-									deleteFunction={() => deleteContact(contact.id)}
-								/>
-								<button
-									class="btn btn-soft btn-primary"
-									onclick={() => updateContact(contact.id, updatedDetails)}
-								>
-									Update
-								</button>
-								<button
-									class="btn btn-dash btn-error ml-10"
-									onclick={() =>
-										(
-											document.getElementById('delete-contact-confirm') as HTMLDialogElement
-										).showModal()}
-								>
-									<Trash /></button
-								>
-							</div>
-						</div>
-					{:else}
-						<div class="flex justify-between mb-5">
-							<div class="flex contents-center">
-								<div class="indicator">
-									{contact.name}
-								</div>
-							</div>
-
-							<button class="btn btn-soft btn-xs" onclick={() => startEditing(contact)}>
-								View
+						<div class="button-container">
+							<button class="btn btn-soft flex-4" onclick={() => (editingId = null)}>
+								Cancel
 							</button>
+							<DeleteConfirm
+								id="delete-contact-confirm"
+								deleteFunction={() => deleteContact(home.hosts.id)}
+							/>
+							<button
+								class="btn btn-soft btn-primary"
+								onclick={() => updateContact(home.hosts.id, updatedDetails)}
+							>
+								Update
+							</button>
+							<button
+								class="btn btn-dash btn-error ml-10"
+								onclick={() =>
+									(
+										document.getElementById('delete-contact-confirm') as HTMLDialogElement
+									).showModal()}
+							>
+								<Trash /></button
+							>
 						</div>
-					{/if}
-				{/each}
+					</div>
+				{:else}
+					<div class="flex justify-between mb-5">
+						<div class="flex contents-center">
+							<div class="indicator">
+								{home.hosts.name}
+							</div>
+						</div>
+
+						<button class="btn btn-soft btn-xs" onclick={() => startEditing(home.hosts)}>
+							View
+						</button>
+					</div>
+				{/if}
 			</div>
 
 			<div class="divider mt-20">
 				<button class="btn btn-xs btn-soft" onclick={() => (isAddingNew = !isAddingNew)}>
 					<div class="flex items-center">
 						<Plus size="size-4.5" />
-						<p class="ml-2">New contact</p>
+						<p class="ml-2">Add secondary contact</p>
 					</div>
 				</button>
 			</div>
 
 			{#if isAddingNew}
-				<input bind:value={newContact.name} placeholder="Name" />
-				<input bind:value={newContact.phone} placeholder="Phone" />
-				<input bind:value={newContact.email} placeholder="Email" />
+				<input bind:value={newContact.name_secondary} placeholder="Name" />
+				<input bind:value={newContact.phone_secondary} placeholder="Phone" />
+				<input bind:value={newContact.email_secondary} placeholder="Email" />
 
-				<button class="btn btn-soft btn-success" onclick={() => addContact(newContact)}>
-					<Plus /> Add contact
+				<button
+					class="btn btn-soft btn-success"
+					onclick={() => addSecondaryContact(home.hosts.id, newContact)}
+				>
+					<Plus /> Add
 				</button>
 			{/if}
 		</ul>

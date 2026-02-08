@@ -138,7 +138,7 @@
 			</div>
 		</div>
 
-		<h2>What This Home Offers</h2>
+		<h2>Amenities</h2>
 		<div class="block amenities">
 			{#if !home.amenities}
 				<p class="amenities-none-text">No amenities listed for this home 🤔</p>
@@ -148,7 +148,7 @@
 				{/each}
 			{/if}
 		</div>
-		<h2>Parking Type</h2>
+		<h2>Parking</h2>
 		<div class="block mt-4">
 			<div class="flex detail">
 				{#if home.parkingType === 'garage'}
@@ -162,19 +162,16 @@
 
 	<div class="contacts flex flex-col items-center">
 		<div class="flex justify-between mt-9 w-90">
-			<h2>Contacts</h2>
+			<h2>Hosts</h2>
 			{#if data.user.isAdmin}
 				<label for="edit-contacts-drawer" class="btn btn-soft btn-primary mr-5 mb-4">
 					<Edit size="size-5" strokeWidth="2" />
 				</label>
 			{/if}
 		</div>
-
 		<div class="block w-90">
 			<ul class="list bg-base-100 rounded-box shadow-md">
-				{#each home.contacts as contact}
-					<ContactsList {contact} />
-				{/each}
+				<ContactsList host={home.hosts} />
 			</ul>
 		</div>
 	</div>

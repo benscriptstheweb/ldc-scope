@@ -11,7 +11,7 @@ export async function GET({ locals, url }) {
             .from('homes')
             .select(`
             *,
-            contacts ( * ),
+            hosts ( * ),
             project!inner ( * ),
             assignments ( volunteer_id ( * ))
         `)
@@ -39,7 +39,6 @@ export async function GET({ locals, url }) {
         .from('homes')
         .select(`
             *,
-            contacts ( * ),
             project!inner ( * ),
             assignments (
                 volunteers ( * )
