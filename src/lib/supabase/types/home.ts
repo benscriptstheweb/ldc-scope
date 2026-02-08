@@ -1,3 +1,4 @@
+import type { Hosts } from "./hosts";
 import type { OccupantType } from "./occupantType";
 import type { Project } from "./project";
 
@@ -16,8 +17,6 @@ export type Home = {
     occupant_type: OccupantType;
 
     // foreign key relations
-    contacts: {
-        name: string;
-    }[];
+    hosts: Hosts
     project: Project;
 }
