@@ -21,7 +21,7 @@
 
 	let isDrawerOpen = $state(false);
 
-	let homeFields = $state({
+	let homeDetailsOriginal = {
 		address1: home.address1,
 		address2: home.address2,
 		city: home.city,
@@ -35,7 +35,9 @@
 		dateAvailable: home.date_available,
 		maxDaysStay: home.max_days_stay,
 		comfortRating: home.comfort_rating
-	});
+	};
+	let homeFields = $state(structuredClone(homeDetailsOriginal));
+	let formChanged = $derived(JSON.stringify(homeFields) !== JSON.stringify(homeDetailsOriginal));
 
 	let images: File[] = $state([]);
 	let fileIsTooLarge = $state(false);
@@ -91,8 +93,6 @@
 			window.location.reload();
 		}
 	}
-
-	let formChanged = $state(false);
 </script>
 
 <DeleteConfirm id="delete-home-confirm" deleteFunction={deleteHome} />
@@ -103,11 +103,7 @@
 	<div class="drawer-side">
 		<label for={id} aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-			<form
-				onchange={() => {
-					formChanged = true;
-				}}
-			>
+			<form>
 				<h1>Edit Home</h1>
 
 				<h2 class="edit-heading">Address</h2>
