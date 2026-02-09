@@ -25,6 +25,12 @@
 	let date_available = $state('');
 	let comfort_rating = $state('good');
 
+	let hosts = $state({
+		name: '',
+		email: '',
+		phone: null
+	});
+
 	function addAllergyToList() {
 		if (allergy.trim() !== '') {
 			homeownerAllergies = [...homeownerAllergies, allergy];
@@ -51,22 +57,12 @@
 		comfort_rating
 	});
 
-	let hostName = $state('');
-	let hostEmail = $state('');
-	let hostPhone: null | number = $state(null);
-
-	let newHomeContact = $derived({
-		name: hostName,
-		phone: hostPhone,
-		email: hostEmail
-	});
-
 	async function addHome(newHome: any) {
 		const homeApiResponse = await fetch(`/api/homes`, {
 			method: 'POST',
 			body: JSON.stringify({
 				home: newHome,
-				contact: newHomeContact
+				contact: hosts
 			})
 		});
 
@@ -186,9 +182,9 @@
 
 			{#if modalPage === 3}
 				<h1 class="page-heading">3. Homeowner Info</h1>
-				<input required bind:value={hostName} type="text" placeholder="Name" />
-				<input required bind:value={hostEmail} type="text" placeholder="Email" />
-				<input required bind:value={hostPhone} type="number" placeholder="Phone" />
+				<input required bind:value={hosts.name} type="text" placeholder="Name" />
+				<input required bind:value={hosts.email} type="text" placeholder="Email" />
+				<input required bind:value={hosts.phone} type="number" placeholder="Phone" />
 				<input bind:value={congregation} type="text" placeholder="Congregation" />
 
 				<h3 class="subheading mt-7">Homeowner Allergies</h3>

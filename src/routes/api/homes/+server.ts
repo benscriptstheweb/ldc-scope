@@ -102,27 +102,34 @@ export async function POST({ request }) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { data, error } = await supabase.from('homes')
-        .insert([body.home])
-        .select('id')
+    const home = body.home;
+    const hosts = body.contact;
+
+    // first, create the primary contact and save the email
+    const { data: newContact, error: contactsError } = await supabase
+        .from('contacts')
+        .insert([{
+            name: hosts.name,
+            phone: hosts.phone,
+            email: hosts.email,
+        }])
+        .select('*')
         .single();
-
-    if (error) {
-        return json({ error: 'Failed to add home' }, { status: 500 });
-    }
-
-    const { error: contactsError } = await supabase.from('contacts').insert([{
-        home_id: data.id,
-        name: body.contact.name,
-        phone: body.contact.phone,
-        email: body.contact.email,
-    }]);
 
     if (contactsError) {
         return json({ error: 'Failed to add contact to new home' }, { status: 500 });
     }
 
-    return json({ success: true, createdHomeId: data.id }, { status: 201 });
+    // second, create the home
+    const { error } = await supabase
+        .from('homes')
+        .insert({ ...home, hosts: newContact.email });
+
+    if (error) {
+        return json({ error: 'Failed to add home' }, { status: 500 });
+    }
+
+    return json({ message: 'Success' }, { status: 200 });
 }
 
 export async function PATCH({ locals, url, request }) {
