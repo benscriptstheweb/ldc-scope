@@ -102,10 +102,8 @@ export async function POST({ request }) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const home = body.home;
-    const hosts = body.contact;
-
     // first, create the primary contact and save the email
+    const hosts = body.contact;
     const { data: newContact, error: contactsError } = await supabase
         .from('contacts')
         .insert([{
@@ -121,6 +119,7 @@ export async function POST({ request }) {
     }
 
     // second, create the home
+    const home = body.home;
     const { error } = await supabase
         .from('homes')
         .insert({ ...home, hosts: newContact.email });
