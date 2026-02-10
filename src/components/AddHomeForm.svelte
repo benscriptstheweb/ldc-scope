@@ -232,6 +232,7 @@
 			<div class="flex justify-between mt-5">
 				<button
 					class="btn btn-outline btn-secondary"
+					type="button"
 					onclick={(e) => {
 						e.preventDefault();
 						(document.getElementById('add-form') as HTMLFormElement).reset();
@@ -249,6 +250,7 @@
 						>
 						<button
 							class="btn btn-soft btn-success"
+							type="submit"
 							onclick={(e) => {
 								e.preventDefault();
 								moveIfValid(() => addHome(newHomeDetails));
