@@ -180,12 +180,18 @@
 				<input required bind:value={hosts.name} type="text" placeholder="Name" />
 				<input required bind:value={hosts.email} type="text" placeholder="Email" />
 				<input required bind:value={hosts.phone} type="number" placeholder="Phone" />
-				<input bind:value={newHomeDetails.congregation} type="text" placeholder="Congregation" />
+				<input
+					required
+					bind:value={newHomeDetails.congregation}
+					type="text"
+					placeholder="Congregation"
+				/>
 
 				<h3 class="subheading mt-7">Homeowner Allergies</h3>
 				<input type="text" bind:value={allergy} />
 				<button
 					class="btn btn-soft btn-primary"
+					type="button"
 					onclick={(e) => {
 						e.preventDefault();
 						addAllergyToList();
@@ -242,7 +248,8 @@
 				{#if modalPage === 4}
 					<div>
 						<button
-							class="btn btn-soft"
+							class="btn btn-ghost"
+							type="button"
 							onclick={(e) => {
 								e.preventDefault();
 								modalPage--;
@@ -263,7 +270,8 @@
 					<div>
 						{#if modalPage !== 1}
 							<button
-								class="btn btn-soft"
+								class="btn btn-ghost"
+								type="button"
 								onclick={(e) => {
 									e.preventDefault();
 									modalPage--;
@@ -272,6 +280,7 @@
 						{/if}
 						<button
 							class="btn btn-soft btn-primary"
+							type="submit"
 							onclick={(e) => {
 								e.preventDefault();
 								moveIfValid(() => modalPage++);
