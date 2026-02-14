@@ -13,7 +13,7 @@
 
 <div class="cards-container">
 	<button class="card shadow-md cursor-pointer w-81 mt-1 text-left" onclick={visitHome}>
-		<div class="p-3 bg-base-200">
+		<div class="p-2 bg-base-200">
 			<div class="flex justify-between">
 				<div>
 					<div class="indicator card-title">
@@ -23,7 +23,7 @@
 					{#if home.isHosting}
 						<div class="badge badge-sm badge-error badge-soft mt-1">Hosting</div>
 					{:else}
-						<p class="half-address">Available: {getParsedDate(home.date_available)}</p>
+						<p class="availability">Available: {getParsedDate(home.date_available)}</p>
 					{/if}
 				</div>
 
@@ -44,8 +44,11 @@
 </div>
 
 <style>
-	.half-address {
+	.availability {
 		font-style: italic;
+		font-size: 0.7em;
+	}
+	.half-address {
 		font-size: 0.9em;
 	}
 	.card-title {
