@@ -48,7 +48,7 @@
 
 	let searchedVolunteer = $state('');
 	let sortedVolunteers = $derived(
-		volunteers.filter((e) => e.name.toLowerCase().includes(searchedVolunteer.toLowerCase()))
+		volunteers.filter((e: any) => e.name.toLowerCase().includes(searchedVolunteer.toLowerCase()))
 	);
 
 	let cycleSortState = $state(0);

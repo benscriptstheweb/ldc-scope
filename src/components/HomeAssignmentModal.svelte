@@ -105,8 +105,7 @@
 											<input
 												type="checkbox"
 												class="checkbox checkbox-accent checkbox-xs"
-												checked={home.occupant_type === volunteerToAssign.type ||
-													home.occupant_type === 'A'}
+												checked={home.occupant_type.includes(volunteerToAssign.type)}
 												onclick={(e) => e.preventDefault()}
 											/>
 											Recommended occupant
@@ -129,8 +128,7 @@
 											disabled={!(
 												!hasOverlap &&
 												home.max_days_stay >= volunteerToAssign.daysAssigned &&
-												(home.occupant_type === volunteerToAssign.type ||
-													home.occupant_type === 'A')
+												home.occupant_type.includes(volunteerToAssign.type)
 											)}>Accept</button
 										>
 										<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
