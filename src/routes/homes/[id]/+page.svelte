@@ -212,7 +212,6 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		height: 150px;
-		overflow: scroll;
 	}
 	.amenities-none-text {
 		color: gray;
