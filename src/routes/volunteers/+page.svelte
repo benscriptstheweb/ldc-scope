@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import Toast from '../../components/Toast.svelte';
 	import Trash from '../../icons/Trash.svelte';
-	import { onMount } from 'svelte';
 	import Link from '../../icons/Link.svelte';
 	import RecommendedOccupantBadge from '../../components/RecommendedOccupantBadge.svelte';
 	import DeleteConfirm from '../../components/DeleteConfirm.svelte';
@@ -17,12 +16,8 @@
 
 	let multiSelectVolunteers = $state([]);
 	let isAllSelected = $state(false);
-
-	onMount(() => {
-		isAllSelected = false;
-	});
-
 	let isLinkCopied = $state(false);
+
 	async function copySurveyLink() {
 		isLinkCopied = true;
 		setTimeout(() => {
@@ -51,7 +46,11 @@
 		}
 	}
 
-	let sortedVolunteers = $state(volunteers);
+	let searchedVolunteer = $state('');
+	let sortedVolunteers = $derived(
+		volunteers.filter((e) => e.name.toLowerCase().includes(searchedVolunteer.toLowerCase()))
+	);
+
 	let cycleSortState = $state(0);
 
 	function toggleSort(sorter: string) {
@@ -121,6 +120,7 @@
 			{/if}
 		{/if}
 	</button>
+	<input class="input mr-2" type="text" placeholder="Search..." bind:value={searchedVolunteer} />
 </div>
 
 <div class="overflow-x-auto">
