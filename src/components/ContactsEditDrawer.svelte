@@ -6,8 +6,8 @@
 	let isDrawerOpen = $state(false);
 	let updatedDetails = $state(structuredClone(home.hosts));
 
-	async function updateContact(contactId: string, fieldsToEdit: Partial<Hosts>) {
-		const res = await fetch(`/api/homes/${home.id}/contacts?contact=${contactId}`, {
+	async function updateContact(fieldsToEdit: Partial<Hosts>) {
+		const res = await fetch(`/api/homes/${home.id}/contacts?homeId=${home.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify(fieldsToEdit)
 		});
@@ -39,10 +39,7 @@
 					<input type="text" placeholder="Email" bind:value={updatedDetails.email_secondary} />
 
 					<div class="button-container">
-						<button
-							class="btn btn-soft btn-primary"
-							onclick={() => updateContact(home.hosts.id, updatedDetails)}
-						>
+						<button class="btn btn-soft btn-primary" onclick={() => updateContact(updatedDetails)}>
 							Update
 						</button>
 					</div>

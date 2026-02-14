@@ -57,8 +57,7 @@
 		const homeApiResponse = await fetch(`/api/homes`, {
 			method: 'POST',
 			body: JSON.stringify({
-				home: { ...newHome, allergies: homeownerAllergies },
-				contact: hosts
+				home: { ...newHome, allergies: homeownerAllergies, hosts }
 			})
 		});
 
@@ -110,7 +109,6 @@
 						<div class="flex flex-row">
 							<label>
 								<input
-									required
 									class="mr-2"
 									type="checkbox"
 									value={occupant.type}

@@ -11,7 +11,6 @@ export async function GET({ locals, url }) {
             .from('homes')
             .select(`
             *,
-            hosts ( * ),
             project!inner ( * ),
             assignments ( volunteer_id ( * ))
         `)
@@ -102,27 +101,10 @@ export async function POST({ request }) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // first, create the primary contact and save the email
-    const hosts = body.contact;
-    const { data: newContact, error: contactsError } = await supabase
-        .from('contacts')
-        .insert([{
-            name: hosts.name,
-            phone: hosts.phone,
-            email: hosts.email,
-        }])
-        .select('*')
-        .single();
-
-    if (contactsError) {
-        return json({ error: 'Failed to add contact to new home' }, { status: 500 });
-    }
-
-    // second, create the home
     const home = body.home;
     const { error } = await supabase
         .from('homes')
-        .insert({ ...home, hosts: newContact.email });
+        .insert({ ...home });
 
     if (error) {
         return json({ error: 'Failed to add home' }, { status: 500 });
