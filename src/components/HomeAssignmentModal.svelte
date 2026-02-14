@@ -69,12 +69,12 @@
 							<li class="list-row">
 								{home.address1}
 								<div>
-									<button onclick={() => visitHome(home.id)} class="mr-2 btn btn-xs btn-soft"
-										>View</button
+									<button onclick={() => visitHome(home.id)} class="btn btn-xs btn-soft"
+										>View home</button
 									>
 									<button
 										onclick={() => confirmAssignment(home.id)}
-										class="btn btn-xs btn-success btn-soft">Assign</button
+										class="btn btn-xs btn-success btn-soft">Select</button
 									>
 								</div>
 							</li>
@@ -104,7 +104,9 @@
 										<label>
 											<input
 												type="checkbox"
-												class="checkbox checkbox-accent checkbox-xs"
+												class="checkbox {home.occupant_type.includes(volunteerToAssign.type)
+													? 'checkbox-accent'
+													: 'checkbox-error'} checkbox-xs"
 												checked={home.occupant_type.includes(volunteerToAssign.type)}
 												onclick={(e) => e.preventDefault()}
 											/>
@@ -129,7 +131,7 @@
 												!hasOverlap &&
 												home.max_days_stay >= volunteerToAssign.daysAssigned &&
 												home.occupant_type.includes(volunteerToAssign.type)
-											)}>Accept</button
+											)}>Assign</button
 										>
 										<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
 											>Cancel</button
