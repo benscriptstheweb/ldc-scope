@@ -6,8 +6,22 @@
 
 	let { data } = $props();
 
+	let searchedCongregation = $state('');
+	let searchedProject = $state('');
+
+	let supportingCongregationsSet = new Set(data.homes.map((e: any) => e.congregation));
+	let supportingCongregations = [...supportingCongregationsSet];
+
+	let filteredHomes = $derived(
+		data.homes.filter(
+			(e: any) =>
+				(!searchedCongregation || e.congregation === searchedCongregation) &&
+				(!searchedProject || e.project === searchedProject)
+		)
+	);
+
 	function sortedHomesByProject(projectName: string) {
-		const organizedHomes = data.homes.filter((home: any) => home.project === projectName);
+		const organizedHomes = filteredHomes.filter((home: any) => home.project === projectName);
 		return organizedHomes.sort((a: any, b: any) => a.distanceToProject - b.distanceToProject);
 	}
 </script>
@@ -24,10 +38,32 @@
 </div>
 
 {#if data.user}
+	<div class="m-8 flex">
+		<div>
+			<span class="label">Congregation</span>
+			<select class="select" bind:value={searchedCongregation}>
+				<option value="">All</option>
+				{#each supportingCongregations as cong}
+					<option value={cong}>{cong}</option>
+				{/each}
+			</select>
+		</div>
+		<div>
+			<span class="label">Project</span>
+			<select class="select" bind:value={searchedProject}>
+				<option value="">All</option>
+				{#await getProjectsByRegion(data.user.assignedRegion) then projects}
+					{#each projects as project}
+						<option value={project.friendly_name}>{project.friendly_name}</option>
+					{/each}
+				{/await}
+			</select>
+		</div>
+	</div>
 	{#await getProjectsByRegion(data.user.assignedRegion) then projects}
-		<div class="projects-container ml-8">
+		<div class="projects-container">
 			{#each projects as project}
-				<p class="project-subheading">Homes for <strong>{project.friendly_name}</strong></p>
+				<p class="project-subheading ml-8">Homes for <strong>{project.friendly_name}</strong></p>
 				<div class="cards-container mb-20">
 					{#each sortedHomesByProject(project.friendly_name) as home}
 						<HomeCard {home} />
@@ -44,8 +80,29 @@
 	}
 	.cards-container {
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		align-items: center;
 		flex-wrap: wrap;
+	}
+
+	@media (min-width: 769px) and (max-width: 1024px) {
+		.cards-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+	}
+	@media (min-width: 768px) {
+		.project-subheading {
+			margin-left: 32px;
+		}
+		.cards-container {
+			margin-left: 32px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			flex-wrap: wrap;
+		}
 	}
 </style>
