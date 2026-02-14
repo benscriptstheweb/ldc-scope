@@ -110,6 +110,7 @@
 						<div class="flex flex-row">
 							<label>
 								<input
+									required
 									class="mr-2"
 									type="checkbox"
 									value={occupant.type}
