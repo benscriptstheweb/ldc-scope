@@ -162,12 +162,7 @@
 							<CustomBadge type="unassigned" />
 						{/if}
 						<RecommendedOccupantBadge occupantType={volunteer.type} />
-						<CustomBadge
-							type="days"
-							days={(new Date(volunteer.date_end).getTime() -
-								new Date(volunteer.date_start).getTime()) /
-								(1000 * 60 * 60 * 24)}
-						/>
+						<CustomBadge type="days" days={volunteer.daysAssigned} />
 					</td>
 				</tr>
 			{/each}

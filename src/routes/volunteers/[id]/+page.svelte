@@ -5,6 +5,7 @@
 	import Plus from '../../../icons/Plus.svelte';
 	import Trash from '../../../icons/Trash.svelte';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
+	import CustomBadge from '../../../components/CustomBadge.svelte';
 
 	export let data;
 
@@ -27,9 +28,12 @@
 
 <div class="top-container flex flex-col items-center">
 	<div class="w-80 mt-5">
-		<div class="flex items-center">
-			<RecommendedOccupantBadge occupantType={data.type} />
-			<p class="heading header-name ml-2">{data.name}</p>
+		<div class="flex items-center justify-between">
+			<p class="heading header-name">{data.name}</p>
+			<div class="flex items-center">
+				<RecommendedOccupantBadge occupantType={data.type} />
+				<CustomBadge type="days" days={data.daysAssigned} />
+			</div>
 		</div>
 		Contact
 		<div class="mt-2 flex flex-row">

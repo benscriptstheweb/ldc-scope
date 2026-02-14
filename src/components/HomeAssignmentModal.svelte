@@ -30,11 +30,6 @@
 		isConfirming = true;
 	}
 
-	const volunteerAssignmentLength =
-		(new Date(volunteerToAssign.date_end).getTime() -
-			new Date(volunteerToAssign.date_start).getTime()) /
-		(1000 * 60 * 60 * 24);
-
 	async function getAssignableHomes() {
 		const { data, error } = await supabase
 			.from('homes')
@@ -101,7 +96,7 @@
 											<input
 												type="checkbox"
 												class="checkbox checkbox-accent checkbox-xs"
-												checked={home.max_days_stay >= volunteerAssignmentLength}
+												checked={home.max_days_stay >= volunteerToAssign.daysAssigned}
 												onclick={(e) => e.preventDefault()}
 											/>
 											Stay duration
@@ -133,7 +128,7 @@
 											class="btn btn-success"
 											disabled={!(
 												!hasOverlap &&
-												home.max_days_stay >= volunteerAssignmentLength &&
+												home.max_days_stay >= volunteerToAssign.daysAssigned &&
 												(home.occupant_type === volunteerToAssign.type ||
 													home.occupant_type === 'A')
 											)}>Accept</button

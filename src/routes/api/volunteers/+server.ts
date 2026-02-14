@@ -24,6 +24,7 @@ export async function GET({ locals, url }) {
         const individualVolunteer = {
             ...data,
             assignedHome: data.assignments.length > 0 ? data.assignments[0].home_id ?? null : null,
+            daysAssigned: (new Date(data.date_end).getTime() - new Date(data.date_start).getTime()) / (1000 * 60 * 60 * 24)
         };
 
         return json(individualVolunteer);
@@ -50,7 +51,8 @@ export async function GET({ locals, url }) {
             ...v,
             assignedHome: v.assignments.length > 0 ? v.assignments[0].home_id ?? null : null,
             isAssigned: v.assignments.length > 0 ? 1 : 0,
-            assignedProject: v.project
+            assignedProject: v.project,
+            daysAssigned: (new Date(v.date_end).getTime() - new Date(v.date_start).getTime()) / (1000 * 60 * 60 * 24)
         }
     });
 
