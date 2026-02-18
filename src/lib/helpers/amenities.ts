@@ -6,5 +6,4 @@ export const amenities = [
     { type: 'Washer' },
     { type: 'Dryer' },
     { type: 'Kitchen' },
-    { type: 'Excellent Privacy' },
 ]

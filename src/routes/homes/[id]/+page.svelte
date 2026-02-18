@@ -37,6 +37,8 @@
 		const res = await fetch(`/api/homes/${home.id}/photos`);
 		photoUrls = await res.json();
 	});
+
+	console.log(home.allergies);
 </script>
 
 {#if data.user.isAdmin}
@@ -115,39 +117,22 @@
 			</div>
 
 			<div class="detail">
-				<strong>Host Congregation: </strong>
-				{home.congregation}
-			</div>
-
-			<div class="detail">
 				<strong>Comfort rating: </strong>
 				<div class="badge">{home.comfort_rating}</div>
-			</div>
-
-			<div class="detail mt-9">
-				Homeowner is allergic to:
-				<div class="allergies">
-					{#if !home.allergies}
-						<p class="allergies-none-text">No allergies! 🎣</p>
-					{:else}
-						{#each home.allergies as allergy}
-							<div class="badge badge-outline badge-secondary">{allergy}</div>
-						{/each}
-					{/if}
-				</div>
 			</div>
 		</div>
 
 		<h2>Amenities</h2>
 		<div class="block amenities">
-			{#if !home.amenities}
-				<p class="amenities-none-text">No amenities listed for this home 🤔</p>
-			{:else}
+			{#if home.amenities && home.amenities.length !== 0}
 				{#each home.amenities as amenity}
 					<div class="badge badge-soft badge-info">{amenity}</div>
 				{/each}
+			{:else}
+				<p class="amenities-none-text">No amenities listed for this home</p>
 			{/if}
 		</div>
+
 		<h2>Parking</h2>
 		<div class="block mt-4">
 			<div class="flex detail">
@@ -158,18 +143,34 @@
 				{/if}
 			</div>
 		</div>
-	</div>
 
-	<div class="contacts flex flex-col items-center">
-		<div class="flex justify-between mt-9 w-90">
-			<h2>Hosts</h2>
+		<div class="block details">
+			{#if home.allergies && home.allergies.length !== 0}
+				<p class="detail">Host allergies:</p>
+				<div class="allergies">
+					{#each home.allergies as allergy}
+						<div class="badge badge-outline badge-secondary">{allergy}</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+
+		<div class="block details">
+			<strong class="detail">Host Congregation:</strong>
+			{home.congregation}
+		</div>
+	</div>
+	<div class="contacts flex flex-col">
+		<div class="flex justify-between ml-8 mt-9 w-90">
+			<h2>Host contacts</h2>
 			{#if data.user.isAdmin}
 				<label for="edit-contacts-drawer" class="btn btn-soft btn-primary mr-5 mb-4">
 					<Edit size="size-5" strokeWidth="2" />
 				</label>
 			{/if}
 		</div>
-		<div class="block w-90">
+
+		<div class="block w-90 ml-8">
 			<ul class="list bg-base-100 rounded-box shadow-md">
 				<ContactsList host={home.hosts} />
 			</ul>
@@ -206,26 +207,7 @@
 		font-weight: bold;
 		padding: 0 30px;
 	}
-	.amenities {
-		margin-top: 10px;
-		display: flex;
-		justify-content: center;
-		flex-wrap: wrap;
-		height: 150px;
-	}
 	.amenities-none-text {
-		color: gray;
-	}
-
-	.allergies {
-		margin-top: 10px;
-		display: flex;
-		justify-content: center;
-		flex-wrap: wrap;
-		height: 150px;
-		overflow: scroll;
-	}
-	.allergies-none-text {
 		color: gray;
 	}
 
