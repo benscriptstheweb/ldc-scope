@@ -95,7 +95,9 @@
 										<label>
 											<input
 												type="checkbox"
-												class="checkbox checkbox-accent checkbox-xs"
+												class="checkbox {home.max_days_stay >= volunteerToAssign.daysAssigned
+													? 'checkbox-accent'
+													: 'checkbox-error'} checkbox-xs"
 												checked={home.max_days_stay >= volunteerToAssign.daysAssigned}
 												onclick={(e) => e.preventDefault()}
 											/>
@@ -115,7 +117,9 @@
 										<label>
 											<input
 												type="checkbox"
-												class="checkbox checkbox-accent checkbox-xs"
+												class="checkbox {!hasOverlap
+													? 'checkbox-accent'
+													: 'checkbox-error'} checkbox-xs"
 												checked={!hasOverlap}
 												onclick={(e) => e.preventDefault()}
 											/>
