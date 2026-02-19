@@ -1,16 +1,12 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { supabase } from '$lib/supabase/supabaseClient';
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
+	import Plus from '../icons/Plus.svelte';
+	import Dots from '../icons/Dots.svelte';
+	import { onMount } from 'svelte';
+	import RecommendedOccupantBadge from './RecommendedOccupantBadge.svelte';
 
 	let { volunteerToAssign, id } = $props();
-
-	function visitHome(homeId: string) {
-		goto(`/homes/${homeId}`);
-	}
-
-	let isConfirming = $state(false);
-	let editingId: string | null = $state(null);
 
 	async function createAssignment(homeId: string, volunteerId: string) {
 		const res = await fetch('/api/assignments', {
@@ -25,9 +21,8 @@
 		}
 	}
 
-	function confirmAssignment(homeId: string) {
-		editingId = homeId;
-		isConfirming = true;
+	function closeModal() {
+		(document.getElementById(id) as HTMLDialogElement).close();
 	}
 
 	async function getAssignableHomes() {
@@ -37,117 +32,103 @@
 			.eq('project', volunteerToAssign.project.id);
 
 		if (error) {
-			console.error('Error fetching assignable homes:', error);
+			console.log('Error fetching assignable homes:', error);
 			return [];
 		}
 
 		return data;
 	}
 
-	function closeModal() {
-		(document.getElementById(id) as HTMLDialogElement).close();
-		isConfirming = false;
-	}
+	let assignableHomes: any[] = $state([]);
+	let unAssignableHomes: any[] = $state([]);
+
+	onMount(async () => {
+		const homes = await getAssignableHomes();
+
+		homes.forEach(async (home: any) => {
+			const hasOverlap = await isOverlapping(volunteerToAssign.id, home.id);
+			if (
+				!hasOverlap &&
+				home.max_days_stay >= volunteerToAssign.daysAssigned &&
+				home.occupant_type.includes(volunteerToAssign.type)
+			) {
+				assignableHomes.push(home);
+			} else {
+				unAssignableHomes.push(home);
+			}
+		});
+	});
 </script>
 
 <dialog {id} class="modal">
 	<div class="modal-box">
-		{#await getAssignableHomes()}
-			<div class="flex w-52 flex-col gap-4">
-				<div class="skeleton h-8 w-28"></div>
-				<div class="skeleton h-4 w-full"></div>
-				<div class="skeleton h-4 w-full"></div>
-			</div>
-		{:then assignableHomes}
-			<p class="heading">Available Homes</p>
-			{#if assignableHomes.length === 0}
-				No homes available for {volunteerToAssign.name}'s project term 🚗
-			{:else}
-				<ul class="list bg-base-100 rounded-box shadow-md">
-					{#each assignableHomes as home}
-						{#await isOverlapping(volunteerToAssign.id, home.id) then hasOverlap}
-							<li class="list-row">
-								{home.address1}
-								<div>
-									<button onclick={() => visitHome(home.id)} class="btn btn-xs btn-soft"
-										>View home</button
-									>
-									<button
-										onclick={() => confirmAssignment(home.id)}
-										class="btn btn-xs btn-success btn-soft">Select</button
-									>
-								</div>
-							</li>
+		{#if assignableHomes.length > 0}
+			<ul class="list mb-8">
+				<h2 class="subheading">Assignable homes</h2>
+				{#each assignableHomes as home}
+					{#await isOverlapping(volunteerToAssign.id, home.id) then hasOverlap}
+						<li class="list-row">
+							{home.address1}
+							<div>
+								<div class="badge badge-xs">{home.distance_to_project} mi</div>
+								<button
+									onclick={() => createAssignment(home.id, volunteerToAssign.id)}
+									class="btn btn-success btn-xs btn-circle"><Plus /></button
+								>
 
-							{#if editingId === home.id && isConfirming}
-								<div class="edit-pane p-5">
-									<div class="volunteer-info mt-2 mb-8">
-										Assign {volunteerToAssign.name} to this home?
-										<div>
-											<strong>
-												{home.address1}, {home.city}, {home.state}
-												{home.zip}
-											</strong>
-										</div>
-									</div>
+								<details class="dropdown dropdown-end">
+									<summary class="btn btn-soft btn-xs btn-circle m-1"><Dots /></summary>
+									<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
+										<li><a href="/homes/{home.id}">View Home</a></li>
+										<li>
+											<details>
+												<summary>Contact Host</summary>
+												<ul>
+													<li><a href="sms:{home.hosts.phone}">Text</a></li>
+													<li><a href="mailto:{home.hosts.email}">Email</a></li>
+													<li><a href="tel:{home.hosts.phone}">Call</a></li>
+												</ul>
+											</details>
+										</li>
+									</ul>
+								</details>
+							</div>
+						</li>
+					{/await}
+				{/each}
+			</ul>
+		{/if}
 
-									<div class="flex flex-col mb-10">
-										<label>
-											<input
-												type="checkbox"
-												class="checkbox {home.max_days_stay >= volunteerToAssign.daysAssigned
-													? 'checkbox-accent'
-													: 'checkbox-error'} checkbox-xs"
-												checked={home.max_days_stay >= volunteerToAssign.daysAssigned}
-												onclick={(e) => e.preventDefault()}
-											/>
-											Stay duration
-										</label>
-										<label>
-											<input
-												type="checkbox"
-												class="checkbox {home.occupant_type.includes(volunteerToAssign.type)
-													? 'checkbox-accent'
-													: 'checkbox-error'} checkbox-xs"
-												checked={home.occupant_type.includes(volunteerToAssign.type)}
-												onclick={(e) => e.preventDefault()}
-											/>
-											Recommended occupant
-										</label>
-										<label>
-											<input
-												type="checkbox"
-												class="checkbox {!hasOverlap
-													? 'checkbox-accent'
-													: 'checkbox-error'} checkbox-xs"
-												checked={!hasOverlap}
-												onclick={(e) => e.preventDefault()}
-											/>
-											Not currently hosting
-										</label>
-									</div>
+		{#if unAssignableHomes.length > 0}
+			<ul class="list">
+				<p class="subheading">Unassignable homes</p>
 
-									<div>
-										<button
-											onclick={() => createAssignment(home.id, volunteerToAssign.id)}
-											class="btn btn-success"
-											disabled={!(
-												!hasOverlap &&
-												home.max_days_stay >= volunteerToAssign.daysAssigned &&
-												home.occupant_type.includes(volunteerToAssign.type)
-											)}>Assign</button
-										>
-										<button onclick={() => (isConfirming = false)} class="btn btn-ghost"
-											>Cancel</button
-										>
-									</div>
-								</div>
-							{/if}
-						{/await}
-					{/each}
-				</ul>
-			{/if}
-		{/await}
+				{#each unAssignableHomes as badHome}
+					<li class="list-row">
+						{badHome.address1}
+						<div>
+							<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
+							<details class="dropdown dropdown-end">
+								<summary class="btn btn-soft btn-xs btn-circle m-1"><Dots /></summary>
+								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
+									<li><a href="/homes/{badHome.id}">View Home</a></li>
+									<li>
+										<details>
+											<summary>Contact Host</summary>
+											<ul>
+												<li><a href="sms:{badHome.hosts.phone}">Text</a></li>
+												<li><a href="mailto:{badHome.hosts.email}">Email</a></li>
+												<li><a href="tel:{badHome.hosts.phone}">Call</a></li>
+											</ul>
+										</details>
+									</li>
+								</ul>
+							</details>
+						</div>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 
 		<div class="modal-action">
 			<form method="dialog">
@@ -158,9 +139,10 @@
 </dialog>
 
 <style>
-	.volunteer-info {
-		justify-content: space-between;
-		align-items: center;
+	.subheading {
+		font-size: 1.3em;
+		font-weight: bold;
+		margin-bottom: 30px;
 	}
 	.list-row {
 		display: flex;
