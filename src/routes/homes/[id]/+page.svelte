@@ -37,8 +37,6 @@
 		const res = await fetch(`/api/homes/${home.id}/photos`);
 		photoUrls = await res.json();
 	});
-
-	console.log(home.allergies);
 </script>
 
 {#if data.user.isAdmin}
@@ -56,17 +54,15 @@
 			{/each}
 		</div>
 
-		{#if home}
-			<div class="w-80 flex items-center justify-between">
-				<div class="mb-8">
-					<p class="heading header-address">{home.address1} {home.address2}</p>
-					<p class="secondary-address">{home.city}, {home.state} {home.zip}</p>
-				</div>
-				<a href={mapLink}>
-					<img class="map-pin" src="/pin.png" width="70px" alt="open-in-map" />
-				</a>
+		<div class="w-80 flex items-center justify-between">
+			<div class="mb-8">
+				<p class="heading header-address">{home.address1} {home.address2}</p>
+				<p>{home.city}, {home.state} {home.zip}</p>
 			</div>
-		{/if}
+			<a href={mapLink}>
+				<img class="map-pin" src="/pin.png" width="70px" alt="open-in-map" />
+			</a>
+		</div>
 
 		{#if data.user.isAdmin}
 			<label for="edit-home-drawer" class="btn btn-soft btn-primary">
@@ -160,8 +156,8 @@
 			{home.congregation}
 		</div>
 	</div>
-	<div class="contacts flex flex-col">
-		<div class="flex justify-between ml-8 mt-9 w-90">
+	<div class="block contacts flex flex-col">
+		<div class="flex justify-between mt-9 w-90">
 			<h2>Host contacts</h2>
 			{#if data.user.isAdmin}
 				<label for="edit-contacts-drawer" class="btn btn-soft btn-primary mr-5 mb-4">
@@ -170,7 +166,7 @@
 			{/if}
 		</div>
 
-		<div class="block w-90 ml-8">
+		<div class="block w-90">
 			<ul class="list bg-base-100 rounded-box shadow-md">
 				<ContactsList host={home.hosts} />
 			</ul>
@@ -197,11 +193,6 @@
 		align-items: center;
 		padding: 0 20px 40px 20px;
 	}
-
-	.secondary-address {
-		font-style: italic;
-	}
-
 	h2 {
 		font-size: 1.2em;
 		font-weight: bold;
@@ -219,7 +210,6 @@
 	.badge {
 		margin: 5px;
 	}
-
 	.divider {
 		font-style: italic;
 		font-size: small;
