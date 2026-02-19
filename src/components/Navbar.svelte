@@ -110,10 +110,4 @@
 			display: inline;
 		}
 	}
-	.title {
-		margin-left: 10px;
-	}
-	.user-privilege {
-		margin-left: 4px;
-	}
 </style>
