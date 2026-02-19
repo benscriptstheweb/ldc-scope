@@ -37,9 +37,11 @@
 		comfortRating: home.comfort_rating
 	};
 	let homeFields = $state(structuredClone(homeDetailsOriginal));
-	let formChanged = $derived(JSON.stringify(homeFields) !== JSON.stringify(homeDetailsOriginal));
-
 	let images: File[] = $state([]);
+	let formChanged = $derived(
+		JSON.stringify(homeFields) !== JSON.stringify(homeDetailsOriginal) || images.length !== 0
+	);
+
 	let fileIsTooLarge = $state(false);
 	let fileIsInvalid = $state(false);
 
