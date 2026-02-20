@@ -34,14 +34,16 @@ export async function POST({ request }) {
     and your volunteer efforts add to the blessing of this project. May you have Jehovah's blessing!</p>
   `;
 
-  const { data } = await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: "no-reply@resend.dev",
-    to: body.hostEmail,
+    to: body.emails,
     subject: "Host Occupant Guidelines",
     html: htmlBody,
   });
 
-  console.log(data)
-
+  if (error) {
+    console.log(error)
+    return json({ message: error.message }, { status: 403 });
+  }
   return json({ message: 'Email success' }, { status: 200 });
 }

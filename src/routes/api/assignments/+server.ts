@@ -5,11 +5,10 @@ import { isOverlapping } from '$lib/helpers/overlappingVolunteers.js';
 export async function GET() {
     const { data: assignments, error } = await supabase
         .from('assignments')
-        .select('id, home_id, volunteer_id');
+        .select('id, home_id, volunteer_id, date_range');
 
     if (error) {
-        console.error('Error fetching assignments:', error);
-        return json({ error: error.message }, { status: 500 });
+        return json({ message: 'Error fetching assignments' }, { status: 500 });
     }
 
     return json(assignments);
@@ -22,19 +21,18 @@ export async function POST({ locals, request }) {
 
     const body = await request.json();
 
-    const hasOverlap = await isOverlapping(body.volunteerId, body.homeId);
+    const hasOverlap = await isOverlapping(body.volunteer, body.home);
 
     if (hasOverlap) {
-        throw new Error('Home is already booked');
+        return json({ message: 'Home is already booked' }, { status: 409 });
     }
 
     const { error } = await supabase
         .from('assignments')
-        .insert([{ home_id: body.homeId, volunteer_id: body.volunteerId }]);
+        .insert([{ home_id: body.home.id, volunteer_id: body.volunteer.id, date_range: body.dateRange }]);
 
     if (error) {
-        console.error('Failed to add assignment:', error);
-        return json({ error: 'Failed to assign' }, { status: 500 });
+        return json({ message: 'Failed to assign' }, { status: 500 });
     }
 
     return json({ success: true }, { status: 201 });

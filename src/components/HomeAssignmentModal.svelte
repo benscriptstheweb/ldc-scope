@@ -4,16 +4,16 @@
 	import Plus from '../icons/Plus.svelte';
 	import Dots from '../icons/Dots.svelte';
 	import { onMount } from 'svelte';
-	import RecommendedOccupantBadge from './RecommendedOccupantBadge.svelte';
 
 	let { volunteerToAssign, id } = $props();
 
-	async function createAssignment(homeId: string, volunteerId: string) {
+	async function createAssignment(home: any, volunteer: any) {
 		const res = await fetch('/api/assignments', {
 			method: 'POST',
 			body: JSON.stringify({
-				volunteerId: volunteerId,
-				homeId: homeId
+				volunteer: volunteer,
+				home: home,
+				dateRange: [volunteer.date_start, volunteer.date_end]
 			})
 		});
 		if (res.ok) {
@@ -25,7 +25,7 @@
 		(document.getElementById(id) as HTMLDialogElement).close();
 	}
 
-	async function getAssignableHomes() {
+	async function getHomesByVolunteerProject() {
 		const { data, error } = await supabase
 			.from('homes')
 			.select('*')
@@ -43,10 +43,10 @@
 	let unAssignableHomes: any[] = $state([]);
 
 	onMount(async () => {
-		const homes = await getAssignableHomes();
+		const homes = await getHomesByVolunteerProject();
 
 		homes.forEach(async (home: any) => {
-			const hasOverlap = await isOverlapping(volunteerToAssign.id, home.id);
+			const hasOverlap = await isOverlapping(volunteerToAssign, home);
 			if (
 				!hasOverlap &&
 				home.max_days_stay >= volunteerToAssign.daysAssigned &&
@@ -66,35 +66,33 @@
 			<ul class="list mb-8">
 				<h2 class="subheading">Assignable homes</h2>
 				{#each assignableHomes as home}
-					{#await isOverlapping(volunteerToAssign.id, home.id) then hasOverlap}
-						<li class="list-row">
-							{home.address1}
-							<div>
-								<div class="badge badge-xs">{home.distance_to_project} mi</div>
-								<button
-									onclick={() => createAssignment(home.id, volunteerToAssign.id)}
-									class="btn btn-success btn-xs btn-circle"><Plus /></button
-								>
+					<li class="list-row">
+						{home.address1}
+						<div>
+							<div class="badge badge-xs">{home.distance_to_project} mi</div>
+							<button
+								onclick={() => createAssignment(home, volunteerToAssign)}
+								class="btn btn-success btn-xs btn-circle"><Plus /></button
+							>
 
-								<details class="dropdown dropdown-end">
-									<summary class="btn btn-soft btn-xs btn-circle m-1"><Dots /></summary>
-									<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
-										<li><a href="/homes/{home.id}">View Home</a></li>
-										<li>
-											<details>
-												<summary>Contact Host</summary>
-												<ul>
-													<li><a href="sms:{home.hosts.phone}">Text</a></li>
-													<li><a href="mailto:{home.hosts.email}">Email</a></li>
-													<li><a href="tel:{home.hosts.phone}">Call</a></li>
-												</ul>
-											</details>
-										</li>
-									</ul>
-								</details>
-							</div>
-						</li>
-					{/await}
+							<details class="dropdown dropdown-end">
+								<summary class="btn btn-soft btn-xs btn-circle m-1"><Dots /></summary>
+								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
+									<li><a href="/homes/{home.id}">View Home</a></li>
+									<li>
+										<details>
+											<summary>Contact Host</summary>
+											<ul>
+												<li><a href="sms:{home.hosts.phone}">Text</a></li>
+												<li><a href="mailto:{home.hosts.email}">Email</a></li>
+												<li><a href="tel:{home.hosts.phone}">Call</a></li>
+											</ul>
+										</details>
+									</li>
+								</ul>
+							</details>
+						</div>
+					</li>
 				{/each}
 			</ul>
 		{/if}

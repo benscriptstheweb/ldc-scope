@@ -16,8 +16,8 @@
 					phone: data.phone,
 					hostName: hosts.name,
 					hostAddress: `${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip}`,
-					hostPhone: `${hosts.phone}`,
-					hostEmail: [`${hosts.email}`]
+					hostPhone: hosts.phone,
+					emails: [hosts.email, data.email]
 				})
 			});
 
