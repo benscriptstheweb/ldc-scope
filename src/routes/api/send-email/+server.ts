@@ -42,7 +42,6 @@ export async function POST({ request }) {
   });
 
   if (error) {
-    console.log(error)
     return json({ message: error.message }, { status: 403 });
   }
   return json({ message: 'Email success' }, { status: 200 });
