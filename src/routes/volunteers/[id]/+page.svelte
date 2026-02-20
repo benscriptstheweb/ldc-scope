@@ -78,14 +78,20 @@
 	</div>
 
 	<div class="w-80 mb-8">
-		<div class="mt-2 flex flex-row">
-			<a href="tel:{data.phone}" aria-label="telephone" class="phone btn btn-soft mr-2">
-				<Telephone />
-			</a>
+		<div class="mt-2 flex flex-col">
+			<div class="mb-2">
+				<a href="tel:{data.phone}" aria-label="telephone" class="phone btn btn-soft mr-2">
+					<Telephone />
+				</a>
+				{data.phone}
+			</div>
 
-			<a href="mailto:{data.email}" aria-label="email" class="email btn btn-soft">
-				<Email />
-			</a>
+			<div>
+				<a href="mailto:{data.email}" aria-label="email" class="email btn btn-soft mr-2">
+					<Email />
+				</a>
+				{data.email}
+			</div>
 		</div>
 	</div>
 
