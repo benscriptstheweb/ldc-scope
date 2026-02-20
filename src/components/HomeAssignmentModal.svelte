@@ -32,7 +32,7 @@
 			.eq('project', volunteerToAssign.project.id);
 
 		if (error) {
-			console.log('Error fetching assignable homes:', error);
+			console.error('Error fetching assignable homes:', error);
 			return [];
 		}
 

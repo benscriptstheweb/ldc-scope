@@ -9,6 +9,7 @@
 	import Email from '../../../icons/Email.svelte';
 	import Telephone from '../../../icons/Telephone.svelte';
 	import Edit from '../../../icons/Edit.svelte';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -23,31 +24,37 @@
 		}
 	}
 
-	// TODO: set the body for the email
-	let hostOccupantGuidelineBody = `Dear Friends,
+	let hostOccupantGuidelineBody = '';
+	let emailTo = '';
 
-	By way of introduction, included in this email is ${data.name} who is visiting from \
-	${getParsedDate(data.date_start)} - ${getParsedDate(data.date_end)} to assist with \
-	the ${data.project.friendly_name} project. ${data.name}'s contact information is: 
-	
-	     M: ${data.phone}.
+	onMount(() => {
+		if (data.assignedHome) {
+			hostOccupantGuidelineBody = `Dear Friends,
+		
+			By way of introduction, included in this email is ${data.name} who is visiting from \
+			${getParsedDate(data.date_start)} - ${getParsedDate(data.date_end)} to assist with \
+			the ${data.project.friendly_name} project. ${data.name}'s contact information is: 
+			
+				 M: ${data.phone}.
+		
+			Also included in this email is ${data.assignedHome.hosts.name} who is providing \
+			housing accommodations for the stay. Below is the address of the property, as well as their contact info:
+		
+				 Host address: ${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip} 
+				 Host contact: ${data.assignedHome.hosts.phone}
+		
+			We recommend that you contact one another to review any further details such as expected time of arrival, etc.
+		
+			Lastly, as a reminder, please visit the link to obtain the "Host and Occupant Guidelines" provided by the branch. \
+			You are encouraged to review these guidelines to help make the best of the stay: 
+				 https://drive.google.com/file/d/1bQAufKzfpXYd68phJYKOJqWgs5iSiXrT/view?usp=sharing
+		
+			It is always worth emphasizing that your loving support of this arrangement is very much appreciated, \
+			and your volunteer efforts add to the blessing of this project. May you have Jehovah's blessing!`;
 
-	Also included in this email is ${data.assignedHome.hosts.name} who is providing \
-	housing accommodations for the stay. Below is the address of the property, as well as their contact info:
-
-	     Host address: ${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip} 
-	     Host contact: ${data.assignedHome.hosts.phone}
-
-	We recommend that you contact one another to review any further details such as expected time of arrival, etc.
-
-	Lastly, as a reminder, please visit the link to obtain the "Host and Occupant Guidelines" provided by the branch. \
-	You are encouraged to review these guidelines to help make the best of the stay: 
-	     https://drive.google.com/file/d/1bQAufKzfpXYd68phJYKOJqWgs5iSiXrT/view?usp=sharing
-
-	It is always worth emphasizing that your loving support of this arrangement is very much appreciated, \
-	and your volunteer efforts add to the blessing of this project. May you have Jehovah's blessing!`;
-
-	let emailTo = `${data.assignedHome.hosts.email},${data.email}`;
+			emailTo = `${data.assignedHome.hosts.email},${data.email}`;
+		}
+	});
 </script>
 
 {#if data.user.isAdmin}
