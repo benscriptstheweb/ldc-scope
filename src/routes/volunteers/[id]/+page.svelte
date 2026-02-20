@@ -9,9 +9,8 @@
 	import Email from '../../../icons/Email.svelte';
 	import Telephone from '../../../icons/Telephone.svelte';
 	import Edit from '../../../icons/Edit.svelte';
-	import { onMount } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 
 	async function deleteHomeAssignment() {
 		const res = await fetch('/api/assignments', {
@@ -24,37 +23,34 @@
 		}
 	}
 
-	let hostOccupantGuidelineBody = '';
-	let emailTo = '';
+	// let emailSent = $state(false);
 
-	onMount(() => {
-		if (data.assignedHome) {
-			hostOccupantGuidelineBody = `Dear Friends,
-		
-			By way of introduction, included in this email is ${data.name} who is visiting from \
-			${getParsedDate(data.date_start)} - ${getParsedDate(data.date_end)} to assist with \
-			the ${data.project.friendly_name} project. ${data.name}'s contact information is: 
-			
-				 M: ${data.phone}.
-		
-			Also included in this email is ${data.assignedHome.hosts.name} who is providing \
-			housing accommodations for the stay. Below is the address of the property, as well as their contact info:
-		
-				 Host address: ${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip} 
-				 Host contact: ${data.assignedHome.hosts.phone}
-		
-			We recommend that you contact one another to review any further details such as expected time of arrival, etc.
-		
-			Lastly, as a reminder, please visit the link to obtain the "Host and Occupant Guidelines" provided by the branch. \
-			You are encouraged to review these guidelines to help make the best of the stay: 
-				 https://drive.google.com/file/d/1bQAufKzfpXYd68phJYKOJqWgs5iSiXrT/view?usp=sharing
-		
-			It is always worth emphasizing that your loving support of this arrangement is very much appreciated, \
-			and your volunteer efforts add to the blessing of this project. May you have Jehovah's blessing!`;
+	// async function sendEmail(hosts: any) {
+	// 	if (data.assignedHome) {
+	// 		const res = await fetch('/api/send-email', {
+	// 			method: 'POST',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 			body: JSON.stringify({
+	// 				name: data.name,
+	// 				date_start: getParsedDate(data.date_start),
+	// 				date_end: getParsedDate(data.date_end),
+	// 				projectName: data.project.friendly_name,
+	// 				phone: data.phone,
+	// 				hostName: hosts.name,
+	// 				hostAddress: `${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip}`,
+	// 				hostPhone: `${hosts.phone}`,
+	// 				hostEmail: ['3dpandabin@gmail.com']
+	// 			})
+	// 		});
 
-			emailTo = `${data.assignedHome.hosts.email},${data.email}`;
-		}
-	});
+	// 		const result = await res.json();
+	// 		if (result.message === 'Email success') {
+	// 			alert('sent!');
+	// 		}
+	// 	} else {
+	// 		return;
+	// 	}
+	// }
 </script>
 
 {#if data.user.isAdmin}
@@ -116,15 +112,12 @@
 			<button class="btn btn-soft btn-error mt-2" onclick={deleteHomeAssignment}>
 				<Trash /> Remove
 			</button>
-			<a
-				href="
-				mailto:{emailTo}?subject=Host Occupant Guidelines&body={encodeURIComponent(
-					hostOccupantGuidelineBody
-				)}"
+			<!-- <button
 				class="btn btn-success btn-soft mt-2"
+				onclick={() => sendEmail(data.assignedHome.hosts)}
 			>
 				<Email /> Send Guidelines
-			</a>
+			</button> -->
 		{:else}
 			<div class="flex w-80">
 				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
