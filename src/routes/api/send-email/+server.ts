@@ -5,9 +5,9 @@ import { json } from '@sveltejs/kit';
 const resend = new Resend(RESEND_API_KEY);
 
 export async function POST({ request }) {
-    const body = await request.json();
+  const body = await request.json();
 
-    const htmlBody = `
+  const htmlBody = `
     <p>Dear Friends,</p>
 
     <p>
@@ -34,14 +34,14 @@ export async function POST({ request }) {
     and your volunteer efforts add to the blessing of this project. May you have Jehovah's blessing!</p>
   `;
 
-    const { data } = await resend.emails.send({
-        from: "no-reply@resend.dev",
-        to: body.hostEmail,
-        subject: "Host Occupant Guidelines",
-        html: htmlBody,
-    });
+  const { data } = await resend.emails.send({
+    from: "no-reply@resend.dev",
+    to: body.hostEmail,
+    subject: "Host Occupant Guidelines",
+    html: htmlBody,
+  });
 
-    console.log(data)
+  console.log(data)
 
-    return json({ message: 'Email success' }, { status: 200 });
+  return json({ message: 'Email success' }, { status: 200 });
 }

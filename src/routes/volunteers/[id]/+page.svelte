@@ -9,6 +9,8 @@
 	import Email from '../../../icons/Email.svelte';
 	import Telephone from '../../../icons/Telephone.svelte';
 	import Edit from '../../../icons/Edit.svelte';
+	import SendConfirm from '../../../components/SendConfirm.svelte';
+	import Toast from '../../../components/Toast.svelte';
 
 	let { data } = $props();
 
@@ -23,40 +25,26 @@
 		}
 	}
 
-	// let emailSent = $state(false);
-
-	// async function sendEmail(hosts: any) {
-	// 	if (data.assignedHome) {
-	// 		const res = await fetch('/api/send-email', {
-	// 			method: 'POST',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({
-	// 				name: data.name,
-	// 				date_start: getParsedDate(data.date_start),
-	// 				date_end: getParsedDate(data.date_end),
-	// 				projectName: data.project.friendly_name,
-	// 				phone: data.phone,
-	// 				hostName: hosts.name,
-	// 				hostAddress: `${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip}`,
-	// 				hostPhone: `${hosts.phone}`,
-	// 				hostEmail: ['3dpandabin@gmail.com']
-	// 			})
-	// 		});
-
-	// 		const result = await res.json();
-	// 		if (result.message === 'Email success') {
-	// 			alert('sent!');
-	// 		}
-	// 	} else {
-	// 		return;
-	// 	}
-	// }
+	let emailSent = $state(false);
 </script>
 
 {#if data.user.isAdmin}
 	<VolunteerEditDrawer id="edit-volunteer-drawer" volunteerDetail={data} />
 {/if}
 <HomeAssignmentModal volunteerToAssign={data} id="assign-home-modal" />
+
+{#if data.assignedHome}
+	<SendConfirm
+		modalId="id-send-confirm"
+		{data}
+		hosts={data.assignedHome.hosts}
+		bind:successfullySent={emailSent}
+	/>
+{/if}
+
+{#if emailSent}
+	<Toast infoText="Email sent successfully!" alertType="alert-success" />
+{/if}
 
 <div class="top-container flex flex-col items-center">
 	<div class="w-80 mt-5">
@@ -118,12 +106,13 @@
 			<button class="btn btn-soft btn-error mt-2" onclick={deleteHomeAssignment}>
 				<Trash /> Remove
 			</button>
-			<!-- <button
+			<button
 				class="btn btn-success btn-soft mt-2"
-				onclick={() => sendEmail(data.assignedHome.hosts)}
+				onclick={() =>
+					(document.getElementById('id-send-confirm') as HTMLDialogElement).showModal()}
 			>
 				<Email /> Send Guidelines
-			</button> -->
+			</button>
 		{:else}
 			<div class="flex w-80">
 				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
