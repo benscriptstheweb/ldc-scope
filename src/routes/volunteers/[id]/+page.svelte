@@ -22,6 +22,32 @@
 			window.location.reload();
 		}
 	}
+
+	// TODO: set the body for the email
+	let hostOccupantGuidelineBody = `Dear Friends,
+
+	By way of introduction, included in this email is ${data.name} who is visiting from \
+	${getParsedDate(data.date_start)} - ${getParsedDate(data.date_end)} to assist with \
+	the ${data.project.friendly_name} project. ${data.name}'s contact information is: 
+	
+	     M: ${data.phone}.
+
+	Also included in this email is ${data.assignedHome.hosts.name} who is providing \
+	housing accommodations for the stay. Below is the address of the property, as well as their contact info:
+
+	     Host address: ${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip} 
+	     Host contact: ${data.assignedHome.hosts.phone}
+
+	We recommend that you contact one another to review any further details such as expected time of arrival, etc.
+
+	Lastly, as a reminder, please visit the link to obtain the "Host and Occupant Guidelines" provided by the branch. \
+	You are encouraged to review these guidelines to help make the best of the stay: 
+	     https://drive.google.com/file/d/1bQAufKzfpXYd68phJYKOJqWgs5iSiXrT/view?usp=sharing
+
+	It is always worth emphasizing that your loving support of this arrangement is very much appreciated, \
+	and your volunteer efforts add to the blessing of this project. May you have Jehovah's blessing!`;
+
+	let emailTo = `${data.assignedHome.hosts.email},${data.email}`;
 </script>
 
 {#if data.user.isAdmin}
@@ -48,6 +74,18 @@
 		</div>
 	</div>
 
+	<div class="w-80 mb-8">
+		<div class="mt-2 flex flex-row">
+			<a href="tel:{data.phone}" aria-label="telephone" class="phone btn btn-soft mr-2">
+				<Telephone />
+			</a>
+
+			<a href="mailto:{data.email}" aria-label="email" class="email btn btn-soft">
+				<Email />
+			</a>
+		</div>
+	</div>
+
 	<div class="w-80">
 		<h2 class="subheading">Assignment</h2>
 		<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
@@ -67,10 +105,19 @@
 						{data.assignedHome.zip}
 					</p>
 				</div>
-				<button class="btn btn-soft btn-error" onclick={deleteHomeAssignment}>
-					<Trash />
-				</button>
 			</div>
+			<button class="btn btn-soft btn-error mt-2" onclick={deleteHomeAssignment}>
+				<Trash /> Remove
+			</button>
+			<a
+				href="
+				mailto:{emailTo}?subject=Host Occupant Guidelines&body={encodeURIComponent(
+					hostOccupantGuidelineBody
+				)}"
+				class="btn btn-success btn-soft mt-2"
+			>
+				<Email /> Send Guidelines
+			</a>
 		{:else}
 			<div class="flex w-80">
 				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
@@ -82,18 +129,6 @@
 				>
 			</div>
 		{/if}
-	</div>
-	<div class="mt-5 w-80">
-		<h2 class="subheading">Contact</h2>
-		<div class="mt-2 flex flex-row">
-			<a href="tel:{data.phone}" aria-label="telephone" class="phone btn btn-soft mr-2">
-				<Telephone />
-			</a>
-
-			<a href="mailto:{data.email}" aria-label="email" class="email btn btn-soft">
-				<Email />
-			</a>
-		</div>
 	</div>
 </div>
 

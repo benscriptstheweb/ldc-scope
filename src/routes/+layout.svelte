@@ -8,16 +8,20 @@
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import Loading from '../components/Loading.svelte';
 
-	let { data, children } = $props();
+	let { children } = $props();
 
 	// this sets a loading spinner to run when navigating between pages. that way we can
 	// remove the impression that the app is hanging or frozen.
 	let loading = $state(false);
-	beforeNavigate(() => {
-		loading = true;
+	beforeNavigate((nav) => {
+		if (nav.to?.route.id) {
+			loading = true;
+		}
 	});
-	afterNavigate(() => {
-		loading = false;
+	afterNavigate((nav) => {
+		if (nav.to?.route.id) {
+			loading = false;
+		}
 	});
 
 	const publicRoutes = ['/signin', '/survey', '/survey/pass'];
