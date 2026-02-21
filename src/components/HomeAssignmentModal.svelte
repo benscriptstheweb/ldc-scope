@@ -3,17 +3,16 @@
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
 	import Plus from '../icons/Plus.svelte';
 	import Dots from '../icons/Dots.svelte';
-	import { onMount } from 'svelte';
 
 	let { volunteerToAssign, id } = $props();
 
-	async function createAssignment(home: any, volunteer: any) {
+	async function createAssignment(home: any, volunteer: any, dateRange: string[]) {
 		const res = await fetch('/api/assignments', {
 			method: 'POST',
 			body: JSON.stringify({
 				volunteer: volunteer,
 				home: home,
-				dateRange: [volunteer.date_start, volunteer.date_end]
+				dateRange
 			})
 		});
 		if (res.ok) {
@@ -39,29 +38,54 @@
 		return data;
 	}
 
+	let startDate = $state('');
+	let endDate = $state('');
 	let assignableHomes: any[] = $state([]);
 	let unAssignableHomes: any[] = $state([]);
 
-	onMount(async () => {
+	async function getUpdatedHomes(start: string, end: string) {
+		if (!start || !end) {
+			return;
+		}
+
 		const homes = await getHomesByVolunteerProject();
 
-		homes.forEach(async (home: any) => {
-			const hasOverlap = await isOverlapping(volunteerToAssign, home);
+		let newAssignable = [];
+		let newUnAssignable = [];
+
+		for (const home of homes) {
+			const hasOverlap = await isOverlapping(home, [start, end]);
+			const daysRange =
+				(new Date(end).getTime() - new Date(start).getTime()) / (1000 * 60 * 60 * 24);
+
 			if (
 				!hasOverlap &&
-				home.max_days_stay >= volunteerToAssign.daysAssigned &&
+				home.max_days_stay >= daysRange &&
 				home.occupant_type.includes(volunteerToAssign.type)
 			) {
-				assignableHomes.push(home);
+				newAssignable.push(home);
 			} else {
-				unAssignableHomes.push(home);
+				newUnAssignable.push(home);
 			}
-		});
+		}
+
+		assignableHomes = newAssignable;
+		unAssignableHomes = newUnAssignable;
+	}
+
+	$effect(() => {
+		getUpdatedHomes(startDate, endDate);
 	});
 </script>
 
 <dialog {id} class="modal">
 	<div class="modal-box">
+		<h2 class="subheading">Select Dates</h2>
+		<div class="dates flex flex-col mb-10">
+			<strong>Start date</strong><input bind:value={startDate} type="date" />
+			<strong>End date</strong><input bind:value={endDate} type="date" />
+		</div>
+
 		{#if assignableHomes.length > 0}
 			<ul class="list mb-8">
 				<h2 class="subheading">Assignable homes</h2>
@@ -71,7 +95,7 @@
 						<div>
 							<div class="badge badge-xs">{home.distance_to_project} mi</div>
 							<button
-								onclick={() => createAssignment(home, volunteerToAssign)}
+								onclick={() => createAssignment(home, volunteerToAssign, [startDate, endDate])}
 								class="btn btn-success btn-xs btn-circle"><Plus /></button
 							>
 

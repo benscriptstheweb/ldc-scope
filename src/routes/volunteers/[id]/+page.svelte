@@ -113,14 +113,13 @@
 		{:else}
 			<div class="flex w-80">
 				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
-
-				<button
-					onclick={() =>
-						(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
-					class="btn btn-soft btn-primary"><Plus />Assign</button
-				>
 			</div>
 		{/if}
+		<button
+			onclick={() =>
+				(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
+			class="btn btn-soft btn-primary mt-3"><Plus />Assign new stay</button
+		>
 	</div>
 </div>
 

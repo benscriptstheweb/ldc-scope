@@ -3,53 +3,55 @@ import { supabase } from '$lib/supabase/supabaseClient';
 import { isOverlapping } from '$lib/helpers/overlappingVolunteers.js';
 
 export async function GET() {
-    const { data: assignments, error } = await supabase
-        .from('assignments')
-        .select('id, home_id, volunteer_id, date_range');
+	const { data: assignments, error } = await supabase
+		.from('assignments')
+		.select('id, home_id, volunteer_id, date_range');
 
-    if (error) {
-        return json({ message: 'Error fetching assignments' }, { status: 500 });
-    }
+	if (error) {
+		return json({ message: 'Error fetching assignments' }, { status: 500 });
+	}
 
-    return json(assignments);
+	return json(assignments);
 }
 
 export async function POST({ locals, request }) {
-    if (!locals.user?.isAdmin) {
-        return new Response('Forbidden', { status: 403 });
-    }
+	if (!locals.user?.isAdmin) {
+		return new Response('Forbidden', { status: 403 });
+	}
 
-    const body = await request.json();
+	const body = await request.json();
 
-    const hasOverlap = await isOverlapping(body.volunteer, body.home);
+	const hasOverlap = await isOverlapping(body.home, [
+		body.volunteer.date_start,
+		body.volunteer.date_end
+	]);
 
-    if (hasOverlap) {
-        return json({ message: 'Home is already booked' }, { status: 409 });
-    }
+	if (hasOverlap) {
+		return json({ message: 'Home is already booked' }, { status: 409 });
+	}
 
-    const { error } = await supabase
-        .from('assignments')
-        .insert([{ home_id: body.home.id, volunteer_id: body.volunteer.id, date_range: body.dateRange }]);
+	const { error } = await supabase
+		.from('assignments')
+		.insert([
+			{ home_id: body.home.id, volunteer_id: body.volunteer.id, date_range: body.dateRange }
+		]);
 
-    if (error) {
-        return json({ message: 'Failed to assign' }, { status: 500 });
-    }
+	if (error) {
+		return json({ message: 'Failed to assign' }, { status: 500 });
+	}
 
-    return json({ success: true }, { status: 201 });
+	return json({ success: true }, { status: 201 });
 }
 
 export async function DELETE({ request }) {
-    const assignmentId = await request.json();
+	const assignmentId = await request.json();
 
-    const { error } = await supabase
-        .from('assignments')
-        .delete()
-        .eq('id', [assignmentId]);
+	const { error } = await supabase.from('assignments').delete().eq('id', [assignmentId]);
 
-    if (error) {
-        console.error('Error deleting assignment:', error);
-        throw error;
-    }
+	if (error) {
+		console.error('Error deleting assignment:', error);
+		throw error;
+	}
 
-    return json({ status: 'deleted' });
+	return json({ status: 'deleted' });
 }
