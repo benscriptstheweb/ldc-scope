@@ -12,7 +12,7 @@ export async function GET({ locals, url }) {
             .select(`
             *,
             project!inner ( * ),
-            assignments ( volunteer_id ( * ))
+            assignments ( volunteer_id ( * ), date_range)
         `)
             .eq('project.region', locals.user?.assignedRegion)
             .eq('id', homeId)
@@ -25,7 +25,7 @@ export async function GET({ locals, url }) {
         const singleHome = {
             ...data,
             id: data.id,
-            assignments: data.assignments.map((a: Assignment) => a.volunteer_id),
+            assignments: data.assignments,
             distanceToProject: data.distance_to_project,
             hasPets: data.has_pets,
             parkingType: data.parking_type

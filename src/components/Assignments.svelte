@@ -9,21 +9,21 @@
 </script>
 
 <ul class="timeline timeline-vertical">
-	{#each sortedVolunteers as { name, date_end }, index}
+	{#each sortedVolunteers as volunteer, index}
 		<li>
 			<div class="timeline-end">
-				{getParsedDate(date_end)}
+				{getParsedDate(volunteer.date_range[1])}
 			</div>
 
 			{#if index !== 0}
-				{#if isPastDate(date_end)}
+				{#if isPastDate(volunteer.date_range[1])}
 					<hr class="bg-success" />
 				{:else}
 					<hr class="bg-success-content" />
 				{/if}
 			{/if}
 
-			{#if isPastDate(date_end)}
+			{#if isPastDate(volunteer.date_range[1])}
 				<div class="timeline-middle">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -55,8 +55,8 @@
 				</div>
 			{/if}
 
-			<div class="timeline-start timeline-box">{name}</div>
-			{#if isPastDate(date_end)}
+			<div class="timeline-start timeline-box">{volunteer.volunteer_id.name}</div>
+			{#if isPastDate(volunteer.date_range[1])}
 				<hr class="bg-success" />
 			{:else}
 				<hr class="bg-success-content" />

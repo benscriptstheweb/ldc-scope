@@ -14,16 +14,6 @@
 	const { data } = $props();
 	const home = data;
 
-	let sortedVolunteers = $state([]);
-
-	if (home.assignments.length) {
-		sortedVolunteers = home.assignments.sort((a: any, b: any) => {
-			const dateA = new Date(a.date_end);
-			const dateB = new Date(b.date_end);
-			return dateB.getTime() - dateA.getTime();
-		});
-	}
-
 	const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 	let mapQuery = encodeURIComponent(`${home.address1},+${home.city},+${home.state}+${home.zip}`);
@@ -77,8 +67,8 @@
 			<div class="divider">History</div>
 		</div>
 		<div class="block volunteers">
-			{#if sortedVolunteers.length !== 0}
-				<Assignments {sortedVolunteers}></Assignments>
+			{#if home.assignments.length !== 0}
+				<Assignments sortedVolunteers={home.assignments}></Assignments>
 			{:else}
 				<p class="message text-center">This home has no assigned volunteers 🪹</p>
 			{/if}
