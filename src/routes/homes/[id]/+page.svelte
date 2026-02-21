@@ -152,8 +152,10 @@
 		</div>
 
 		<div class="block details">
-			<strong class="detail">Host Congregation:</strong>
-			{home.congregation}
+			<strong class="detail">Host Congregation</strong>
+			<div class="detail">
+				{home.congregation}
+			</div>
 		</div>
 	</div>
 	<div class="block contacts flex flex-col">
