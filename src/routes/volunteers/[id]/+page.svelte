@@ -59,26 +59,21 @@
 			</div>
 
 			<div class="flex items-center">
-				<RecommendedOccupantBadge occupantType={data.type} />
 				<CustomBadge type="days" days={data.daysAssigned} />
+				<RecommendedOccupantBadge occupantType={data.type} />
 			</div>
 		</div>
 	</div>
 
 	<div class="w-80 mb-8">
-		<div class="mt-2 flex flex-col">
-			<div class="mb-2">
-				<a href="tel:{data.phone}" aria-label="telephone" class="phone btn btn-soft mr-2">
+		<div class="mt-2">
+			<div class="flex mt-5">
+				<a href="tel:{data.phone}" aria-label="telephone" class="phone mr-5">
 					<Telephone />
 				</a>
-				{data.phone}
-			</div>
-
-			<div>
-				<a href="mailto:{data.email}" aria-label="email" class="email btn btn-soft mr-2">
+				<a href="mailto:{data.email}" aria-label="email" class="email">
 					<Email />
 				</a>
-				{data.email}
 			</div>
 		</div>
 	</div>
@@ -103,16 +98,18 @@
 					</p>
 				</div>
 			</div>
-			<button class="btn btn-soft btn-error mt-2" onclick={deleteHomeAssignment}>
-				<Trash /> Remove
-			</button>
-			<button
-				class="btn btn-success btn-soft mt-2"
-				onclick={() =>
-					(document.getElementById('id-send-confirm') as HTMLDialogElement).showModal()}
-			>
-				<Email /> Send Guidelines
-			</button>
+			<div class="flex justify-between">
+				<button class="btn btn-dash mt-2" onclick={deleteHomeAssignment}>
+					<Trash /> Remove stay
+				</button>
+				<button
+					class="btn btn-success btn-soft mt-2"
+					onclick={() =>
+						(document.getElementById('id-send-confirm') as HTMLDialogElement).showModal()}
+				>
+					<Email /> Send Guidelines
+				</button>
+			</div>
 		{:else}
 			<div class="flex w-80">
 				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
