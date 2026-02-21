@@ -26,7 +26,12 @@ export async function GET({ locals, url }) {
 		let newAssignments: any = [];
 
 		if (data.assignments) {
-			newAssignments = data.assignments.map((e: any) => e.home_id)
+			newAssignments = data.assignments.map((e: any) => {
+				return {
+					home_id: e.home_id,
+					date_range: e.date_range
+				}
+			})
 		}
 
 		const individualVolunteer = {

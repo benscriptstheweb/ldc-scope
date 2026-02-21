@@ -96,17 +96,22 @@
 				modalId="id-send-confirm-{idx}"
 				{data}
 				{assignedHome}
-				hosts={assignedHome.hosts}
+				hosts={assignedHome.home_id.hosts}
 				bind:successfullySent={emailSent}
 			/>
 			<div class="mt-5 w-80">
 				{#if assignedHome !== null}
 					<div class="flex flex-row items-center justify-between">
 						<div class="address">
-							<h2>{assignedHome.address1}, {assignedHome.address2}</h2>
+							<h2>{assignedHome.home_id.address1}, {assignedHome.home_id.address2}</h2>
 							<p>
-								{assignedHome.city}, {assignedHome.state}
-								{assignedHome.zip}
+								{assignedHome.home_id.city}, {assignedHome.home_id.state}
+								{assignedHome.home_id.zip}
+							</p>
+							<p>
+								{getParsedDate(assignedHome.date_range[0])} to {getParsedDate(
+									assignedHome.date_range[1]
+								)}
 							</p>
 						</div>
 					</div>
