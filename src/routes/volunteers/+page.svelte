@@ -161,8 +161,8 @@
 						{#if volunteer.assignedHome === null}
 							<CustomBadge type="unassigned" />
 						{/if}
-						<RecommendedOccupantBadge occupantType={volunteer.type} />
 						<CustomBadge type="days" days={volunteer.daysAssigned} />
+						<RecommendedOccupantBadge occupantType={volunteer.type} />
 					</td>
 				</tr>
 			{/each}
