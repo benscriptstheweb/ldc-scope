@@ -23,7 +23,7 @@
 		setTimeout(() => {
 			isLinkCopied = false;
 		}, 3000);
-		await navigator.clipboard.writeText('https://ldc-scope.vercel.app/survey');
+		await navigator.clipboard.writeText('https://lacasamorada.org/survey');
 	}
 
 	function toggleSelectAll() {
