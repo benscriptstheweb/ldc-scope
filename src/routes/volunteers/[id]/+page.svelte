@@ -70,7 +70,7 @@
 		</div>
 	</div>
 
-	<div class="w-80">
+	<div class="w-80 mb-8">
 		<h2 class="subheading">Assignment</h2>
 		<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
 		<p class="project-info">
@@ -78,15 +78,24 @@
 		</p>
 	</div>
 
-	<div class="mt-8">
-		<h2 class="subheading">Stays</h2>
+	<div class="flex items-center mt-8 w-80 justify-between">
+		<div>
+			<h2 class="subheading">Stays</h2>
+		</div>
+		<div>
+			<button
+				onclick={() =>
+					(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
+				class="btn btn-soft btn-primary"><Plus />New stay</button
+			>
+		</div>
 	</div>
-
 	{#if data.assignedHome}
 		{#each data.assignedHome as assignedHome, idx}
 			<SendConfirm
 				modalId="id-send-confirm-{idx}"
 				{data}
+				{assignedHome}
 				hosts={assignedHome.hosts}
 				bind:successfullySent={emailSent}
 			/>
@@ -94,7 +103,7 @@
 				{#if assignedHome !== null}
 					<div class="flex flex-row items-center justify-between">
 						<div class="address">
-							<h2 class="card-title">{assignedHome.address1}, {assignedHome.address2}</h2>
+							<h2>{assignedHome.address1}, {assignedHome.address2}</h2>
 							<p>
 								{assignedHome.city}, {assignedHome.state}
 								{assignedHome.zip}
@@ -102,11 +111,11 @@
 						</div>
 					</div>
 					<div class="flex justify-between">
-						<button class="btn btn-dash mt-2" onclick={deleteHomeAssignment}>
+						<button class="btn btn-dash mt-2 btn-xs" onclick={deleteHomeAssignment}>
 							<Trash /> Remove stay
 						</button>
 						<button
-							class="btn btn-success btn-soft mt-2"
+							class="btn btn-success btn-soft mt-2 btn-xs"
 							onclick={() =>
 								(
 									document.getElementById(`id-send-confirm-${idx}`) as HTMLDialogElement
@@ -123,10 +132,6 @@
 			</div>
 		{/each}
 	{/if}
-	<button
-		onclick={() => (document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
-		class="btn btn-soft btn-primary mt-3"><Plus />Assign new stay</button
-	>
 </div>
 
 <style>
@@ -144,5 +149,11 @@
 		font-size: 1.2em;
 		font-weight: bold;
 		margin-top: 20px;
+	}
+	.address {
+		font-size: 0.8em;
+	}
+	.address > h2 {
+		font-weight: bold;
 	}
 </style>

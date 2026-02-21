@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 
-	let { modalId, data, hosts, successfullySent = $bindable() } = $props();
+	let { modalId, data, assignedHome, hosts, successfullySent = $bindable() } = $props();
 
 	async function sendEmail() {
 		if (data.assignedHome) {
@@ -15,7 +15,7 @@
 					projectName: data.project.friendly_name,
 					phone: data.phone,
 					hostName: hosts.name,
-					hostAddress: `${data.assignedHome.address1}, ${data.assignedHome.city}, ${data.assignedHome.state} ${data.assignedHome.zip}`,
+					hostAddress: `${assignedHome.address1}, ${assignedHome.city}, ${assignedHome.state} ${assignedHome.zip}`,
 					hostPhone: hosts.phone,
 					emails: [hosts.email, data.email]
 				})
