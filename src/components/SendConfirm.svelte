@@ -3,6 +3,8 @@
 
 	let { modalId, data, hosts, successfullySent = $bindable() } = $props();
 
+	console.log(hosts);
+
 	async function sendEmail() {
 		if (data.assignedHome) {
 			const res = await fetch('/api/send-email', {

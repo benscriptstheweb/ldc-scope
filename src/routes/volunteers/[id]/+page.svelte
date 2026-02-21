@@ -14,6 +14,7 @@
 
 	let { data } = $props();
 
+	// TODO: delete specific assignment by id since there will be other assignments
 	async function deleteHomeAssignment() {
 		const res = await fetch('/api/assignments', {
 			method: 'DELETE',
@@ -32,15 +33,6 @@
 	<VolunteerEditDrawer id="edit-volunteer-drawer" volunteerDetail={data} />
 {/if}
 <HomeAssignmentModal volunteerToAssign={data} id="assign-home-modal" />
-
-{#if data.assignedHome}
-	<SendConfirm
-		modalId="id-send-confirm"
-		{data}
-		hosts={data.assignedHome.hosts}
-		bind:successfullySent={emailSent}
-	/>
-{/if}
 
 {#if emailSent}
 	<Toast infoText="Email sent successfully!" alertType="alert-success" />
@@ -86,41 +78,55 @@
 		</p>
 	</div>
 
-	<div class="mt-5 w-80">
-		<h2 class="subheading">Stay</h2>
-		{#if data.assignedHome !== null}
-			<div class="flex flex-row items-center justify-between">
-				<div class="address">
-					<h2 class="card-title">{data.assignedHome.address1}, {data.assignedHome.address2}</h2>
-					<p>
-						{data.assignedHome.city}, {data.assignedHome.state}
-						{data.assignedHome.zip}
-					</p>
-				</div>
-			</div>
-			<div class="flex justify-between">
-				<button class="btn btn-dash mt-2" onclick={deleteHomeAssignment}>
-					<Trash /> Remove stay
-				</button>
-				<button
-					class="btn btn-success btn-soft mt-2"
-					onclick={() =>
-						(document.getElementById('id-send-confirm') as HTMLDialogElement).showModal()}
-				>
-					<Email /> Send Guidelines
-				</button>
-			</div>
-		{:else}
-			<div class="flex w-80">
-				<p class="message">This volunteer has not been assigned a home yet 🥲</p>
-			</div>
-		{/if}
-		<button
-			onclick={() =>
-				(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
-			class="btn btn-soft btn-primary mt-3"><Plus />Assign new stay</button
-		>
+	<div class="mt-8">
+		<h2 class="subheading">Stays</h2>
 	</div>
+
+	{#if data.assignedHome}
+		{#each data.assignedHome as assignedHome, idx}
+			<SendConfirm
+				modalId="id-send-confirm-{idx}"
+				{data}
+				hosts={assignedHome.hosts}
+				bind:successfullySent={emailSent}
+			/>
+			<div class="mt-5 w-80">
+				{#if assignedHome !== null}
+					<div class="flex flex-row items-center justify-between">
+						<div class="address">
+							<h2 class="card-title">{assignedHome.address1}, {assignedHome.address2}</h2>
+							<p>
+								{assignedHome.city}, {assignedHome.state}
+								{assignedHome.zip}
+							</p>
+						</div>
+					</div>
+					<div class="flex justify-between">
+						<button class="btn btn-dash mt-2" onclick={deleteHomeAssignment}>
+							<Trash /> Remove stay
+						</button>
+						<button
+							class="btn btn-success btn-soft mt-2"
+							onclick={() =>
+								(
+									document.getElementById(`id-send-confirm-${idx}`) as HTMLDialogElement
+								).showModal()}
+						>
+							<Email /> Send Guidelines
+						</button>
+					</div>
+				{:else}
+					<div class="flex w-80">
+						<p class="message">This volunteer has not been assigned a home yet 🥲</p>
+					</div>
+				{/if}
+			</div>
+		{/each}
+	{/if}
+	<button
+		onclick={() => (document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
+		class="btn btn-soft btn-primary mt-3"><Plus />Assign new stay</button
+	>
 </div>
 
 <style>

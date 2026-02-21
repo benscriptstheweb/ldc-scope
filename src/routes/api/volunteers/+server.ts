@@ -23,12 +23,15 @@ export async function GET({ locals, url }) {
 			console.error('Error fetching individual volunteer:', error);
 		}
 
-		// TODO: save all assignments (bookings) as an array and output to frontend
-		// console.log(data.assignments);
+		let newAssignments: any = [];
+
+		if (data.assignments) {
+			newAssignments = data.assignments.map((e: any) => e.home_id)
+		}
 
 		const individualVolunteer = {
 			...data,
-			assignedHome: data.assignments.length > 0 ? (data.assignments[0].home_id ?? null) : null,
+			assignedHome: data.assignments.length > 0 ? (newAssignments ?? null) : null,
 			daysAssigned:
 				(new Date(data.date_end).getTime() - new Date(data.date_start).getTime()) /
 				(1000 * 60 * 60 * 24)
@@ -43,7 +46,7 @@ export async function GET({ locals, url }) {
 			`
             *,
             project!inner ( * ),
-            assignments ( home_id ( * ))
+            assignments (home_id ( * ))
         `
 		)
 		.eq('project.region', locals.user?.assignedRegion)
@@ -58,7 +61,7 @@ export async function GET({ locals, url }) {
 		// return 1 or 0 for isAssigned to sort them later in the frontend
 		return {
 			...v,
-			assignedHome: v.assignments.length > 0 ? (v.assignments[0].home_id ?? null) : null,
+			assignedHome: v.assignments.length > 0 ? (v.assignments ?? null) : null,
 			isAssigned: v.assignments.length > 0 ? 1 : 0,
 			assignedProject: v.project,
 			daysAssigned:
