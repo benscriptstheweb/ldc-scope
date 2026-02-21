@@ -21,10 +21,7 @@ export async function POST({ locals, request }) {
 
 	const body = await request.json();
 
-	const hasOverlap = await isOverlapping(body.home, [
-		body.volunteer.date_start,
-		body.volunteer.date_end
-	]);
+	const hasOverlap = await isOverlapping(body.home, body.dateRange);
 
 	if (hasOverlap) {
 		return json({ message: 'Home is already booked' }, { status: 409 });
