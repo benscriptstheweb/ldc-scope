@@ -28,6 +28,7 @@ export async function GET({ locals, url }) {
 		if (data.assignments) {
 			newAssignments = data.assignments.map((e: any) => {
 				return {
+					id: e.id,
 					home_id: e.home_id,
 					date_range: e.date_range
 				}

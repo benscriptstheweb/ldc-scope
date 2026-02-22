@@ -14,11 +14,10 @@
 
 	let { data } = $props();
 
-	// TODO: delete specific assignment by id since there will be other assignments
-	async function deleteHomeAssignment() {
+	async function deleteHomeAssignment(id: string) {
 		const res = await fetch('/api/assignments', {
 			method: 'DELETE',
-			body: JSON.stringify(data.assignments[0].id)
+			body: JSON.stringify(id)
 		});
 
 		if (res.ok) {
@@ -116,7 +115,10 @@
 						</div>
 					</div>
 					<div class="flex justify-between">
-						<button class="btn btn-dash mt-2 btn-xs" onclick={deleteHomeAssignment}>
+						<button
+							class="btn btn-dash mt-2 btn-xs"
+							onclick={() => deleteHomeAssignment(assignedHome.id)}
+						>
 							<Trash /> Remove stay
 						</button>
 						<button
