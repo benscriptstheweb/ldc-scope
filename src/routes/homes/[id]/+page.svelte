@@ -27,6 +27,15 @@
 		const res = await fetch(`/api/homes/${home.id}/photos`);
 		photoUrls = await res.json();
 	});
+
+	let sortedVolunteers = $state([]);
+	if (home.assignments.length) {
+		sortedVolunteers = home.assignments.sort((a: any, b: any) => {
+			const dateA = new Date(a.date_range[1]);
+			const dateB = new Date(b.date_range[1]);
+			return dateB.getTime() - dateA.getTime();
+		});
+	}
 </script>
 
 {#if data.user.isAdmin}
@@ -68,7 +77,7 @@
 		</div>
 		<div class="block volunteers">
 			{#if home.assignments.length !== 0}
-				<Assignments sortedVolunteers={home.assignments}></Assignments>
+				<Assignments {sortedVolunteers}></Assignments>
 			{:else}
 				<p class="message text-center">This home has no assigned volunteers 🪹</p>
 			{/if}
