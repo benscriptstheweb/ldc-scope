@@ -81,9 +81,13 @@
 <dialog {id} class="modal">
 	<div class="modal-box">
 		<h2 class="subheading">Select Dates</h2>
-		<div class="dates flex flex-col mb-10">
-			<strong>Start date</strong><input bind:value={startDate} type="date" />
-			<strong>End date</strong><input bind:value={endDate} type="date" />
+		<div class="dates flex flex-col mb-5">
+			<div>
+				<strong>Start date</strong><input class="input" bind:value={startDate} type="date" />
+			</div>
+			<div class="mt-5 mb-8">
+				<strong>End date</strong><input class="input" bind:value={endDate} type="date" />
+			</div>
 		</div>
 
 		{#if assignableHomes.length > 0}
@@ -100,7 +104,7 @@
 							>
 
 							<details class="dropdown dropdown-end">
-								<summary class="btn btn-soft btn-xs btn-circle m-1"><Dots /></summary>
+								<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
 								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
 									<li><a href="/homes/{home.id}">View Home</a></li>
 									<li>
