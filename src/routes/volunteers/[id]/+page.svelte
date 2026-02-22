@@ -98,7 +98,7 @@
 				hosts={assignedHome.home_id.hosts}
 				bind:successfullySent={emailSent}
 			/>
-			<div class="mt-5 w-80">
+			<div class="stay-info mt-5 w-80">
 				{#if assignedHome !== null}
 					<div class="flex flex-row items-center justify-between">
 						<div class="address">
@@ -155,7 +155,6 @@
 	.subheading {
 		font-size: 1.2em;
 		font-weight: bold;
-		margin-top: 20px;
 	}
 	.address {
 		font-size: 0.8em;
