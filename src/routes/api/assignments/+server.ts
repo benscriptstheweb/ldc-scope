@@ -43,7 +43,10 @@ export async function POST({ locals, request }) {
 export async function DELETE({ request }) {
 	const assignmentId = await request.json();
 
-	const { error } = await supabase.from('assignments').delete().eq('id', [assignmentId]);
+	const { error } = await supabase
+		.from('assignments')
+		.delete()
+		.eq('id', [assignmentId]);
 
 	if (error) {
 		console.error('Error deleting assignment:', error);
