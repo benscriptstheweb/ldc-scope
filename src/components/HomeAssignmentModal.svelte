@@ -60,6 +60,7 @@
 
 			if (
 				!hasOverlap &&
+				new Date(home.date_available).getTime() <= new Date(startDate).getTime() &&
 				home.max_days_stay >= daysRange &&
 				home.occupant_type.includes(volunteerToAssign.type)
 			) {
