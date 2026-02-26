@@ -221,7 +221,11 @@
 					{#each photoUrls.filenames as filename}
 						<div class="flex list-row items-center justify-between">
 							<p>{filename}</p>
-							<button class="btn btn-error btn-dash" onclick={() => deleteImages(filename)}>
+							<button
+								type="button"
+								class="btn btn-error btn-dash"
+								onclick={() => deleteImages(filename)}
+							>
 								<Trash />
 							</button>
 						</div>
@@ -261,6 +265,7 @@
 
 				<div class="pt-10 flex justify-between">
 					<button
+						type="button"
 						class="btn btn-dash btn-error"
 						onclick={(e) => {
 							e.preventDefault();
