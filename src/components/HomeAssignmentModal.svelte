@@ -38,8 +38,8 @@
 		return data;
 	}
 
-	let startDate = $state('');
-	let endDate = $state('');
+	let startDate = $state(volunteerToAssign.date_start);
+	let endDate = $state(volunteerToAssign.date_end);
 	let assignableHomes: any[] = $state([]);
 	let unAssignableHomes: any[] = $state([]);
 
@@ -80,15 +80,19 @@
 
 <dialog {id} class="modal">
 	<div class="modal-box">
-		<h2 class="subheading">Select Dates</h2>
-		<div class="dates flex flex-col mb-5">
-			<div>
-				<strong>Start date</strong><input class="input" bind:value={startDate} type="date" />
-			</div>
-			<div class="mt-5 mb-8">
-				<strong>End date</strong><input class="input" bind:value={endDate} type="date" />
-			</div>
+		<h2 class="subheading mb-2">Select Dates</h2>
+		<div class="flex flex-col justify-between">
+			<label class="label">
+				<strong>Start</strong>
+				<input bind:value={startDate} type="date" />
+			</label>
+			<label class="label">
+				<strong>End</strong>
+				<input bind:value={endDate} type="date" />
+			</label>
 		</div>
+
+		<div class="divider"></div>
 
 		{#if assignableHomes.length > 0}
 			<ul class="list mb-8">
@@ -135,7 +139,7 @@
 						<div>
 							<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
 							<details class="dropdown dropdown-end">
-								<summary class="btn btn-soft btn-xs btn-circle m-1"><Dots /></summary>
+								<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
 								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
 									<li><a href="/homes/{badHome.id}">View Home</a></li>
 									<li>
@@ -168,10 +172,26 @@
 	.subheading {
 		font-size: 1.3em;
 		font-weight: bold;
-		margin-bottom: 30px;
 	}
 	.list-row {
 		display: flex;
 		justify-content: space-between;
+	}
+	input {
+		border: none;
+		border-bottom: 1px solid rgba(110, 109, 112, 0.589);
+		outline: none;
+		padding: 5px;
+		margin-bottom: 15px;
+		font-size: 1.1em;
+	}
+	input:focus {
+		border: none;
+		border-bottom: 1px solid white;
+		outline: none;
+	}
+
+	input:user-invalid {
+		border-bottom: 1px solid var(--color-error);
 	}
 </style>
