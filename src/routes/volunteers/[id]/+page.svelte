@@ -56,7 +56,7 @@
 		</div>
 	</div>
 
-	<div class="w-80 mb-8">
+	<div class="w-80">
 		<div class="mt-2">
 			<div class="flex mt-5">
 				<a href="tel:{data.phone}" aria-label="telephone" class="phone mr-5">
@@ -68,8 +68,9 @@
 			</div>
 		</div>
 	</div>
+	<div class="flex self-center divider w-80"></div>
 
-	<div class="w-80 mb-8">
+	<div class="w-80 mb-10">
 		<h2 class="subheading">Assignment</h2>
 		<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
 		<p class="project-info">
@@ -77,7 +78,7 @@
 		</p>
 	</div>
 
-	<div class="flex items-center mt-8 w-80 justify-between">
+	<div class="flex items-center w-80 justify-between">
 		<div>
 			<h2 class="subheading">Stays</h2>
 		</div>
