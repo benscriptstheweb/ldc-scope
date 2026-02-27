@@ -82,15 +82,15 @@
 <dialog {id} class="modal">
 	<div class="modal-box">
 		<h2 class="subheading mb-2">Select Dates</h2>
-		<div class="flex flex-col items-center">
-			<label class="input">
-				<strong class="label">Start</strong>
-				<input bind:value={startDate} type="date" />
-			</label>
-			<label class="input">
+		<div class="w-55">
+			<div class="flex justify-between">
+				<strong class="label join-item">Start</strong>
+				<input class="mb-2 join-item" bind:value={startDate} type="date" />
+			</div>
+			<div class="flex justify-between">
 				<strong class="label">End</strong>
 				<input bind:value={endDate} type="date" />
-			</label>
+			</div>
 		</div>
 
 		<div class="divider"></div>
@@ -178,21 +178,10 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	/* input {
-		border: none;
-		border-bottom: 1px solid rgba(110, 109, 112, 0.589);
-		outline: none;
+	input {
+		border: 1px solid rgba(110, 109, 112, 0.589);
 		padding: 5px;
-		margin-bottom: 15px;
 		font-size: 1.1em;
+		border-radius: 10px;
 	}
-	input:focus {
-		border: none;
-		border-bottom: 1px solid white;
-		outline: none;
-	}
-
-	input:user-invalid {
-		border-bottom: 1px solid var(--color-error);
-	} */
 </style>
