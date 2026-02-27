@@ -28,7 +28,7 @@
 
 <AddHomeForm id="add-home-form" />
 
-<div class="header m-8 flex justify-between">
+<div class="header mr-8 ml-8 mt-8 flex justify-between">
 	<p class="heading">Inventory</p>
 	<button
 		class="btn btn-soft btn-success"
@@ -38,25 +38,26 @@
 </div>
 
 {#if data.user}
-	<div class="m-8 flex">
+	<!-- FILTERS -->
+	<div class="ml-8 mr-8 mt-3 flex">
 		<div>
-			<span class="label">Congregation</span>
-			<select class="select" bind:value={searchedCongregation}>
-				<option value="">All</option>
-				{#each supportingCongregations as cong}
-					<option value={cong}>{cong}</option>
-				{/each}
-			</select>
-		</div>
-		<div>
-			<span class="label">Project</span>
 			<select class="select" bind:value={searchedProject}>
-				<option value="">All</option>
+				<option disabled value="">Project</option>
+				<option selected value="">All</option>
 				{#await getProjectsByRegion(data.user.assignedRegion) then projects}
 					{#each projects as project}
 						<option value={project.friendly_name}>{project.friendly_name}</option>
 					{/each}
 				{/await}
+			</select>
+		</div>
+		<div>
+			<select class="select" bind:value={searchedCongregation}>
+				<option disabled value="">Congregation</option>
+				<option selected value="">All</option>
+				{#each supportingCongregations as cong}
+					<option value={cong}>{cong}</option>
+				{/each}
 			</select>
 		</div>
 	</div>
