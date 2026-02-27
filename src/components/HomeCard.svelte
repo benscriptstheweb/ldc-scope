@@ -12,8 +12,8 @@
 </script>
 
 <div class="cards-container">
-	<button class="card shadow-md cursor-pointer w-81 mt-1 text-left" onclick={visitHome}>
-		<div class="p-2 bg-base-200">
+	<button class="card cursor-pointer w-81 mt-1 text-left" onclick={visitHome}>
+		<div class="card-thing p-2 bg-base-200">
 			<div class="flex justify-between">
 				<div>
 					<div class="indicator card-title">
@@ -53,5 +53,8 @@
 	}
 	.card-title {
 		font-weight: 800;
+	}
+	.card-thing {
+		border-radius: 5px;
 	}
 </style>
