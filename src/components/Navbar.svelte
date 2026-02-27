@@ -61,7 +61,9 @@
 						>
 						<p class="menu-text ml-2">Volunteers</p>
 						{#await getUnassignedCount() then count}
-							<span class="badge badge-xs badge-secondary indicator-item">{count}</span>
+							{#if count > 0}
+								<span class="badge badge-xs badge-secondary indicator-item">{count}</span>
+							{/if}
 						{/await}
 					</div>
 				</a>
