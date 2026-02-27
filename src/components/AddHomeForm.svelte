@@ -45,7 +45,7 @@
 		comfort_rating: 'good'
 	});
 
-	let modalPage = $state(1);
+	let modalPage = $state(2);
 
 	function moveIfValid(moveAction: any) {
 		if ((document.getElementById('add-form') as HTMLFormElement).reportValidity()) {
@@ -103,30 +103,13 @@
 					Has pets?
 				</div>
 
-				<p class="mt-4">Recommended Occupant</p>
-				<ul>
-					{#each occupantTypes as occupant}
-						<div class="flex flex-row">
-							<label>
-								<input
-									class="mr-2"
-									type="checkbox"
-									value={occupant.type}
-									bind:group={newHomeDetails.occupant_type}
-								/>
-								{occupant.desc}
-							</label>
-						</div>
-					{/each}
-				</ul>
-
-				<p class="mt-4">Parking Type</p>
+				<p class="mt-4"><strong>Parking type</strong></p>
 				<select required class="select" bind:value={newHomeDetails.parking_type}>
 					<option value="street">Street</option>
 					<option value="garage">Garage</option>
 				</select>
 
-				<h3 class="subheading mt-7">Amenities (<i>Select all that apply</i>)</h3>
+				<h3 class="subheading mt-7">Amenities <i>(optional)</i></h3>
 				<ul>
 					{#each amenities as amenity}
 						<li>
@@ -141,7 +124,7 @@
 					{/each}
 				</ul>
 
-				<p class="mt-4">Comfort Rating</p>
+				<p class="subheading mt-4">Comfort Rating</p>
 				<select required class="select" bind:value={newHomeDetails.comfort_rating}>
 					<option value="excellent">Excellent</option>
 					<option value="good">Good</option>
@@ -149,9 +132,33 @@
 					<option value="unacceptable">Uncceptable</option>
 				</select>
 			{/if}
-
 			{#if modalPage === 2}
-				<h1 class="page-heading">2. Project Details</h1>
+				<div class="mb-20 mt-2">
+					<p class="subheading">
+						Recommended occupant <i>(Select all that apply)</i>
+					</p>
+					<div class="mt-4">
+						<ul>
+							{#each occupantTypes as occupant}
+								<div class="flex flex-row">
+									<label>
+										<input
+											class="mr-2"
+											type="checkbox"
+											value={occupant.type}
+											bind:group={newHomeDetails.occupant_type}
+										/>
+										{occupant.desc}
+									</label>
+								</div>
+							{/each}
+						</ul>
+					</div>
+				</div>
+			{/if}
+
+			{#if modalPage === 3}
+				<h1 class="page-heading">3. Project Details</h1>
 
 				<p>Select project</p>
 				<select required class="select mb-7" bind:value={newHomeDetails.project}>
@@ -174,8 +181,8 @@
 				</label>
 			{/if}
 
-			{#if modalPage === 3}
-				<h1 class="page-heading">3. Homeowner Info</h1>
+			{#if modalPage === 4}
+				<h1 class="page-heading">4. Host Info</h1>
 				<input required bind:value={hosts.name} type="text" placeholder="Name" />
 				<input required bind:value={hosts.email} type="text" placeholder="Email" />
 				<input required bind:value={hosts.phone} type="number" placeholder="Phone" />
@@ -186,7 +193,7 @@
 					placeholder="Congregation"
 				/>
 
-				<h3 class="subheading mt-7">Homeowner Allergies</h3>
+				<h3 class="subheading mt-7">Host Allergies</h3>
 				<input type="text" bind:value={allergy} />
 				<button
 					class="btn btn-soft btn-primary"
@@ -215,8 +222,8 @@
 				</div>
 			{/if}
 
-			{#if modalPage === 4}
-				<h1 class="page-heading">4. Availability</h1>
+			{#if modalPage === 5}
+				<h1 class="page-heading">5. Availability</h1>
 				<label class="label">
 					Stay Duration (in days)
 					<input
@@ -244,7 +251,7 @@
 						(document.getElementById(id) as HTMLDialogElement).close();
 					}}>Close</button
 				>
-				{#if modalPage === 4}
+				{#if modalPage === 5}
 					<div>
 						<button
 							class="btn btn-ghost"
