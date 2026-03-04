@@ -64,7 +64,7 @@
 	{#await getProjectsByRegion(data.user.assignedRegion) then projects}
 		<div class="projects-container">
 			{#each projects as project}
-				{#if !searchedCongregation && !searchedProject}
+				{#if sortedHomesByProject(project.friendly_name).length !== 0 && !searchedCongregation && !searchedProject}
 					<p class="project-subheading ml-8 mt-8">
 						Homes for <strong>{project.friendly_name}</strong>
 					</p>
