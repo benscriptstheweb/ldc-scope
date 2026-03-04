@@ -45,7 +45,7 @@
 		comfort_rating: 'good'
 	});
 
-	let modalPage = $state(2);
+	let modalPage = $state(1);
 
 	function moveIfValid(moveAction: any) {
 		if ((document.getElementById('add-form') as HTMLFormElement).reportValidity()) {
