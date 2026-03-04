@@ -43,6 +43,6 @@
 		justify-content: flex-end;
 	}
 	.contact-btns > a {
-		margin-left: 30px;
+		margin-left: 20px;
 	}
 </style>
