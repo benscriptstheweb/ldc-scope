@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Email from '../icons/Email.svelte';
+	import Sms from '../icons/Sms.svelte';
 	import Telephone from '../icons/Telephone.svelte';
 
 	let { host } = $props();
@@ -8,10 +9,12 @@
 <li class="list-row items-center">
 	<div>{host.name}</div>
 	<div class="contact-btns justify-center content-center items-center">
+		<a href="sms:{host.phone}" aria-label="telephone">
+			<Sms />
+		</a>
 		<a href="tel:{host.phone}" aria-label="telephone">
 			<Telephone />
 		</a>
-
 		<a href="mailto:{host.email}" aria-label="email">
 			<Email />
 		</a>

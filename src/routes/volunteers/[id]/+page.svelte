@@ -11,6 +11,7 @@
 	import Edit from '../../../icons/Edit.svelte';
 	import SendConfirm from '../../../components/SendConfirm.svelte';
 	import Toast from '../../../components/Toast.svelte';
+	import Sms from '../../../icons/Sms.svelte';
 
 	let { data } = $props();
 
@@ -59,6 +60,9 @@
 	<div class="w-80">
 		<div class="mt-2">
 			<div class="flex mt-5">
+				<a href="sms:{data.phone}" aria-label="telephone" class="phone mr-5">
+					<Sms />
+				</a>
 				<a href="tel:{data.phone}" aria-label="telephone" class="phone mr-5">
 					<Telephone />
 				</a>
