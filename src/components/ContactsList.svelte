@@ -24,10 +24,12 @@
 	<li class="list-row items-center">
 		<div>{host.name_secondary}</div>
 		<div class="contact-btns justify-center content-center items-center">
+			<a href="sms:{host.phone}" aria-label="telephone">
+				<Sms />
+			</a>
 			<a href="tel:{host.phone_secondary}" aria-label="telephone">
 				<Telephone />
 			</a>
-
 			<a href="mailto:{host.email_secondary}" aria-label="email">
 				<Email />
 			</a>
