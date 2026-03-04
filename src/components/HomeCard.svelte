@@ -23,7 +23,9 @@
 					{#if home.isHosting}
 						<div class="badge badge-sm badge-error badge-soft mt-1">Hosting</div>
 					{:else}
-						<p class="availability">Available: {getParsedDate(home.date_available)}</p>
+						<p class="badge badge-sm badge-soft availability">
+							{getParsedDate(home.date_available)}
+						</p>
 					{/if}
 				</div>
 
