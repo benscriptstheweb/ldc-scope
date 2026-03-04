@@ -124,7 +124,7 @@
 					<div class="badge badge-soft badge-info">{amenity}</div>
 				{/each}
 			{:else}
-				<p class="amenities-none-text">No amenities listed for this home</p>
+				<p class="detail amenities-none-text">No amenities listed for this home 🤷‍♂️</p>
 			{/if}
 		</div>
 
