@@ -12,7 +12,7 @@
 </script>
 
 <div class="cards-container">
-	<button class="card cursor-pointer w-81 mt-3 text-left" onclick={visitHome}>
+	<button class="card cursor-pointer w-85 mt-3 text-left" onclick={visitHome}>
 		<div class="card-thing p-3 bg-base-200">
 			<div class="flex justify-between">
 				<div>
