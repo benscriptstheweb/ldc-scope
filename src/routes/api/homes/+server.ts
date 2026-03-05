@@ -11,7 +11,8 @@ export async function GET({ locals, url }) {
             .select(`
             *,
             project!inner ( * ),
-            assignments ( volunteer_id ( * ), date_range)
+            assignments ( volunteer_id ( * ), date_range),
+            comments ( * )
         `)
             .eq('project.region', locals.user?.assignedRegion)
             .eq('id', homeId)
@@ -27,7 +28,8 @@ export async function GET({ locals, url }) {
             assignments: data.assignments,
             distanceToProject: data.distance_to_project,
             hasPets: data.has_pets,
-            parkingType: data.parking_type
+            parkingType: data.parking_type,
+            comments: data.comments
         };
 
         return json(singleHome);

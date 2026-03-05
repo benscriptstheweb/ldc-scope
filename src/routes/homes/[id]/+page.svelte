@@ -10,6 +10,8 @@
 	import { onMount } from 'svelte';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import CustomBadge from '../../../components/CustomBadge.svelte';
+	import Van from '../../../icons/Van.svelte';
+	import Plus from '../../../icons/Plus.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -35,6 +37,20 @@
 			const dateB = new Date(b.date_range[1]);
 			return dateB.getTime() - dateA.getTime();
 		});
+	}
+
+	let newComment = $state(false);
+	let commentText = $state('');
+
+	async function postComment(text: string) {
+		const res = await fetch(`/api/comments?homeId=${home.id}`, {
+			method: 'POST',
+			body: JSON.stringify(text)
+		});
+
+		if (res.ok) {
+			window.location.reload();
+		}
 	}
 </script>
 
@@ -138,20 +154,23 @@
 			{/if}
 		</div>
 
-		{#if home.rv_notes}
-			<h2>RV Info</h2>
-			<div class="block mt-4">
-				<textarea disabled class="textarea">{home.rv_notes}</textarea>
-			</div>
-		{/if}
-
-		<h2>Parking</h2>
-		<div class="block mt-4">
+		<!-- CAR -->
+		<h2>Parking & RV</h2>
+		<div class="block mt-2">
 			<div class="flex detail">
 				{#if home.parkingType === 'garage'}
-					<ParkingStructure /><span class="ml-2">Garage</span>
+					<ParkingStructure /><span class="ml-2">garage</span>
 				{:else}
-					<ParkingStreet /><span class="ml-2">Street</span>
+					<ParkingStreet /><span class="ml-2">street</span>
+				{/if}
+			</div>
+
+			<div class="detail flex flex-row">
+				<Van />
+				{#if home.rv_notes}
+					<p class="ml-1">{home.rv_notes}</p>
+				{:else}
+					<p class="ml-1">no rv hookup</p>
 				{/if}
 			</div>
 		</div>
@@ -167,27 +186,55 @@
 			</div>
 		{/if}
 
+		<!-- HOST -->
+		<h2 class="text-center mb-4">Host</h2>
 		<div class="block details">
-			<strong class="detail">Host Congregation</strong>
 			<div class="detail">
+				<strong>Congregation:</strong>
 				{home.congregation}
 			</div>
-		</div>
-	</div>
-	<div class="block contacts flex flex-col">
-		<div class="flex justify-between mt-9 w-90">
-			<h2>Host contacts</h2>
-			{#if data.user.isAdmin}
-				<label for="edit-contacts-drawer" class="btn btn-soft btn-primary mr-5 mb-4">
-					<Edit size="size-5" strokeWidth="2" />
-				</label>
-			{/if}
-		</div>
 
-		<div class="block w-90">
+			<div class="flex justify-between mt-5">
+				{#if data.user.isAdmin}
+					<label for="edit-contacts-drawer" class="btn btn-soft btn-primary btn-xs mr-5 mb-4">
+						Edit contacts<Edit size="size-4" strokeWidth="2" />
+					</label>
+				{/if}
+			</div>
+
 			<ul class="list bg-base-100 rounded-box shadow-md">
 				<ContactsList host={home.hosts} />
 			</ul>
+		</div>
+	</div>
+
+	<div class="block flex flex-col mt-5">
+		<div class="flex flex-row mb-3">
+			<h2>Comments</h2>
+
+			{#if !newComment}
+				<button class="btn btn-soft" onclick={() => (newComment = !newComment)}><Plus /> New</button
+				>
+			{:else}
+				<button class="btn btn-secondary btn-outline" onclick={() => (newComment = !newComment)}
+					>Cancel</button
+				>
+				<button class="btn btn-success btn-outline" onclick={() => postComment(commentText)}
+					>Send</button
+				>
+			{/if}
+		</div>
+
+		{#if newComment}
+			<textarea class="textarea" bind:value={commentText}></textarea>
+		{/if}
+
+		<div>
+			{#each home.comments as comment}
+				<p class="text-left">
+					{comment.comment}
+				</p>
+			{/each}
 		</div>
 	</div>
 </div>
