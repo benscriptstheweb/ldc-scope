@@ -11,7 +11,8 @@
 		email: '',
 		phone: null,
 		date_start: new Date().toDateString(),
-		date_end: new Date().toDateString()
+		date_end: new Date().toDateString(),
+		allergies_notes: ''
 	});
 
 	let occupantType = $state('');
@@ -56,23 +57,25 @@
 			}, 7000);
 		}
 	}
+
+	let hasSpecialNeeds = $state(false);
 </script>
 
 {#if submitted}
 	<Toast infoText={'Your request has been submitted. An agent will contact you shortly.'} />
 {/if}
 
-<div class="flex flex-col items-center mb-10">
-	<h2 class="heading mb-3">Housing Request</h2>
+<div class="flex flex-col items-center mb-10 mt-5">
+	<h2 class="heading">LDC Region 7</h2>
+	<p class="title-description mb-5">Housing Request</p>
 	<div class="form flex flex-col h-full w-80">
-		<div class="p-5 bg-base-200 message-block w-65 self-center">
+		<div class="p-5 bg-base-200 message-block w-90 self-center">
 			<p class="message">
 				Thank you for volunteering to assist with this LDC project! To request housing accomodations
 				during your visit, please provide the following information.
 			</p>
-			<p class="message">
-				To fulfill a housing request in the best possible way, please submit this form no later than
-				one week before your visit.
+			<p class="mt-2 message">
+				💡 Please submit this form no later than <strong><u>one week</u></strong> before your visit.
 			</p>
 		</div>
 		<Spacer spacing="mt-15" />
@@ -131,9 +134,24 @@
 		</div>
 
 		<Spacer spacing="mt-10" />
+		<div>
+			<input class="mr-2" type="checkbox" bind:checked={hasSpecialNeeds} />
+			Any special considerations (allergies, etc.)?
+
+			{#if hasSpecialNeeds}
+				<textarea
+					class="mt-2 textarea"
+					bind:value={newVolunteer.allergies_notes}
+					placeholder="add any information that may be useful in matching you to a home"
+				></textarea>
+			{/if}
+		</div>
+
+		<Spacer spacing="mt-20" />
 		<button
 			onclick={() => addVolunteer(newVolunteerName, newVolunteer, occupantType)}
 			class="btn btn-success"
+			disabled={occupantType === ''}
 		>
 			<Plus />
 			Submit Request</button
@@ -142,8 +160,11 @@
 </div>
 
 <style>
+	.title-description {
+		font-size: 1.3em;
+	}
 	.message {
-		font-size: 0.8em;
+		font-size: 0.95em;
 	}
 	.message-block {
 		border-radius: 8%;

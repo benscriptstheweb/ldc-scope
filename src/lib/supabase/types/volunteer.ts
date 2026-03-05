@@ -11,6 +11,7 @@ export type Volunteer = {
     date_start: string;
     date_end: string;
     type: OccupantType;
+    allergies_notes: string;
 
     // foreign key relations
     assignments: Assignment[];
