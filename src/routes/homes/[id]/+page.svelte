@@ -128,6 +128,13 @@
 			{/if}
 		</div>
 
+		{#if home.rv_notes}
+			<h2>RV Info</h2>
+			<div class="block mt-4">
+				<textarea disabled class="textarea">{home.rv_notes}</textarea>
+			</div>
+		{/if}
+
 		<h2>Parking</h2>
 		<div class="block mt-4">
 			<div class="flex detail">
@@ -139,16 +146,16 @@
 			</div>
 		</div>
 
-		<div class="block details">
-			{#if home.allergies && home.allergies.length !== 0}
+		{#if home.allergies && home.allergies.length !== 0}
+			<div class="block details">
 				<p class="detail">Host allergies:</p>
 				<div class="allergies">
 					{#each home.allergies as allergy}
 						<div class="badge badge-outline badge-secondary">{allergy}</div>
 					{/each}
 				</div>
-			{/if}
-		</div>
+			</div>
+		{/if}
 
 		<div class="block details">
 			<strong class="detail">Host Congregation</strong>

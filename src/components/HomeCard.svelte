@@ -27,6 +27,9 @@
 							{getParsedDate(home.date_available)}
 						</p>
 					{/if}
+					{#if home.rv_notes}
+						<div class="badge badge-secondary badge-sm"><strong>RV</strong></div>
+					{/if}
 				</div>
 
 				<!-- INDICATORS -->
