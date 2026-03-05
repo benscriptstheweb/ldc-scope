@@ -1,7 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
 import { type Home } from '$lib/supabase/types/home.js';
-import type { Assignment } from '$lib/supabase/types/assignment.js';
 
 export async function GET({ locals, url }) {
     const homeId = url.searchParams.get('id');

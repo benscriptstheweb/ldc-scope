@@ -72,7 +72,15 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="flex self-center divider w-80"></div>
+
+	{#if data.allergies_notes}
+		<div class="w-80 mb-10">
+			<h2 class="mb-2">🚨 Special Needs</h2>
+			<textarea class="textarea" disabled>{data.allergies_notes}</textarea>
+		</div>
+	{/if}
 
 	<div class="w-80 mb-10">
 		<h2 class="subheading">Assignment</h2>

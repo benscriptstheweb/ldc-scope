@@ -45,7 +45,8 @@
 				phone: details.phone,
 				project: details.project,
 				date_start: details.date_start,
-				date_end: details.date_end
+				date_end: details.date_end,
+				allergies_notes: details.allergies_notes
 			})
 		});
 
