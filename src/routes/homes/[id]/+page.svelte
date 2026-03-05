@@ -113,7 +113,17 @@
 
 			<div class="detail">
 				<strong>Comfort rating: </strong>
-				<div class="badge">{home.comfort_rating}</div>
+				<div
+					class="badge {home.comfort_rating === 'excellent'
+						? 'badge-success'
+						: home.comfort_rating === 'good'
+							? 'badge-primary'
+							: home.comfort_rating === 'unacceptable'
+								? 'badge-error'
+								: ''}"
+				>
+					<strong>{home.comfort_rating}</strong>
+				</div>
 			</div>
 		</div>
 
