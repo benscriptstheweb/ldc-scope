@@ -42,10 +42,12 @@
 		has_pets: false,
 		parking_type: 'street',
 		date_available: '',
-		comfort_rating: 'good'
+		comfort_rating: 'good',
+		rv_notes: ''
 	});
 
 	let modalPage = $state(1);
+	let hasRVHookup = $state(false);
 
 	function moveIfValid(moveAction: any) {
 		if ((document.getElementById('add-form') as HTMLFormElement).reportValidity()) {
@@ -65,6 +67,13 @@
 			window.location.reload();
 		}
 	}
+
+	// we wouldn't want to uncheck the rv hookup checkbox and accidentally upload random notes
+	$effect(() => {
+		if (!hasRVHookup) {
+			newHomeDetails.rv_notes = '';
+		}
+	});
 </script>
 
 <dialog {id} class="modal">
@@ -108,6 +117,19 @@
 					<option value="street">Street</option>
 					<option value="garage">Garage</option>
 				</select>
+
+				<div class="mt-3">
+					<input class="mr-2" type="checkbox" bind:checked={hasRVHookup} />
+					Has RV Hookup?
+
+					{#if hasRVHookup}
+						<textarea
+							class="textarea"
+							bind:value={newHomeDetails.rv_notes}
+							placeholder="add any pertinent details about the RV hookup"
+						></textarea>
+					{/if}
+				</div>
 
 				<h3 class="subheading mt-7">Amenities <i>(optional)</i></h3>
 				<ul>
