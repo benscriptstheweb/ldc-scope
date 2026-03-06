@@ -89,7 +89,7 @@
 		</div>
 
 		<p class="mt-4 mb-2"><strong>Project</strong></p>
-		<select required class="select mb-7" bind:value={currentProjectId}>
+		<select required class="select mb-4" bind:value={currentProjectId}>
 			<option disabled selected>Select project</option>
 			{#await getProjects() then projects}
 				{#each projects as project}
