@@ -230,8 +230,8 @@
 		</div>
 	</div>
 
-	<div class="items-center flex flex-col mt-5">
-		<div class="w-90 comment-container">
+	<div class="items-center flex flex-col mt-10">
+		<div class="w-80 comment-container">
 			<div class="flex flex-row mb-3 justify-between items-center">
 				<strong class="ml-1">Comments</strong>
 
@@ -250,7 +250,7 @@
 			</div>
 
 			{#if newComment}
-				<textarea maxlength="300" class="w-90 mb-5 textarea" bind:value={commentText}></textarea>
+				<textarea maxlength="300" class="w-80 mb-5 textarea" bind:value={commentText}></textarea>
 			{/if}
 
 			{#each comments as comment}
