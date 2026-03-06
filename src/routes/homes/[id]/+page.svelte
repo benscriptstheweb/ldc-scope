@@ -240,10 +240,12 @@
 						><Plus /> New comment</button
 					>
 				{:else}
-					<button class="btn btn-ghost" onclick={() => (newComment = !newComment)}>Cancel</button>
-					<button class="ml-3 btn btn-success btn-soft" onclick={() => postComment(commentText)}
-						>Post</button
-					>
+					<div>
+						<button class="btn btn-ghost" onclick={() => (newComment = !newComment)}>Cancel</button>
+						<button class="ml-3 btn btn-success btn-soft" onclick={() => postComment(commentText)}
+							>Post</button
+						>
+					</div>
 				{/if}
 			</div>
 
