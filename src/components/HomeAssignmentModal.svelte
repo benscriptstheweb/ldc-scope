@@ -3,6 +3,7 @@
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
 	import Plus from '../icons/Plus.svelte';
 	import Dots from '../icons/Dots.svelte';
+	import { getProjects } from '$lib/helpers/getProjects';
 
 	let { volunteerToAssign, id } = $props();
 
@@ -24,11 +25,8 @@
 		(document.getElementById(id) as HTMLDialogElement).close();
 	}
 
-	async function getHomesByVolunteerProject() {
-		const { data, error } = await supabase
-			.from('homes')
-			.select('*')
-			.eq('project', volunteerToAssign.project.id);
+	async function getHomesByVolunteerProject(projectId: string) {
+		const { data, error } = await supabase.from('homes').select('*').eq('project', projectId);
 
 		if (error) {
 			console.error('Error fetching assignable homes:', error);
@@ -40,15 +38,13 @@
 
 	let startDate = $state(volunteerToAssign.date_start);
 	let endDate = $state(volunteerToAssign.date_end);
-	// let assignableHomes: any[] = $state([]);
-	// let unAssignableHomes: any[] = $state([]);
 
-	async function getUpdatedHomes(start: string, end: string) {
+	async function getUpdatedHomes(start: string, end: string, projectId: string) {
 		if (!start || !end) {
 			return { assignableHomes: [], unAssignableHomes: [] };
 		}
 
-		const homes = await getHomesByVolunteerProject();
+		const homes = await getHomesByVolunteerProject(projectId);
 
 		let newAssignable = [];
 		let newUnAssignable = [];
@@ -72,9 +68,9 @@
 
 		return { assignableHomes: newAssignable, unAssignableHomes: newUnAssignable };
 	}
-
+	let currentProjectId = $state(volunteerToAssign.project.id);
 	$effect(() => {
-		getUpdatedHomes(startDate, endDate);
+		getUpdatedHomes(startDate, endDate, currentProjectId);
 	});
 </script>
 
@@ -92,8 +88,18 @@
 			</div>
 		</div>
 
+		<p class="mt-4 mb-2"><strong>Project</strong></p>
+		<select required class="select mb-7" bind:value={currentProjectId}>
+			<option disabled selected>Select project</option>
+			{#await getProjects() then projects}
+				{#each projects as project}
+					<option value={project.id}>{project.friendly_name}</option>
+				{/each}
+			{/await}
+		</select>
+
 		<div class="divider"></div>
-		{#await getUpdatedHomes(startDate, endDate)}
+		{#await getUpdatedHomes(startDate, endDate, currentProjectId)}
 			<div class="skeleton h-4 w-60 mb-3"></div>
 			<div class="skeleton h-4 w-30 mb-3"></div>
 			<div class="skeleton h-4 w-40"></div>
