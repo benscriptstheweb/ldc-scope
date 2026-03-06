@@ -77,8 +77,8 @@
 
 	{#if data.allergies_notes}
 		<div class="w-80 mb-10">
-			<h2 class="mb-2">🚨 Special Needs</h2>
-			<textarea class="textarea" disabled>{data.allergies_notes}</textarea>
+			<h2 class="subheading">🚨 Special Needs</h2>
+			{data.allergies_notes}
 		</div>
 	{/if}
 
