@@ -16,6 +16,7 @@ export async function GET({ locals, url }) {
         `)
             .eq('project.region', locals.user?.assignedRegion)
             .eq('id', homeId)
+            .order('created_at', { referencedTable: 'comments', ascending: false })
             .single();
 
         if (error) {

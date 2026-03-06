@@ -12,6 +12,8 @@
 	import CustomBadge from '../../../components/CustomBadge.svelte';
 	import Van from '../../../icons/Van.svelte';
 	import Plus from '../../../icons/Plus.svelte';
+	import Trash from '../../../icons/Trash.svelte';
+	import Dots from '../../../icons/Dots.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -30,6 +32,7 @@
 		photoUrls = await res.json();
 	});
 
+	// TODO: do this in the backend like comments
 	let sortedVolunteers = $state([]);
 	if (home.assignments.length) {
 		sortedVolunteers = home.assignments.sort((a: any, b: any) => {
@@ -42,14 +45,33 @@
 	let newComment = $state(false);
 	let commentText = $state('');
 
+	let comments = $state(home.comments);
+
 	async function postComment(text: string) {
 		const res = await fetch(`/api/comments?homeId=${home.id}`, {
 			method: 'POST',
-			body: JSON.stringify(text)
+			body: JSON.stringify({ text, user: data.user.email })
 		});
 
 		if (res.ok) {
-			window.location.reload();
+			const tempComment = {
+				id: crypto.randomUUID(),
+				home_id: home.id,
+				user: data.user.email,
+				comment: text
+			};
+
+			comments = [tempComment, ...comments];
+		}
+	}
+
+	async function deleteComment(commentId: string) {
+		const res = await fetch(`/api/comments?commentId=${commentId}`, {
+			method: 'DELETE'
+		});
+
+		if (res.ok) {
+			comments = comments.filter((c: any) => c.id !== commentId);
 		}
 	}
 </script>
@@ -230,10 +252,24 @@
 		{/if}
 
 		<div>
-			{#each home.comments as comment}
-				<p class="text-left">
-					{comment.comment}
-				</p>
+			{#each comments as comment}
+				<div class="flex flex-row justify-between">
+					<p class="mr-4">{comment.comment}</p>
+
+					{#if data.user.email === comment.user}
+						<details class="dropdown dropdown-end">
+							<summary class="btn btn-ghost btn-xs btn-circle"><Dots /></summary>
+							<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-50 shadow-sm">
+								<li>
+									<button class="btn btn-error" onclick={() => deleteComment(comment.id)}
+										><Trash />Delete</button
+									>
+								</li>
+							</ul>
+						</details>
+					{/if}
+					<!--  -->
+				</div>
 			{/each}
 		</div>
 	</div>
