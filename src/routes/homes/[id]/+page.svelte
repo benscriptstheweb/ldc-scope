@@ -230,45 +230,45 @@
 		</div>
 	</div>
 
-	<div class="block flex flex-col mt-5">
-		<div class="flex flex-row mb-3">
-			<h2>Comments</h2>
+	<div class="items-center flex flex-col mt-5">
+		<div class="w-90 comment-container">
+			<div class="flex flex-row mb-3 justify-between items-center">
+				<strong class="ml-1">Comments</strong>
 
-			{#if !newComment}
-				<button class="btn btn-soft" onclick={() => (newComment = !newComment)}><Plus /> New</button
-				>
-			{:else}
-				<button class="btn btn-secondary btn-outline" onclick={() => (newComment = !newComment)}
-					>Cancel</button
-				>
-				<button class="btn btn-success btn-outline" onclick={() => postComment(commentText)}
-					>Send</button
-				>
+				{#if !newComment}
+					<button class="btn btn-soft" onclick={() => (newComment = !newComment)}
+						><Plus /> New comment</button
+					>
+				{:else}
+					<button class="btn btn-ghost" onclick={() => (newComment = !newComment)}>Cancel</button>
+					<button class="ml-3 btn btn-success btn-soft" onclick={() => postComment(commentText)}
+						>Post</button
+					>
+				{/if}
+			</div>
+
+			{#if newComment}
+				<textarea maxlength="300" class="w-90 mb-5 textarea" bind:value={commentText}></textarea>
 			{/if}
-		</div>
 
-		{#if newComment}
-			<textarea class="textarea" bind:value={commentText}></textarea>
-		{/if}
-
-		<div>
 			{#each comments as comment}
-				<div class="flex flex-row justify-between">
-					<p class="mr-4">{comment.comment}</p>
+				<div class="chat {data.user.email === comment.user ? 'chat-end' : 'chat-start'}">
+					<div class="flex chat-bubble">
+						<p class="mr-4">{comment.comment}</p>
 
-					{#if data.user.email === comment.user}
-						<details class="dropdown dropdown-end">
-							<summary class="btn btn-ghost btn-xs btn-circle"><Dots /></summary>
-							<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-50 shadow-sm">
-								<li>
-									<button class="btn btn-error" onclick={() => deleteComment(comment.id)}
-										><Trash />Delete</button
-									>
-								</li>
-							</ul>
-						</details>
-					{/if}
-					<!--  -->
+						{#if data.user.email === comment.user}
+							<details class="dropdown dropdown-end">
+								<summary class="btn btn-ghost btn-xs btn-circle"><Dots /></summary>
+								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-50 shadow-sm">
+									<li>
+										<button class="btn btn-error" onclick={() => deleteComment(comment.id)}
+											><Trash />Delete</button
+										>
+									</li>
+								</ul>
+							</details>
+						{/if}
+					</div>
 				</div>
 			{/each}
 		</div>
