@@ -1,2 +1,1 @@
-# Casa Morada
-👷‍♀️ ➡️ 🏡
+# La Casa Morada 🏡
