@@ -41,7 +41,7 @@
 	}
 
 	async function deleteVolunteer() {
-		const res = await fetch(`/api/volunteers/${volunteerDetail.id}`, {
+		const res = await fetch(`/api/volunteers?id=${volunteerDetail.id}`, {
 			method: 'DELETE'
 		});
 
