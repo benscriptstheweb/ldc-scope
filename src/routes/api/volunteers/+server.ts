@@ -12,7 +12,8 @@ export async function GET({ locals, url }) {
 				`
                 *,
                 project!inner ( * ),
-                assignments ( id, home_id ( * ), date_range)
+                assignments ( id, home_id ( * ), date_range),
+				volunteer_comments ( * )
             `
 			)
 			.eq('project.region', locals.user?.assignedRegion)
@@ -40,7 +41,8 @@ export async function GET({ locals, url }) {
 			assignedHome: data.assignments.length > 0 ? (newAssignments ?? null) : null,
 			daysAssigned:
 				(new Date(data.date_end).getTime() - new Date(data.date_start).getTime()) /
-				(1000 * 60 * 60 * 24)
+				(1000 * 60 * 60 * 24),
+			volunteer_comments: data.volunteer_comments
 		};
 
 		return json(individualVolunteer);
