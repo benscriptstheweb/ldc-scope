@@ -15,10 +15,20 @@
 	let isWrongPassword = $state(false);
 	let isAccountCreated = $state(false);
 	let accountExists = $state(false);
+	let fieldsEmpty = $state(false);
 
 	const auth = getAuth();
 
 	async function createAccount() {
+		if (email === '' || password === '') {
+			fieldsEmpty = true;
+			setTimeout(() => {
+				fieldsEmpty = false;
+			}, 3000);
+
+			return;
+		}
+
 		createUserWithEmailAndPassword(auth, email, password)
 			.then(() => {
 				isAccountCreated = true;
@@ -76,6 +86,12 @@
 {#if isWrongPassword}
 	<Toast infoText={'Wrong credentials. Please try again'} alertType={'alert-error'} />
 {/if}
+{#if fieldsEmpty}
+	<Toast
+		infoText={'Please fill out your email and password, then click create account!'}
+		alertType={'alert-error'}
+	/>
+{/if}
 
 <div class="center-container">
 	<div class="logo">
@@ -90,7 +106,7 @@
 					class="input mb-2"
 					type="text"
 					bind:value={email}
-					placeholder="username"
+					placeholder="email"
 					autocomplete="username"
 				/>
 				<div class="relative">
