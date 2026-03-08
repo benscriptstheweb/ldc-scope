@@ -123,9 +123,14 @@
 		</p>
 
 		<p class="project-info">
-			Assigned agent: <span class="badge badge-soft"
-				><strong>{data.assignedUserAgent.displayName}</strong></span
-			>
+			Assigned agent:
+			{#if data.agent}
+				<span class="badge badge-soft badge-info">
+					<strong>{data.assignedUserAgent.displayName}</strong></span
+				>
+			{:else}
+				<span class="badge badge-soft badge-error"><strong>No assigned agent</strong></span>
+			{/if}
 		</p>
 	</div>
 
