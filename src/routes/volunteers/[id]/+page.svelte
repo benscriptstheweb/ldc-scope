@@ -121,6 +121,12 @@
 		<p class="project-info">
 			Dates: {getParsedDate(data.date_start)} to {getParsedDate(data.date_end)}
 		</p>
+
+		<p class="project-info">
+			Assigned agent: <span class="badge badge-soft"
+				><strong>{data.assignedUserAgent.displayName}</strong></span
+			>
+		</p>
 	</div>
 
 	<div class="flex items-center w-80 justify-between">

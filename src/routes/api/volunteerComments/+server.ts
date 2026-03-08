@@ -29,7 +29,6 @@ export async function DELETE({ url }) {
         .eq('id', commentId);
 
     if (error) {
-        console.log(error)
         return json({ error: 'Failed to delete comment' }, { status: 500 });
     }
 

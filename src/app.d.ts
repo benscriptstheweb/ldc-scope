@@ -6,6 +6,7 @@ declare global {
 				email: string | undefined;
 				isAdmin: boolean;
 				assignedRegion: number;
+				displayName: string;
 			} | null;
 		}
 	}

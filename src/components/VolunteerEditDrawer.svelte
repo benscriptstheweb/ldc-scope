@@ -13,7 +13,8 @@
 		email: '',
 		project: 0,
 		date_start: new Date(),
-		date_end: new Date()
+		date_end: new Date(),
+		agent: ''
 	});
 
 	let defaultInfo = {
@@ -22,7 +23,8 @@
 		email: volunteerDetail.email,
 		project: volunteerDetail.project.id,
 		date_start: volunteerDetail.date_start,
-		date_end: volunteerDetail.date_end
+		date_end: volunteerDetail.date_end,
+		agent: volunteerDetail.agent
 	};
 
 	onMount(() => {
@@ -48,6 +50,13 @@
 		if (res.ok) {
 			goto('/volunteers');
 		}
+	}
+
+	async function getUsers() {
+		const res = await fetch('/api/users');
+		const users = await res.json();
+
+		return { users };
 	}
 </script>
 
@@ -82,6 +91,18 @@
 				<strong>Start</strong><input bind:value={newVolunteerDetails.date_start} type="date" />
 				<strong>End</strong><input bind:value={newVolunteerDetails.date_end} type="date" />
 			</div>
+
+			<strong>Assigned agent</strong>
+			<select bind:value={newVolunteerDetails.agent} class="select mb-7">
+				{#await getUsers() then fbUsers}
+					{#each fbUsers.users as user}
+						<option value={user.email} selected={volunteerDetail.agent === user.email}
+							>{user.displayName}</option
+						>
+					{/each}
+				{/await}
+			</select>
+
 			<div class="button-group flex">
 				<button
 					class="btn btn-ghost"

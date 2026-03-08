@@ -18,7 +18,8 @@ export const handle: Handle = async ({ event, resolve }) => {
                     uid: decodedToken.uid,
                     email: decodedToken.email,
                     isAdmin: decodedToken.isAdmin,
-                    assignedRegion: decodedToken.assignedRegion
+                    assignedRegion: decodedToken.assignedRegion,
+                    displayName: decodedToken.name
                 };
             }
 

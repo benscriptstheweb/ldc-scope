@@ -145,7 +145,8 @@ export async function PATCH({ locals, url, request }) {
 			email: body.email,
 			project: body.project,
 			date_start: body.date_start,
-			date_end: body.date_end
+			date_end: body.date_end,
+			agent: body.agent
 		})
 		.eq('id', volunteerId)
 		.single();
