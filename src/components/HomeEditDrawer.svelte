@@ -6,6 +6,7 @@
 	import { uploadImages } from '$lib/helpers/images';
 	import Toast from './Toast.svelte';
 	import { occupantTypes } from '$lib/helpers/occupantTypes';
+	import { getProjectsByRegion } from '$lib/helpers/getProjects';
 
 	let { home, id, photoUrls } = $props();
 
@@ -34,7 +35,8 @@
 		parkingType: home.parkingType,
 		dateAvailable: home.date_available,
 		maxDaysStay: home.max_days_stay,
-		comfortRating: home.comfort_rating
+		comfortRating: home.comfort_rating,
+		project: home.project.id
 	};
 	let homeFields = $state(structuredClone(homeDetailsOriginal));
 	let images: File[] = $state([]);
@@ -124,6 +126,18 @@
 					/>
 					<input required class="w-25" type="text" placeholder="Zip" bind:value={homeFields.zip} />
 				</div>
+
+				<h2 class="subheading mt-2">Project</h2>
+				<select bind:value={homeFields.project} class="select mb-7">
+					<option disabled selected>Select project</option>
+					{#await getProjectsByRegion(home.project.region) then projects}
+						{#each projects as project}
+							<option value={project.id} selected={project.id === homeFields.project}
+								>{project.friendly_name}</option
+							>
+						{/each}
+					{/await}
+				</select>
 
 				<label class="label">
 					Distance to project:
