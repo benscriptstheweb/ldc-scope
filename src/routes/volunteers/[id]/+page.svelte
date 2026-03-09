@@ -76,16 +76,6 @@
 		<div class="flex items-center justify-between">
 			<div class="flex items-center">
 				<p class="heading header-name mr-2">{data.name}</p>
-				{#if data.user.isAdmin}
-					<label for="edit-volunteer-drawer" class="btn btn-soft btn-xs btn-primary">
-						<Edit />Edit
-					</label>
-				{/if}
-			</div>
-
-			<div class="flex items-center">
-				<CustomBadge type="days" days={data.daysAssigned} />
-				<RecommendedOccupantBadge occupantType={data.type} />
 			</div>
 		</div>
 	</div>
@@ -107,6 +97,12 @@
 		</div>
 	</div>
 
+	{#if data.user.isAdmin}
+		<label for="edit-volunteer-drawer" class="btn btn-soft btn-primary mb-3">
+			<Edit />Edit Volunteer
+		</label>
+	{/if}
+
 	{#if data.allergies_notes}
 		<div class="w-80 mb-10">
 			<h2 class="subheading">🚨 Special Needs</h2>
@@ -115,8 +111,15 @@
 	{/if}
 
 	<div class="self-center card bg-base-300 pt-9 w-90">
-		<div class="ml-8 mb-10">
-			<h2 class="subheading">Assignment</h2>
+		<div class="ml-8 mr-8 mb-10">
+			<div class="flex justify-between items-cente">
+				<h2 class="subheading">Assignment</h2>
+				<div class="flex">
+					<CustomBadge type="days" days={data.daysAssigned} />
+					<RecommendedOccupantBadge occupantType={data.type} />
+				</div>
+			</div>
+			<div class="divider"></div>
 			<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
 			<p class="project-info">
 				Dates: {getParsedDate(data.date_start)} to {getParsedDate(data.date_end)}

@@ -92,7 +92,7 @@
 				<strong>End</strong><input bind:value={newVolunteerDetails.date_end} type="date" />
 			</div>
 
-			<strong>Assigned agent</strong>
+			<strong class="text-center">Assigned agent</strong>
 			<select bind:value={newVolunteerDetails.agent} class="select mb-7">
 				{#await getUsers() then fbUsers}
 					{#each fbUsers.users as user}
@@ -111,10 +111,10 @@
 						isDrawerOpen = false;
 					}}>Cancel</button
 				>
-				<button class="btn btn-primary" onclick={() => updateInfo()}>Save</button>
+				<button class="btn btn-primary" onclick={() => updateInfo()}>Update</button>
 			</div>
 			<button
-				class="delete-btn btn btn-soft btn-error"
+				class="delete-btn btn btn-dash btn-error"
 				onclick={() =>
 					(document.getElementById('delete-volunteer-confirm') as HTMLDialogElement).showModal()}
 				>Delete Volunteer</button
