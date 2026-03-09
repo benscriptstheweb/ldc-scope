@@ -90,7 +90,8 @@
 		</div>
 	</div>
 
-	<div class="w-80">
+	<!-- CONTACT BUTTONS -->
+	<div class="w-80 mb-8">
 		<div class="mt-2">
 			<div class="flex mt-5">
 				<a href="sms:{data.phone}" aria-label="telephone" class="phone mr-5">
@@ -106,8 +107,6 @@
 		</div>
 	</div>
 
-	<div class="flex self-center divider w-80"></div>
-
 	{#if data.allergies_notes}
 		<div class="w-80 mb-10">
 			<h2 class="subheading">🚨 Special Needs</h2>
@@ -115,86 +114,87 @@
 		</div>
 	{/if}
 
-	<div class="w-80 mb-10">
-		<h2 class="subheading">Assignment</h2>
-		<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
-		<p class="project-info">
-			Dates: {getParsedDate(data.date_start)} to {getParsedDate(data.date_end)}
-		</p>
+	<div class="self-center card bg-base-300 pt-9 w-90">
+		<div class="ml-8 mb-10">
+			<h2 class="subheading">Assignment</h2>
+			<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
+			<p class="project-info">
+				Dates: {getParsedDate(data.date_start)} to {getParsedDate(data.date_end)}
+			</p>
 
-		<p class="project-info">
-			Assigned agent:
-			{#if data.agent}
-				<span class="badge badge-soft badge-info">
-					<strong>{data.assignedUserAgent.displayName}</strong></span
-				>
-			{:else}
-				<span class="badge badge-soft badge-error"><strong>No assigned agent</strong></span>
-			{/if}
-		</p>
-	</div>
-
-	<div class="flex items-center w-80 justify-between">
-		<div>
-			<h2 class="subheading">Stays</h2>
-		</div>
-		<div>
-			<button
-				onclick={() =>
-					(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
-				class="btn btn-soft btn-primary"><Plus />New stay</button
-			>
-		</div>
-	</div>
-	{#if data.assignedHome}
-		{#each data.assignedHome as assignedHome, idx}
-			<SendConfirm
-				modalId="id-send-confirm-{idx}"
-				{data}
-				{assignedHome}
-				hosts={assignedHome.home_id.hosts}
-				bind:successfullySent={emailSent}
-			/>
-			<div class="stay-info mt-5 w-80">
-				{#if assignedHome !== null}
-					<div class="flex flex-row items-center justify-between">
-						<div class="address">
-							<h2>{assignedHome.home_id.address1}, {assignedHome.home_id.address2}</h2>
-							<p>
-								{assignedHome.home_id.city}, {assignedHome.home_id.state}
-								{assignedHome.home_id.zip}
-							</p>
-							<p>
-								{getParsedDate(assignedHome.date_range[0])} to {getParsedDate(
-									assignedHome.date_range[1]
-								)}
-							</p>
-						</div>
-					</div>
-					<div class="flex justify-between">
-						<button
-							class="btn btn-dash mt-2 btn-xs"
-							onclick={() => deleteHomeAssignment(assignedHome.id)}
-						>
-							<Trash /> Remove stay
-						</button>
-						<button
-							class="btn btn-success btn-soft mt-2 btn-xs"
-							onclick={() =>
-								(
-									document.getElementById(`id-send-confirm-${idx}`) as HTMLDialogElement
-								).showModal()}
-						>
-							<Email /> Send Guidelines
-						</button>
-					</div>
+			<p class="project-info">
+				Assigned agent:
+				{#if data.agent}
+					<span class="badge badge-soft badge-info">
+						<strong>{data.assignedUserAgent.displayName}</strong></span
+					>
+				{:else}
+					<span class="badge badge-soft badge-error"><strong>No assigned agent</strong></span>
 				{/if}
+			</p>
+		</div>
+
+		<div class="mt-4 ml-8 mr-8 mb-9 flex flex-col">
+			<div class="flex flex-row justify-between mb-2">
+				<h2 class="subheading">Stays</h2>
+				<button
+					onclick={() =>
+						(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
+					class="btn btn-soft"><Plus />New stay</button
+				>
 			</div>
-		{/each}
-	{/if}
+			{#if data.assignedHome}
+				{#each data.assignedHome as assignedHome, idx}
+					<SendConfirm
+						modalId="id-send-confirm-{idx}"
+						{data}
+						{assignedHome}
+						hosts={assignedHome.home_id.hosts}
+						bind:successfullySent={emailSent}
+					/>
+					{#if assignedHome !== null}
+						<div class="stay-info mt-5 flex justify-between items-center">
+							<div class="address">
+								<h2>{assignedHome.home_id.address1}</h2>
+								<p>
+									{assignedHome.home_id.city}, {assignedHome.home_id.state}
+									{assignedHome.home_id.zip}
+								</p>
+								<p>
+									{getParsedDate(assignedHome.date_range[0])} to {getParsedDate(
+										assignedHome.date_range[1]
+									)}
+								</p>
+							</div>
+							<details class="dropdown dropdown-end">
+								<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
+								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
+									<li><a href="/homes/{assignedHome.home_id.id}">View home</a></li>
+									<li>
+										<button
+											onclick={() =>
+												(
+													document.getElementById(`id-send-confirm-${idx}`) as HTMLDialogElement
+												).showModal()}
+										>
+											Send Guidelines
+										</button>
+									</li>
+									<li>
+										<button onclick={() => deleteHomeAssignment(assignedHome.id)}>
+											Remove stay
+										</button>
+									</li>
+								</ul>
+							</details>
+						</div>
+					{/if}
+				{/each}
+			{/if}
+		</div>
+	</div>
 
 	<div class="items-center flex flex-col mt-10">
-		<div class="divider w-80"></div>
 		<div class="w-80 comment-container">
 			<div class="flex flex-row mb-3 justify-between items-center">
 				<strong class="ml-1">Comments</strong>
