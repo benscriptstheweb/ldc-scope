@@ -2,7 +2,7 @@ import { supabase } from "$lib/supabase/supabaseClient";
 import { json } from "@sveltejs/kit";
 import type { PageServerLoad } from "../$types";
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async () => {
     const { data, error } = await supabase
         .from('homes')
         .select('city');

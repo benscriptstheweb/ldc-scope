@@ -35,7 +35,7 @@
 			<!-- link to reports -->
 			<li>
 				<a href="/reports">
-					<Stats /><span class="menu-text">Dashboard</span>
+					<Stats /><span class="menu-text">Reports</span>
 				</a>
 			</li>
 
