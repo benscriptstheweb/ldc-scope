@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { amenities } from '$lib/helpers/amenities';
-	import { getProjects } from '$lib/helpers/getProjects';
+	import { getProjectsByRegion } from '$lib/helpers/getProjects';
 	import { occupantTypes } from '$lib/helpers/occupantTypes';
 	import Ex from '../icons/Ex.svelte';
 	import Plus from '../icons/Plus.svelte';
 
-	let { id } = $props();
+	let { id, userRegion } = $props();
 
 	let hosts = $state({
 		name: '',
@@ -184,7 +184,7 @@
 
 				<p>Select project</p>
 				<select required class="select mb-7" bind:value={newHomeDetails.project}>
-					{#await getProjects() then projects}
+					{#await getProjectsByRegion(userRegion) then projects}
 						{#each projects as project}
 							<option value={project.id}>{project.friendly_name}</option>
 						{/each}

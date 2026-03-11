@@ -25,8 +25,6 @@
 	}
 </script>
 
-<AddHomeForm id="add-home-form" />
-
 <div class="header mr-8 ml-8 mt-8 flex justify-between">
 	<p class="heading">Inventory</p>
 	<button
@@ -37,6 +35,7 @@
 </div>
 
 {#if data.user}
+	<AddHomeForm id="add-home-form" userRegion={data.user.assignedRegion} />
 	<!-- FILTERS -->
 	<div class="ml-8 mr-8 mt-3 flex">
 		<div>
