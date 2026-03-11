@@ -90,9 +90,7 @@
 			<select bind:value={newVolunteerDetails.agent} class="select mb-7">
 				{#await getUsers() then fbUsers}
 					{#each fbUsers.users as user}
-						<option value={user.email} selected={volunteerDetail.agent === user.email}
-							>{user.displayName}</option
-						>
+						<option value={user.email}>{user.displayName}</option>
 					{/each}
 				{/await}
 			</select>

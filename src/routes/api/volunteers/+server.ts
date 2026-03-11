@@ -38,6 +38,7 @@ export async function GET({ locals, url }) {
 
 		const individualVolunteer = {
 			...data,
+			hasCompletedAssignment: new Date() < data.date_end ? true : false,
 			assignedHome: data.assignments.length > 0 ? (newAssignments ?? null) : null,
 			daysAssigned:
 				(new Date(data.date_end).getTime() - new Date(data.date_start).getTime()) /
