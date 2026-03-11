@@ -118,7 +118,6 @@
 		<Spacer spacing="mt-10" />
 		<p class="subheading">2. Project you are assigned to:</p>
 		<select bind:value={newVolunteer.project} class="select">
-			<option disabled selected>Select project</option>
 			{#await getProjects() then projects}
 				{#each projects as project}
 					<option value={project.id}>{project.friendly_name}</option>

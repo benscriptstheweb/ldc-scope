@@ -184,7 +184,6 @@
 
 				<p>Select project</p>
 				<select required class="select mb-7" bind:value={newHomeDetails.project}>
-					<option disabled selected>Select project</option>
 					{#await getProjects() then projects}
 						{#each projects as project}
 							<option value={project.id}>{project.friendly_name}</option>

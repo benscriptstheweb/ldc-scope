@@ -76,12 +76,9 @@
 
 			<h2 class="subheading">Project</h2>
 			<select bind:value={newVolunteerDetails.project} class="select mb-7">
-				<option disabled selected>Select project</option>
 				{#await getProjectsByRegion(volunteerDetail.project.region) then projects}
 					{#each projects as project}
-						<option value={project.id} selected={project.id === newVolunteerDetails.project}
-							>{project.friendly_name}</option
-						>
+						<option value={project.id}>{project.friendly_name}</option>
 					{/each}
 				{/await}
 			</select>

@@ -128,13 +128,11 @@
 				</div>
 
 				<h2 class="subheading mt-2">Project</h2>
+
 				<select bind:value={homeFields.project} class="select mb-7">
-					<option disabled selected>Select project</option>
 					{#await getProjectsByRegion(home.project.region) then projects}
 						{#each projects as project}
-							<option value={project.id} selected={project.id === homeFields.project}
-								>{project.friendly_name}</option
-							>
+							<option value={project.id}>{project.friendly_name}</option>
 						{/each}
 					{/await}
 				</select>

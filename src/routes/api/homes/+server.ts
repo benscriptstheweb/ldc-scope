@@ -4,6 +4,21 @@ import { type Home } from '$lib/supabase/types/home.js';
 
 export async function GET({ locals, url }) {
     const homeId = url.searchParams.get('id');
+    const projectId = url.searchParams.get('projectId');
+
+    if (projectId) {
+        const { data: homesByProject, error } = await supabase
+            .from('homes')
+            .select('*')
+            .order('distance_to_project', { ascending: true })
+            .eq('project', projectId);
+
+        if (error) {
+            return json({ error: 'Error retrieving single home' }, { status: 400 });
+        }
+
+        return json(homesByProject);
+    }
 
     if (homeId) {
         const { data, error } = await supabase
@@ -45,6 +60,7 @@ export async function GET({ locals, url }) {
                 volunteers ( * )
             )
         `)
+        .order('distance_to_project', { ascending: true })
         .eq('project.region', locals.user?.assignedRegion)
         .overrideTypes<Home[]>();
 

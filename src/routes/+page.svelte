@@ -21,8 +21,7 @@
 	);
 
 	function sortedHomesByProject(projectName: string) {
-		const organizedHomes = filteredHomes.filter((home: any) => home.project === projectName);
-		return organizedHomes.sort((a: any, b: any) => a.distanceToProject - b.distanceToProject);
+		return filteredHomes.filter((home: any) => home.project === projectName);
 	}
 </script>
 
