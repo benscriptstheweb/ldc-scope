@@ -2,7 +2,7 @@
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
 	import Plus from '../icons/Plus.svelte';
 	import Dots from '../icons/Dots.svelte';
-	import { getProjectsByRegion } from '$lib/helpers/getProjects';
+	import ProjectByRegionSelector from './ProjectByRegionSelector.svelte';
 
 	let { volunteerToAssign, id } = $props();
 
@@ -84,13 +84,10 @@
 		</div>
 
 		<p class="mt-4 mb-2"><strong>Project</strong></p>
-		<select required class="select mb-4" bind:value={currentProjectId}>
-			{#await getProjectsByRegion(volunteerToAssign.project.region) then projects}
-				{#each projects as project}
-					<option value={project.id}>{project.friendly_name}</option>
-				{/each}
-			{/await}
-		</select>
+		<ProjectByRegionSelector
+			bind:selection={currentProjectId}
+			projectRegion={volunteerToAssign.project.region}
+		/>
 
 		<div class="divider"></div>
 		{#await getUpdatedHomes(startDate, endDate, currentProjectId)}

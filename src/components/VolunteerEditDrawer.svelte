@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import DeleteConfirm from './DeleteConfirm.svelte';
-	import { getProjectsByRegion } from '$lib/helpers/getProjects';
+	import ProjectByRegionSelector from './ProjectByRegionSelector.svelte';
 
 	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
@@ -75,13 +75,10 @@
 			<input bind:value={newVolunteerDetails.email} type="email" placeholder="Email" />
 
 			<h2 class="subheading">Project</h2>
-			<select bind:value={newVolunteerDetails.project} class="select mb-7">
-				{#await getProjectsByRegion(volunteerDetail.project.region) then projects}
-					{#each projects as project}
-						<option value={project.id}>{project.friendly_name}</option>
-					{/each}
-				{/await}
-			</select>
+			<ProjectByRegionSelector
+				bind:selection={newVolunteerDetails.project}
+				projectRegion={volunteerDetail.project.region}
+			/>
 
 			<h2 class="subheading">Dates</h2>
 			<div class="dates flex mb-10">
