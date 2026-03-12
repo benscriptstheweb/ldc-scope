@@ -46,9 +46,19 @@
 		}
 	}
 
+	let viewCompleted = $state(false);
 	let searchedVolunteer = $state('');
 	let sortedVolunteers = $derived(
-		volunteers.filter((e: any) => e.name.toLowerCase().includes(searchedVolunteer.toLowerCase()))
+		volunteers.filter((e: any) => {
+			if (viewCompleted) {
+				return e.name.toLowerCase().includes(searchedVolunteer.toLowerCase());
+			} else {
+				return (
+					e.name.toLowerCase().includes(searchedVolunteer.toLowerCase()) &&
+					!e.hasCompletedAssignment
+				);
+			}
+		})
 	);
 
 	let cycleSortState = $state(0);
@@ -104,32 +114,40 @@
 	</button>
 </div>
 
-<div class="flex delete-container justify-between h-8 ml-2 mb-2">
-	<button
-		class="btn btn-error btn-soft ml-2"
-		disabled={multiSelectVolunteers.length <= 0}
-		onclick={() =>
-			(document.getElementById('batch-delete-confirm') as HTMLDialogElement).showModal()}
-	>
-		<Trash />
-		{#if multiSelectVolunteers.length !== 0}
-			{#if multiSelectVolunteers.length === 1}
-				<p>{multiSelectVolunteers.length} volunteer</p>
-			{:else}
-				<p>{multiSelectVolunteers.length} volunteers</p>
+<div class="flex justify-between h-8 ml-2 mb-2">
+	{#if data.user?.isAdmin}
+		<button
+			class="btn btn-error btn-soft ml-2"
+			disabled={multiSelectVolunteers.length <= 0}
+			onclick={() =>
+				(document.getElementById('batch-delete-confirm') as HTMLDialogElement).showModal()}
+		>
+			<Trash />
+			{#if multiSelectVolunteers.length !== 0}
+				{#if multiSelectVolunteers.length === 1}
+					<p>{multiSelectVolunteers.length} volunteer</p>
+				{:else}
+					<p>{multiSelectVolunteers.length} volunteers</p>
+				{/if}
 			{/if}
-		{/if}
-	</button>
+		</button>
+	{/if}
+
 	<input class="input mr-2" type="text" placeholder="Search..." bind:value={searchedVolunteer} />
+	<div class="flex label view-complete-checkbox mr-2">
+		<input type="checkbox" bind:checked={viewCompleted} />View Completed
+	</div>
 </div>
 
 <div class="overflow-x-auto">
 	<table class="table">
 		<thead>
 			<tr>
-				<th>
-					<input type="checkbox" onclick={toggleSelectAll} />
-				</th>
+				{#if data.user?.isAdmin}
+					<th>
+						<input type="checkbox" onclick={toggleSelectAll} />
+					</th>
+				{/if}
 				<th class="cursor-pointer" onclick={() => toggleSort('name')}>Name</th>
 				<th class="cursor-pointer" onclick={() => toggleSort('project')}>Project</th>
 				<th class="cursor-pointer text-right" onclick={() => toggleSort('status')}>Status</th>
@@ -139,16 +157,18 @@
 		<tbody>
 			{#each sortedVolunteers as volunteer}
 				<tr class="volunteer-rows" onclick={() => openVolunteerPage(volunteer)}>
-					<th>
-						<label>
-							<input
-								onclick={(e) => e.stopPropagation()}
-								type="checkbox"
-								value={volunteer.id}
-								bind:group={multiSelectVolunteers}
-							/>
-						</label>
-					</th>
+					{#if data.user?.isAdmin}
+						<th>
+							<label>
+								<input
+									onclick={(e) => e.stopPropagation()}
+									type="checkbox"
+									value={volunteer.id}
+									bind:group={multiSelectVolunteers}
+								/>
+							</label>
+						</th>
+					{/if}
 					<td class="name">
 						<label for="volunteer-drawer" class="drawer-button">
 							{volunteer.name}
@@ -158,7 +178,7 @@
 						{volunteer.assignedProject.friendly_name}
 					</td>
 					<td class="info-status flex justify-end">
-						{#if volunteer.hasCompletedAssignment}
+						{#if !volunteer.hasCompletedAssignment}
 							{#if volunteer.assignedHome === null}
 								<CustomBadge type="unassigned" />
 							{/if}
@@ -175,6 +195,10 @@
 </div>
 
 <style>
+	.view-complete-checkbox {
+		font-size: 0.8em;
+		font-weight: bold;
+	}
 	.info-status {
 		font-weight: bold;
 	}
