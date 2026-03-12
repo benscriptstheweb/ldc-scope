@@ -104,7 +104,7 @@
 					<h2 class="subheading text-center mb-3">Assignable homes</h2>
 					{#each assignableHomes as home}
 						<li class="list-row">
-							{home.address1}
+							{home.address1}, {home.city}
 							<div>
 								{#if home.project === volunteerToAssign.project.id}
 									<div class="badge badge-xs">{home.distance_to_project} mi</div>
