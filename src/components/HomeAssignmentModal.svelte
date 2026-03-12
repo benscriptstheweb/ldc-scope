@@ -106,7 +106,9 @@
 						<li class="list-row">
 							{home.address1}
 							<div>
-								<div class="badge badge-xs">{home.distance_to_project} mi</div>
+								{#if home.project === volunteerToAssign.project.id}
+									<div class="badge badge-xs">{home.distance_to_project} mi</div>
+								{/if}
 								<button
 									onclick={() => createAssignment(home, volunteerToAssign, [startDate, endDate])}
 									class="btn btn-success btn-xs btn-circle"><Plus /></button
@@ -142,7 +144,9 @@
 						<li class="list-row">
 							{badHome.address1}
 							<div>
-								<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
+								{#if badHome.project === volunteerToAssign.project.id}
+									<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
+								{/if}
 								<details class="dropdown dropdown-end">
 									<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
 									<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
