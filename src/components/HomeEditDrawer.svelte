@@ -6,7 +6,7 @@
 	import { uploadImages } from '$lib/helpers/images';
 	import Toast from './Toast.svelte';
 	import { occupantTypes } from '$lib/helpers/occupantTypes';
-	import { getProjectsByRegion } from '$lib/helpers/getProjects';
+	import ProjectByRegionSelector from './ProjectByRegionSelector.svelte';
 
 	let { home, id, photoUrls } = $props();
 
@@ -128,16 +128,10 @@
 				</div>
 
 				<h2 class="subheading mt-2">Project</h2>
-				<select bind:value={homeFields.project} class="select mb-7">
-					<option disabled selected>Select project</option>
-					{#await getProjectsByRegion(home.project.region) then projects}
-						{#each projects as project}
-							<option value={project.id} selected={project.id === homeFields.project}
-								>{project.friendly_name}</option
-							>
-						{/each}
-					{/await}
-				</select>
+				<ProjectByRegionSelector
+					bind:selection={homeFields.project}
+					projectRegion={home.project.region}
+				/>
 
 				<label class="label">
 					Distance to project:

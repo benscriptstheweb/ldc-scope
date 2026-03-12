@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { amenities } from '$lib/helpers/amenities';
-	import { getProjects } from '$lib/helpers/getProjects';
 	import { occupantTypes } from '$lib/helpers/occupantTypes';
 	import Ex from '../icons/Ex.svelte';
 	import Plus from '../icons/Plus.svelte';
+	import ProjectByRegionSelector from './ProjectByRegionSelector.svelte';
 
-	let { id } = $props();
+	let { id, userRegion } = $props();
 
 	let hosts = $state({
 		name: '',
@@ -183,14 +183,10 @@
 				<h1 class="page-heading">3. Project Details</h1>
 
 				<p>Select project</p>
-				<select required class="select mb-7" bind:value={newHomeDetails.project}>
-					<option disabled selected>Select project</option>
-					{#await getProjects() then projects}
-						{#each projects as project}
-							<option value={project.id}>{project.friendly_name}</option>
-						{/each}
-					{/await}
-				</select>
+				<ProjectByRegionSelector
+					bind:selection={newHomeDetails.project}
+					projectRegion={userRegion}
+				/>
 
 				<label class="label">
 					<p>Distance to Project (in miles)</p>

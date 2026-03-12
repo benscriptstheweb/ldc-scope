@@ -98,7 +98,7 @@
 	</div>
 
 	{#if data.user.isAdmin}
-		<label for="edit-volunteer-drawer" class="btn btn-soft btn-primary mb-3">
+		<label for="edit-volunteer-drawer" class="btn btn-soft btn-primary mb-8">
 			<Edit />Edit Volunteer
 		</label>
 	{/if}

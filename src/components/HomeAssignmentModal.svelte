@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabase/supabaseClient';
 	import { isOverlapping } from '$lib/helpers/overlappingVolunteers';
 	import Plus from '../icons/Plus.svelte';
 	import Dots from '../icons/Dots.svelte';
-	import { getProjects } from '$lib/helpers/getProjects';
+	import ProjectByRegionSelector from './ProjectByRegionSelector.svelte';
 
 	let { volunteerToAssign, id } = $props();
 
@@ -26,14 +25,10 @@
 	}
 
 	async function getHomesByVolunteerProject(projectId: string) {
-		const { data, error } = await supabase.from('homes').select('*').eq('project', projectId);
+		const res = await fetch(`/api/homes?projectId=${projectId}`);
+		const homesByProject = res.json();
 
-		if (error) {
-			console.error('Error fetching assignable homes:', error);
-			return [];
-		}
-
-		return data;
+		return homesByProject;
 	}
 
 	let startDate = $state(volunteerToAssign.date_start);
@@ -89,14 +84,10 @@
 		</div>
 
 		<p class="mt-4 mb-2"><strong>Project</strong></p>
-		<select required class="select mb-4" bind:value={currentProjectId}>
-			<option disabled selected>Select project</option>
-			{#await getProjects() then projects}
-				{#each projects as project}
-					<option value={project.id}>{project.friendly_name}</option>
-				{/each}
-			{/await}
-		</select>
+		<ProjectByRegionSelector
+			bind:selection={currentProjectId}
+			projectRegion={volunteerToAssign.project.region}
+		/>
 
 		<div class="divider"></div>
 		{#await getUpdatedHomes(startDate, endDate, currentProjectId)}

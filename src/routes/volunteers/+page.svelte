@@ -158,11 +158,15 @@
 						{volunteer.assignedProject.friendly_name}
 					</td>
 					<td class="info-status flex justify-end">
-						{#if volunteer.assignedHome === null}
-							<CustomBadge type="unassigned" />
+						{#if volunteer.hasCompletedAssignment}
+							{#if volunteer.assignedHome === null}
+								<CustomBadge type="unassigned" />
+							{/if}
+							<CustomBadge type="days" days={volunteer.daysAssigned} />
+							<RecommendedOccupantBadge occupantType={volunteer.type} />
+						{:else}
+							<div class="badge badge-soft">Completed</div>
 						{/if}
-						<CustomBadge type="days" days={volunteer.daysAssigned} />
-						<RecommendedOccupantBadge occupantType={volunteer.type} />
 					</td>
 				</tr>
 			{/each}

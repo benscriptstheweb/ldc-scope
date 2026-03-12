@@ -2,7 +2,6 @@
 	import AddHomeForm from '../components/AddHomeForm.svelte';
 	import HomeCard from '../components/HomeCard.svelte';
 	import Plus from '../icons/Plus.svelte';
-	import { getProjectsByRegion } from '$lib/helpers/getProjects';
 
 	let { data } = $props();
 
@@ -21,12 +20,9 @@
 	);
 
 	function sortedHomesByProject(projectName: string) {
-		const organizedHomes = filteredHomes.filter((home: any) => home.project === projectName);
-		return organizedHomes.sort((a: any, b: any) => a.distanceToProject - b.distanceToProject);
+		return filteredHomes.filter((home: any) => home.project === projectName);
 	}
 </script>
-
-<AddHomeForm id="add-home-form" />
 
 <div class="header mr-8 ml-8 mt-8 flex justify-between">
 	<p class="heading">Inventory</p>
@@ -38,45 +34,40 @@
 </div>
 
 {#if data.user}
+	<AddHomeForm id="add-home-form" userRegion={data.user.assignedRegion} />
 	<!-- FILTERS -->
 	<div class="ml-8 mr-8 mt-3 flex">
 		<div>
 			<select class="select" bind:value={searchedProject}>
-				<option disabled value="">Project</option>
-				<option selected value="">All</option>
-				{#await getProjectsByRegion(data.user.assignedRegion) then projects}
-					{#each projects as project}
-						<option value={project.friendly_name}>{project.friendly_name}</option>
-					{/each}
-				{/await}
+				<option selected value="">All Projects</option>
+				{#each data.projectsByRegion as project}
+					<option value={project.friendly_name}>{project.friendly_name}</option>
+				{/each}
 			</select>
 		</div>
 		<div>
 			<select class="select" bind:value={searchedCongregation}>
-				<option disabled value="">Congregation</option>
-				<option selected value="">All</option>
+				<option selected value="">All Congregations</option>
 				{#each supportingCongregations as cong}
 					<option value={cong}>{cong}</option>
 				{/each}
 			</select>
 		</div>
 	</div>
-	{#await getProjectsByRegion(data.user.assignedRegion) then projects}
-		<div class="projects-container">
-			{#each projects as project}
-				{#if sortedHomesByProject(project.friendly_name).length !== 0 && !searchedCongregation && !searchedProject}
-					<p class="project-subheading ml-8 mt-8">
-						Homes for <strong>{project.friendly_name}</strong>
-					</p>
-				{/if}
-				<div class="cards-container">
-					{#each sortedHomesByProject(project.friendly_name) as home}
-						<HomeCard {home} />
-					{/each}
-				</div>
-			{/each}
-		</div>
-	{/await}
+	<div class="projects-container">
+		{#each data.projectsByRegion as project}
+			{#if sortedHomesByProject(project.friendly_name).length !== 0 && !searchedCongregation && !searchedProject}
+				<p class="project-subheading ml-8 mt-8">
+					Homes for <strong>{project.friendly_name}</strong>
+				</p>
+			{/if}
+			<div class="cards-container">
+				{#each sortedHomesByProject(project.friendly_name) as home}
+					<HomeCard {home} />
+				{/each}
+			</div>
+		{/each}
+	</div>
 {/if}
 
 <style>
