@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import DeleteConfirm from './DeleteConfirm.svelte';
 	import ProjectByRegionSelector from './ProjectByRegionSelector.svelte';
@@ -7,17 +6,7 @@
 	let { volunteerDetail, id } = $props();
 	let isDrawerOpen = $state(false);
 
-	let newVolunteerDetails = $state({
-		name: '',
-		phone: 0,
-		email: '',
-		project: 0,
-		date_start: new Date(),
-		date_end: new Date(),
-		agent: ''
-	});
-
-	let defaultInfo = {
+	let volunteerDetailsOriginal = {
 		name: volunteerDetail.name,
 		phone: volunteerDetail.phone,
 		email: volunteerDetail.email,
@@ -27,9 +16,11 @@
 		agent: volunteerDetail.agent
 	};
 
-	onMount(() => {
-		newVolunteerDetails = defaultInfo;
-	});
+	let newVolunteerDetails = $state(structuredClone(volunteerDetailsOriginal));
+
+	let formChanged = $derived(
+		JSON.stringify(newVolunteerDetails) !== JSON.stringify(volunteerDetailsOriginal)
+	);
 
 	async function updateInfo() {
 		const res = await fetch(`/api/volunteers?id=${volunteerDetail.id}`, {
@@ -95,22 +86,17 @@
 				{/await}
 			</select>
 
-			<div class="button-group flex">
+			<div class="flex justify-between mt-12">
 				<button
-					class="btn btn-ghost"
-					onclick={() => {
-						newVolunteerDetails = defaultInfo;
-						isDrawerOpen = false;
-					}}>Cancel</button
+					class="delete-btn btn btn-dash btn-error"
+					onclick={() =>
+						(document.getElementById('delete-volunteer-confirm') as HTMLDialogElement).showModal()}
+					>Delete Volunteer</button
 				>
-				<button class="btn btn-primary" onclick={() => updateInfo()}>Update</button>
+				<button class="btn btn-primary" disabled={!formChanged} onclick={() => updateInfo()}
+					>Update</button
+				>
 			</div>
-			<button
-				class="delete-btn btn btn-dash btn-error"
-				onclick={() =>
-					(document.getElementById('delete-volunteer-confirm') as HTMLDialogElement).showModal()}
-				>Delete Volunteer</button
-			>
 		</ul>
 	</div>
 </div>
