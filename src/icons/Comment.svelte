@@ -5,6 +5,5 @@
 	fill="currentColor"
 	xmlns="http://www.w3.org/2000/svg"
 >
-	<path d="M13 0L16 3L9 10H6V7L13 0Z" />
-	<path d="M1 1V15H15V9H13V13H3V3H7V1H1Z" />
+	<path d="M2 1H5L16 7V9L5 15H2L3 9H8V7H3L2 1Z" />
 </svg>

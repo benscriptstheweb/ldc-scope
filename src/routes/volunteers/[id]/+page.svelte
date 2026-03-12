@@ -2,7 +2,6 @@
 	import HomeAssignmentModal from '../../../components/HomeAssignmentModal.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import VolunteerEditDrawer from '../../../components/VolunteerEditDrawer.svelte';
-	import Plus from '../../../icons/Plus.svelte';
 	import Trash from '../../../icons/Trash.svelte';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import CustomBadge from '../../../components/CustomBadge.svelte';
@@ -13,6 +12,8 @@
 	import Toast from '../../../components/Toast.svelte';
 	import Sms from '../../../icons/Sms.svelte';
 	import Dots from '../../../icons/Dots.svelte';
+	import Route from '../../../icons/Route.svelte';
+	import Comment from '../../../icons/Comment.svelte';
 
 	let { data } = $props();
 
@@ -143,7 +144,7 @@
 				<button
 					onclick={() =>
 						(document.getElementById('assign-home-modal') as HTMLDialogElement).showModal()}
-					class="btn btn-soft"><Plus />New stay</button
+					class="btn btn-soft"><Route />New stay</button
 				>
 			</div>
 			{#if data.assignedHome}
@@ -204,7 +205,7 @@
 
 				{#if !newComment}
 					<button class="btn btn-soft" onclick={() => (newComment = !newComment)}
-						><Plus /> New comment</button
+						><Comment /> New comment</button
 					>
 				{:else}
 					<div>

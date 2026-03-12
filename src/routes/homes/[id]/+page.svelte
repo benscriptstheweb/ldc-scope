@@ -11,9 +11,9 @@
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import CustomBadge from '../../../components/CustomBadge.svelte';
 	import Van from '../../../icons/Van.svelte';
-	import Plus from '../../../icons/Plus.svelte';
 	import Trash from '../../../icons/Trash.svelte';
 	import Dots from '../../../icons/Dots.svelte';
+	import Comment from '../../../icons/Comment.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -103,7 +103,7 @@
 
 		{#if data.user.isAdmin}
 			<label for="edit-home-drawer" class="btn btn-soft btn-primary">
-				<Edit size="size-5" strokeWidth="2" />
+				<Edit />
 				Edit Home
 			</label>
 		{/if}
@@ -219,7 +219,7 @@
 			<div class="flex justify-between mt-5">
 				{#if data.user.isAdmin}
 					<label for="edit-contacts-drawer" class="btn btn-soft btn-primary btn-xs mr-5 mb-4">
-						Edit contacts<Edit size="size-4" strokeWidth="2" />
+						<Edit />Edit contacts
 					</label>
 				{/if}
 			</div>
@@ -237,7 +237,7 @@
 
 				{#if !newComment}
 					<button class="btn btn-soft" onclick={() => (newComment = !newComment)}
-						><Plus /> New comment</button
+						><Comment /> New comment</button
 					>
 				{:else}
 					<div>
