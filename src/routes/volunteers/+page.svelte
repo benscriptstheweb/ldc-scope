@@ -6,6 +6,9 @@
 	import RecommendedOccupantBadge from '../../components/RecommendedOccupantBadge.svelte';
 	import DeleteConfirm from '../../components/DeleteConfirm.svelte';
 	import CustomBadge from '../../components/CustomBadge.svelte';
+	import Lookup from '../../icons/Lookup.svelte';
+	import Ex from '../../icons/Ex.svelte';
+	import CompletedPerson from '../../icons/CompletedPerson.svelte';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -48,6 +51,7 @@
 
 	let viewCompleted = $state(false);
 	let searchedVolunteer = $state('');
+
 	let sortedVolunteers = $derived(
 		volunteers.filter((e: any) => {
 			if (viewCompleted) {
@@ -67,7 +71,7 @@
 		cycleSortState += 1;
 
 		if (cycleSortState === 1) {
-			sortedVolunteers = [...volunteers].sort((a, b) => {
+			sortedVolunteers = [...sortedVolunteers].sort((a, b) => {
 				if (sorter === 'project') {
 					return a.project.friendly_name.localeCompare(b.project.friendly_name);
 				} else if (sorter === 'status') {
@@ -77,7 +81,7 @@
 				}
 			});
 		} else if (cycleSortState === 2) {
-			sortedVolunteers = [...volunteers].sort((a, b) => {
+			sortedVolunteers = [...sortedVolunteers].sort((a, b) => {
 				if (sorter === 'project') {
 					return b.project.friendly_name.localeCompare(a.project.friendly_name);
 				} else if (sorter === 'status') {
@@ -91,6 +95,8 @@
 			cycleSortState = 0;
 		}
 	}
+
+	let isSearching = $state(false);
 </script>
 
 <DeleteConfirm
@@ -114,29 +120,48 @@
 	</button>
 </div>
 
-<div class="flex justify-between h-8 ml-2 mb-2">
-	{#if data.user?.isAdmin}
-		<button
-			class="btn btn-error btn-soft ml-2"
-			disabled={multiSelectVolunteers.length <= 0}
-			onclick={() =>
-				(document.getElementById('batch-delete-confirm') as HTMLDialogElement).showModal()}
-		>
-			<Trash />
-			{#if multiSelectVolunteers.length !== 0}
-				{#if multiSelectVolunteers.length === 1}
-					<p>{multiSelectVolunteers.length} volunteer</p>
-				{:else}
-					<p>{multiSelectVolunteers.length} volunteers</p>
+<div class="flex h-8 ml-2 mb-2 justify-between items-center">
+	{#if !isSearching}
+		{#if data.user?.isAdmin}
+			<button
+				class="btn btn-error btn-soft btn-xs"
+				disabled={multiSelectVolunteers.length <= 0}
+				onclick={() =>
+					(document.getElementById('batch-delete-confirm') as HTMLDialogElement).showModal()}
+			>
+				<Trash />
+				{#if multiSelectVolunteers.length !== 0}
+					{#if multiSelectVolunteers.length === 1}
+						<p>{multiSelectVolunteers.length} volunteer</p>
+					{:else}
+						<p>{multiSelectVolunteers.length} volunteers</p>
+					{/if}
 				{/if}
-			{/if}
-		</button>
+			</button>
+		{/if}
 	{/if}
 
-	<input class="input mr-2" type="text" placeholder="Search..." bind:value={searchedVolunteer} />
-	<div class="flex label view-complete-checkbox mr-2">
-		<input type="checkbox" bind:checked={viewCompleted} />View Completed
-	</div>
+	{#if isSearching}
+		<div class="join">
+			<button class="join-item btn btn-soft btn-xs" onclick={() => (isSearching = !isSearching)}
+				><Ex />Cancel</button
+			>
+			<input
+				class="join-item input input-xs"
+				type="text"
+				placeholder="Volunteer name..."
+				bind:value={searchedVolunteer}
+			/>
+		</div>
+	{:else}
+		<button class="btn btn-ghost mr-1 btn-xs" onclick={() => (isSearching = !isSearching)}
+			><Lookup />Search name</button
+		>
+	{/if}
+
+	<button class="mr-2 btn btn-ghost btn-xs" onclick={() => (viewCompleted = !viewCompleted)}
+		><CompletedPerson />View completed</button
+	>
 </div>
 
 <div class="overflow-x-auto">
@@ -175,7 +200,7 @@
 						</label>
 					</td>
 					<td class="project-region">
-						{volunteer.assignedProject.friendly_name}
+						{volunteer.project.friendly_name}
 					</td>
 					<td class="info-status flex justify-end">
 						{#if !volunteer.hasCompletedAssignment}
