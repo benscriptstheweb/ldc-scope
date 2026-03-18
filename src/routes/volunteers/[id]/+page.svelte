@@ -14,6 +14,7 @@
 	import Dots from '../../../icons/Dots.svelte';
 	import Route from '../../../icons/Route.svelte';
 	import Comment from '../../../icons/Comment.svelte';
+	import Comments from '../../../components/Comments.svelte';
 
 	let { data } = $props();
 
@@ -32,7 +33,6 @@
 
 	let newComment = $state(false);
 	let commentText = $state('');
-	let comments = $state(data.volunteer_comments);
 
 	async function postComment(text: string) {
 		const res = await fetch(`/api/volunteerComments?volunteerId=${data.id}`, {
@@ -41,14 +41,7 @@
 		});
 
 		if (res.ok) {
-			const tempComment = {
-				id: crypto.randomUUID(),
-				volunteer_id: data.id,
-				user: data.user.email,
-				comment: text
-			};
-
-			comments = [tempComment, ...comments];
+			window.location.reload();
 		}
 	}
 
@@ -58,7 +51,7 @@
 		});
 
 		if (res.ok) {
-			comments = comments.filter((c: any) => c.id !== commentId);
+			window.location.reload();
 		}
 	}
 </script>
@@ -198,51 +191,12 @@
 		</div>
 	</div>
 
-	<div class="items-center flex flex-col mt-10">
-		<div class="w-80 comment-container">
-			<div class="flex flex-row mb-3 justify-between items-center">
-				<strong class="ml-1">Comments</strong>
-
-				{#if !newComment}
-					<button class="btn btn-soft" onclick={() => (newComment = !newComment)}
-						><Comment /> New comment</button
-					>
-				{:else}
-					<div>
-						<button class="btn btn-ghost" onclick={() => (newComment = !newComment)}>Cancel</button>
-						<button class="ml-3 btn btn-success btn-soft" onclick={() => postComment(commentText)}
-							>Post</button
-						>
-					</div>
-				{/if}
-			</div>
-
-			{#if newComment}
-				<textarea maxlength="300" class="w-80 mb-5 textarea" bind:value={commentText}></textarea>
-			{/if}
-
-			{#each comments as comment}
-				<div class="chat {data.user.email === comment.user ? 'chat-end' : 'chat-start'}">
-					<div class="flex chat-bubble">
-						<p class="mr-4">{comment.comment}</p>
-
-						{#if data.user.email === comment.user}
-							<details class="dropdown dropdown-end">
-								<summary class="btn btn-ghost btn-xs btn-circle"><Dots /></summary>
-								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-50 shadow-sm">
-									<li>
-										<button class="btn btn-error" onclick={() => deleteComment(comment.id)}
-											><Trash />Delete</button
-										>
-									</li>
-								</ul>
-							</details>
-						{/if}
-					</div>
-				</div>
-			{/each}
-		</div>
-	</div>
+	<Comments
+		postCommentCallback={postComment}
+		deleteCommentCallback={deleteComment}
+		commentsData={data.volunteer_comments}
+		currentUserEmail={data.user.email}
+	/>
 </div>
 
 <style>
