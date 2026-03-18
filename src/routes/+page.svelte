@@ -63,7 +63,9 @@
 			{/if}
 			<div class="cards-container">
 				{#each sortedHomesByProject(project.friendly_name) as home}
-					<HomeCard {home} />
+					<div class="card-spacer">
+						<HomeCard {home} />
+					</div>
 				{/each}
 			</div>
 		{/each}
@@ -81,6 +83,7 @@
 		flex-wrap: wrap;
 	}
 
+	/* iPhone/iPad */
 	@media (min-width: 769px) and (max-width: 1024px) {
 		.cards-container {
 			display: flex;
@@ -89,6 +92,8 @@
 			flex-wrap: wrap;
 		}
 	}
+
+	/* Desktop */
 	@media (min-width: 768px) {
 		.project-subheading {
 			margin-left: 32px;
@@ -99,6 +104,9 @@
 			flex-direction: row;
 			align-items: center;
 			flex-wrap: wrap;
+		}
+		.card-spacer {
+			margin-right: 10px;
 		}
 	}
 </style>
