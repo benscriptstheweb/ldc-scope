@@ -172,19 +172,15 @@
 		<h2>Parking & RV</h2>
 		<div class="block mt-2">
 			<div class="flex detail">
-				{#if home.parkingType === 'garage'}
-					<ParkingStructure /><span class="ml-2">garage</span>
-				{:else}
-					<ParkingStreet /><span class="ml-2">street</span>
-				{/if}
+				Type: {home.parkingType}
 			</div>
 
 			<div class="detail flex flex-row">
-				<Van />
+				RV:
 				{#if home.rv_notes}
-					<p class="ml-1">{home.rv_notes}</p>
+					{home.rv_notes}
 				{:else}
-					<p class="ml-1">no rv hookup</p>
+					no rv hookup
 				{/if}
 			</div>
 		</div>

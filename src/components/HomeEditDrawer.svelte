@@ -186,6 +186,9 @@
 				<select required class="select" bind:value={homeFields.parkingType}>
 					<option value="street">Street</option>
 					<option value="garage">Garage</option>
+					<option value="lot">Parking lot</option>
+					<option value="lawn">Lawn</option>
+					<option value="driveway">Driveway</option>
 				</select>
 
 				<div class="divider"></div>
