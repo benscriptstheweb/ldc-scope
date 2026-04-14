@@ -26,7 +26,20 @@
 		setTimeout(() => {
 			isLinkCopied = false;
 		}, 3000);
-		await navigator.clipboard.writeText('https://lacasamorada.org/survey');
+
+		const res = await fetch('/api/generate-invite', {
+			method: 'POST'
+		});
+
+		const data = await res.json();
+
+		if (!res.ok) {
+			console.error(data.error);
+			return;
+		}
+
+		const link = `https://lacasamorada.org/survey?token=${data.token}`;
+		await navigator.clipboard.writeText(link);
 	}
 
 	function toggleSelectAll() {

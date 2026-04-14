@@ -36,7 +36,10 @@
 	let submitted = $state(false);
 
 	async function addVolunteer(name: string, details: any, type: string) {
-		const res = await fetch('/api/volunteers', {
+		const params = new URLSearchParams(window.location.search);
+		const token = params.get('token');
+
+		const res = await fetch(`/api/volunteers?token=${token}`, {
 			method: 'POST',
 			body: JSON.stringify({
 				name,

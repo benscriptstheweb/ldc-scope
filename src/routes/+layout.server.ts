@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
-    const publicRoutes = ['/signin', '/survey', '/survey/pass'];
+    const publicRoutes = ['/signin', '/survey'];
     const pathname = url.pathname;
 
     // redirect to signin if there is no user object in locals
