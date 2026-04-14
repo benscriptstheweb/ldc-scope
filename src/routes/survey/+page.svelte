@@ -6,6 +6,7 @@
 	import { getProjects } from '$lib/helpers/getProjects';
 	import { type Volunteer } from '$lib/supabase/types/volunteer';
 	import { OccupantType } from '$lib/supabase/types/occupantType';
+	import { goto } from '$app/navigation';
 
 	let newVolunteer: Partial<Volunteer> = $state({
 		email: '',
@@ -57,7 +58,7 @@
 			submitted = true;
 			setTimeout(() => {
 				submitted = false;
-				window.location.reload();
+				goto('/');
 			}, 7000);
 		}
 	}
