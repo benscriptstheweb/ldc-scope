@@ -38,7 +38,7 @@ export async function GET({ locals, url }) {
 
 		const individualVolunteer = {
 			...data,
-			hasCompletedAssignment: new Date() > new Date(data.date_end) ? true : false,
+			hasCompletedAssignment: new Date().getTime() > new Date(data.date_end).getTime() ? true : false,
 			assignedHome: data.assignments.length > 0 ? (newAssignments ?? null) : null,
 			daysAssigned:
 				(new Date(data.date_end).getTime() - new Date(data.date_start).getTime()) /
@@ -70,7 +70,7 @@ export async function GET({ locals, url }) {
 		// return 1 or 0 for isAssigned to sort them later in the frontend
 		return {
 			...v,
-			hasCompletedAssignment: new Date() > new Date(v.date_end) ? true : false,
+			hasCompletedAssignment: new Date().getTime() > new Date(v.date_end).getTime() ? true : false,
 			assignedHome: v.assignments.length > 0 ? (v.assignments ?? null) : null,
 			isAssigned: v.assignments.length > 0 ? 1 : 0,
 			assignedProject: v.project,
