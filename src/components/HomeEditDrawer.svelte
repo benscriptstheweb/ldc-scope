@@ -38,7 +38,7 @@
 		maxDaysStay: home.max_days_stay,
 		comfortRating: home.comfort_rating,
 		project: home.project.id,
-		blackoutDates: home.blackout_dates
+		blackoutDates: home.blackout_dates ?? ['', '']
 	};
 
 	let homeFields = $state(structuredClone(homeDetailsOriginal));
