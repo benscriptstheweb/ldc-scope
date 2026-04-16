@@ -100,6 +100,10 @@
 			window.location.reload();
 		}
 	}
+
+	async function clearBlackoutDates(newHomeFields: any) {
+		newHomeFields.blackoutDates = ['', ''];
+	}
 </script>
 
 <DeleteConfirm id="delete-home-confirm" deleteFunction={deleteHome} />
@@ -237,6 +241,9 @@
 				<label class="label">
 					End<input class="m-1" type="date" bind:value={homeFields.blackoutDates[1]} />
 				</label>
+				<button type="button" class="btn btn-error" onclick={() => clearBlackoutDates(homeFields)}
+					>Clear blackout dates</button
+				>
 
 				<div class="divider"></div>
 				<h2 class="edit-heading">Images</h2>

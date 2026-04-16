@@ -143,6 +143,12 @@ export async function PATCH({ locals, url, request }) {
         return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    let blackoutDates = null;
+
+    if (body.blackout_dates[0] !== '') {
+        blackoutDates = [body.blackout_dates[0], body.blackout_dates[1]]
+    }
+
     const { error } = await supabase
         .from('homes')
         .update({
@@ -159,7 +165,7 @@ export async function PATCH({ locals, url, request }) {
             date_available: body.dateAvailable,
             comfort_rating: body.comfortRating,
             project: body.project,
-            blackout_dates: body.blackout_dates
+            blackout_dates: blackoutDates
         })
         .eq('id', id);
 
