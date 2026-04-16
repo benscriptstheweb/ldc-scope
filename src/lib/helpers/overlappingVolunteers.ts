@@ -13,5 +13,16 @@ export async function isOverlapping(home: any, dateRange: any) {
 		return true;
 	}
 
+	// has blackout dates
+	const { data: homesData } = await supabase
+		.from('homes')
+		.select(`*`)
+		.eq('id', home.id)
+		.overlaps('blackout_dates', dateRange)
+
+	if (homesData && homesData.length > 0) {
+		return true;
+	}
+
 	return false;
 }

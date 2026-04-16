@@ -158,7 +158,8 @@ export async function PATCH({ locals, url, request }) {
             max_days_stay: body.maxDaysStay,
             date_available: body.dateAvailable,
             comfort_rating: body.comfortRating,
-            project: body.project
+            project: body.project,
+            blackout_dates: body.blackout_dates
         })
         .eq('id', id);
 

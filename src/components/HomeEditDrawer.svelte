@@ -18,6 +18,7 @@
 		state: string;
 		zip: string;
 		distanceToProject: number;
+		blackoutDates: string[];
 	};
 
 	let isDrawerOpen = $state(false);
@@ -36,8 +37,10 @@
 		dateAvailable: home.date_available,
 		maxDaysStay: home.max_days_stay,
 		comfortRating: home.comfort_rating,
-		project: home.project.id
+		project: home.project.id,
+		blackoutDates: home.blackout_dates
 	};
+
 	let homeFields = $state(structuredClone(homeDetailsOriginal));
 	let images: File[] = $state([]);
 	let formChanged = $derived(
@@ -68,7 +71,7 @@
 
 		const homesApiResponse = await fetch(`/api/homes?id=${home.id}`, {
 			method: 'PATCH',
-			body: JSON.stringify(newHomeDetails)
+			body: JSON.stringify({ ...newHomeDetails, blackout_dates: newHomeDetails.blackoutDates })
 		});
 
 		if (homesApiResponse.ok) {
@@ -223,6 +226,16 @@
 				<label class="label">
 					Available as of
 					<input required bind:value={homeFields.dateAvailable} type="date" />
+				</label>
+
+				<h2 class="edit-heading mt-4">Blackout Dates</h2>
+
+				<label class="label">
+					Start<input class="m-1" type="date" bind:value={homeFields.blackoutDates[0]} />
+				</label>
+
+				<label class="label">
+					End<input class="m-1" type="date" bind:value={homeFields.blackoutDates[1]} />
 				</label>
 
 				<div class="divider"></div>

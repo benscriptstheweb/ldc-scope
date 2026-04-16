@@ -99,6 +99,16 @@
 				Edit Home
 			</label>
 		{/if}
+
+		{#if home.blackout_dates}
+			<div class="badge badge-error badge-xl">
+				<strong>
+					Blackout: {getParsedDate(home.blackout_dates[0])} - {getParsedDate(
+						home.blackout_dates[1]
+					)}
+				</strong>
+			</div>
+		{/if}
 	</div>
 
 	<div class="history flex flex-col">
