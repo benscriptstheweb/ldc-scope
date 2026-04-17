@@ -20,17 +20,18 @@ export async function isOverlapping(home: any, dateRange: any) {
 	const { data: homeData } = await supabase
 		.from('homes')
 		.select(`*`)
-		.eq('id', home.id);
+		.eq('id', home.id)
+		.single();
 
-	console.log(homeData);
-
-	// const hasBlackoutOnDateRange = homeData?.some((home) => 
-	// 	new Date(home.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
-	// 	new Date(home.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime());
-
- //    if (hasBlackoutOnDateRange) {
- //        return true;
- //    }
+	if (homeData.blackout_dates !== null) {
+		const hasBlackoutOnDateRange =
+			new Date(homeData.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
+			new Date(homeData.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime());
+	
+	    if (hasBlackoutOnDateRange) {
+	        return true;
+	    }
+	}
 
     return false;
 }
