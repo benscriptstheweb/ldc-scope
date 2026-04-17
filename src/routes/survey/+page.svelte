@@ -47,7 +47,7 @@
 				type,
 				email: details.email,
 				phone: details.phone,
-				project: details.project,
+				project: details.project.id,
 				date_start: details.date_start,
 				date_end: details.date_end,
 				allergies_notes: details.allergies_notes
@@ -55,6 +55,21 @@
 		});
 
 		if (res.ok) {
+			await fetch('/api/send-notification', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name,
+					type,
+					email: details.email,
+					phone: details.phone,
+					project: details.project.friendly_name,
+					date_start: details.date_start,
+					date_end: details.date_end,
+					allergies_notes: details.allergies_notes
+				})
+			});
+
 			submitted = true;
 			setTimeout(() => {
 				submitted = false;
@@ -124,7 +139,7 @@
 		<select bind:value={newVolunteer.project} class="select">
 			{#await getProjects() then projects}
 				{#each projects as project}
-					<option value={project.id}>{project.friendly_name}</option>
+					<option value={project}>{project.friendly_name}</option>
 				{/each}
 			{/await}
 		</select>
