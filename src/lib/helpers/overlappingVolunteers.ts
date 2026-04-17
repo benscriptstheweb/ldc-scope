@@ -23,10 +23,12 @@ export async function isOverlapping(home: any, dateRange: any) {
 		.eq('id', home.id)
 		.single();
 
+	console.log(homeData);
+
 	if (homeData.blackout_dates !== null) {
 		const hasBlackoutOnDateRange =
 			new Date(homeData.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
-			new Date(homeData.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime());
+			new Date(homeData.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime();
 	
 	    if (hasBlackoutOnDateRange) {
 	        return true;
