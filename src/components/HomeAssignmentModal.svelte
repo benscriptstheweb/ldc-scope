@@ -64,9 +64,11 @@
 		return { assignableHomes: newAssignable, unAssignableHomes: newUnAssignable };
 	}
 	let currentProjectId = $state(volunteerToAssign.project.id);
-	$effect(() => {
+	/*
+$effect(() => {
 		getUpdatedHomes(startDate, endDate, currentProjectId);
 	});
+*/
 </script>
 
 <dialog {id} class="modal">
