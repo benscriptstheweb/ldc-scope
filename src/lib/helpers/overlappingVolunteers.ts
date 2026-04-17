@@ -8,9 +8,9 @@ export async function isOverlapping(home: any, dateRange: any) {
 		.eq('home_id', home.id)
 		.overrideTypes<Assignment[]>();
 
-	if (data && data.length > 0) {
-		return true;
-	}
+	// if (data && data.length > 0) {
+	// 	return true;
+	// }
 
 	// has blackout dates
 	const { data: homesData } = await supabase
