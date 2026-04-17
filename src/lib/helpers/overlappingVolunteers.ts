@@ -22,6 +22,8 @@ export async function isOverlapping(home: any, dateRange: any) {
 		.select(`*`)
 		.eq('id', home.id);
 
+	console.log(homeData);
+
 	const hasBlackoutOnDateRange = homeData?.some((home) => 
 		new Date(home.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
 		new Date(home.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime());
