@@ -8,25 +8,30 @@ export async function isOverlapping(home: any, dateRange: any) {
 		.eq('home_id', home.id)
 		.overrideTypes<Assignment[]>();
 
-	// if (data && data.length > 0) {
-	// 	return true;
-	// }
-
-	// has blackout dates
-	const { data: homesData } = await supabase
-		.from('homes')
-		.select(`*`)
-		.eq('id', home.id)
-
     const hasOverlappingAssignments = assignmentData?.some((assignment) => 
 		new Date(assignment.date_range[0]).getTime() <= new Date(dateRange[1]).getTime() &&
-		new Date(assignment.date_range[1]).getTime() >= new Date(dateRange[0]).getTime())
-
-	console.log(assignmentData);
+		new Date(assignment.date_range[1]).getTime() >= new Date(dateRange[0]).getTime());
 
     if (hasOverlappingAssignments) {
         return true;
     }
+
+	// check for blackout dates
+	const { data: homeData } = await supabase
+		.from('homes')
+		.select(`*`)
+		.eq('id', home.id)
+		.single();
+
+	if (homeData.blackout_dates !== null) {
+		const hasBlackoutOnDateRange =
+			new Date(homeData.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
+			new Date(homeData.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime();
+	
+	    if (hasBlackoutOnDateRange) {
+	        return true;
+	    }
+	}
 
     return false;
 }
