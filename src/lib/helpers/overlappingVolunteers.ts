@@ -19,8 +19,8 @@ export async function isOverlapping(home: any, dateRange: any) {
 		.eq('id', home.id)
 
     const hasOverlappingAssignments = assignmentData?.some((assignment) => 
-		new Date(assignment.date_start).getTime() <= new Date(dateRange[1]) &&
-		new Date(assignment.end_date).getTime() >= new Date(dateRange[0]))
+		new Date(assignment.date_start).getTime() <= new Date(dateRange[1]).getTime() &&
+		new Date(assignment.end_date).getTime() >= new Date(dateRange[0])).getTime()
 
     if (hasOverlappingAssignments) {
         return true;
