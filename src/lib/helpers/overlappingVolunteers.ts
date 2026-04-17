@@ -24,13 +24,13 @@ export async function isOverlapping(home: any, dateRange: any) {
 
 	console.log(homeData);
 
-	const hasBlackoutOnDateRange = homeData?.some((home) => 
-		new Date(home.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
-		new Date(home.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime());
+	// const hasBlackoutOnDateRange = homeData?.some((home) => 
+	// 	new Date(home.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
+	// 	new Date(home.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime());
 
-    if (hasBlackoutOnDateRange) {
-        return true;
-    }
+ //    if (hasBlackoutOnDateRange) {
+ //        return true;
+ //    }
 
     return false;
 }
