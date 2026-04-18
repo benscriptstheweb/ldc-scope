@@ -96,7 +96,7 @@ export async function POST({ request, cookies }) {
 		return json({ error: 'Failed to add volunteer' }, { status: 500 });
 	}
 
-	cookies.delete('survey_auth', { path: '/' });
+	cookies.delete('survey_auth', { path: '/survey' });
 
 	return json({ success: true }, { status: 201 });
 }

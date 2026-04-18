@@ -38,6 +38,10 @@
 	async function addVolunteer(name: string, details: any, type: string) {
 		const res = await fetch(`/api/volunteers`, {
 			method: 'POST',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify({
 				name,
 				type,
