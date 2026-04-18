@@ -27,18 +27,7 @@
 			isLinkCopied = false;
 		}, 3000);
 
-		const res = await fetch('/api/generate-invite', {
-			method: 'POST'
-		});
-
-		const data = await res.json();
-
-		if (!res.ok) {
-			console.error(data.error);
-			return;
-		}
-
-		const link = `https://lacasamorada.org/survey?token=${data.token}`;
+		const link = `https://lacasamorada.org/survey`;
 		await navigator.clipboard.writeText(link);
 	}
 

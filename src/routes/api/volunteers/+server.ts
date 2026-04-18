@@ -82,27 +82,8 @@ export async function GET({ locals, url }) {
 	return json(volunteers);
 }
 
-export async function POST({ request, url }) {
+export async function POST({ request, cookies }) {
 	const body = await request.json();
-	const token = url.searchParams.get('token');
-
-	if (!token) {
-		return json({ error: 'Missing token' }, { status: 403 });
-	}
-
-	const { data: invite, error: inviteError } = await supabase
-		.from('invites')
-		.select('*')
-		.eq('token', token)
-		.single();
-
-	if (inviteError || !invite) {
-		return json({ error: 'Invalid token' }, { status: 403 });
-	}
-
-	if (invite.used === true) {
-		return json({ error: 'Token already used' }, { status: 403 });
-	}
 
 	if (!body.project || !body.name || !body.phone) {
 		return json({ error: 'Missing required fields' }, { status: 400 });
@@ -115,11 +96,7 @@ export async function POST({ request, url }) {
 		return json({ error: 'Failed to add volunteer' }, { status: 500 });
 	}
 
-	// Mark token as used
-	await supabase
-		.from('invites')
-		.update({ used: true })
-		.eq('id', invite.id);
+	cookies.delete('survey_auth', { path: '/' });
 
 	return json({ success: true }, { status: 201 });
 }

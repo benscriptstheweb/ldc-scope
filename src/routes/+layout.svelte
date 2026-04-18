@@ -24,7 +24,7 @@
 		}
 	});
 
-	const publicRoutes = ['/signin', '/survey'];
+	const publicRoutes = ['/signin', '/survey', '/survey/pass'];
 
 	onMount(() => {
 		// track authentication status:

@@ -6,13 +6,12 @@
 	import { getProjects } from '$lib/helpers/getProjects';
 	import { type Volunteer } from '$lib/supabase/types/volunteer';
 	import { OccupantType } from '$lib/supabase/types/occupantType';
-	import { goto } from '$app/navigation';
 
 	let newVolunteer: Partial<Volunteer> = $state({
 		email: '',
 		phone: null,
-		date_start: new Date().toDateString(),
-		date_end: new Date().toDateString(),
+		date_start: '',
+		date_end: '',
 		allergies_notes: ''
 	});
 
@@ -37,10 +36,7 @@
 	let submitted = $state(false);
 
 	async function addVolunteer(name: string, details: any, type: string) {
-		const params = new URLSearchParams(window.location.search);
-		const token = params.get('token');
-
-		const res = await fetch(`/api/volunteers?token=${token}`, {
+		const res = await fetch(`/api/volunteers`, {
 			method: 'POST',
 			body: JSON.stringify({
 				name,
@@ -73,7 +69,7 @@
 			submitted = true;
 			setTimeout(() => {
 				submitted = false;
-				goto('/');
+				window.location.reload();
 			}, 7000);
 		}
 	}
@@ -99,81 +95,90 @@
 			</p>
 		</div>
 		<Spacer spacing="mt-15" />
-		<p class="subheading">1. Basic info:</p>
 
-		<div class="mt-5 mb-5 occupant-type flex justify-between">
-			<label>
-				<input type="radio" value={OccupantType.Brother} bind:group={occupantType} />
-				Brother
-			</label>
-			<label>
-				<input type="radio" value={OccupantType.Sister} bind:group={occupantType} />
-				Sister
-			</label>
-			<label>
-				<input type="radio" value={OccupantType.Couple} bind:group={occupantType} />
-				Couple
-			</label>
-		</div>
+		<form>
+			<p class="subheading">1. Basic info:</p>
 
-		{#if occupantType === OccupantType.Brother || occupantType === OccupantType.Sister}
-			<div class="info flex flex-col">
-				<input bind:value={singleName} type="text" placeholder="Name" />
-				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
-				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
+			<div class="mt-5 mb-5 occupant-type flex justify-between">
+				<label>
+					<input type="radio" value={OccupantType.Brother} bind:group={occupantType} />
+					Brother
+				</label>
+				<label>
+					<input type="radio" value={OccupantType.Sister} bind:group={occupantType} />
+					Sister
+				</label>
+				<label>
+					<input type="radio" value={OccupantType.Couple} bind:group={occupantType} />
+					Couple
+				</label>
 			</div>
-		{:else if occupantType === OccupantType.Couple}
-			<div class="info flex flex-col">
-				<div class="flex">
-					<input class="w-35" bind:value={spouse1} type="text" placeholder="Spouse 1" />
-					<span class="w-10 text-center flex-end">&</span>
-					<input class="w-35" bind:value={spouse2} type="text" placeholder="Spouse 2" />
+
+			{#if occupantType === OccupantType.Brother || occupantType === OccupantType.Sister}
+				<div class="info flex flex-col">
+					<input bind:value={singleName} type="text" placeholder="Name" />
+					<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
+					<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
 				</div>
-				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
-				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
-			</div>
-		{/if}
-
-		<Spacer spacing="mt-10" />
-		<p class="subheading">2. Project you are assigned to:</p>
-		<select bind:value={newVolunteer.project} class="select">
-			{#await getProjects() then projects}
-				{#each projects as project}
-					<option value={project}>{project.friendly_name}</option>
-				{/each}
-			{/await}
-		</select>
-
-		<Spacer spacing="mt-10" />
-		<p class="subheading">3. Start and end date:</p>
-		<div class="flex justify-center items-center">
-			<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
-			<Arrow />
-			<input class="m-1" type="date" bind:value={newVolunteer.date_end} />
-		</div>
-
-		<Spacer spacing="mt-10" />
-		<div>
-			<input class="mr-2" type="checkbox" bind:checked={hasSpecialNeeds} />
-			Any special considerations (allergies, etc.)?
-
-			{#if hasSpecialNeeds}
-				<textarea
-					class="mt-2 textarea"
-					bind:value={newVolunteer.allergies_notes}
-					placeholder="add any information that may be useful in matching you to a home"
-				></textarea>
+			{:else if occupantType === OccupantType.Couple}
+				<div class="info flex flex-col">
+					<div class="flex">
+						<input class="w-35" bind:value={spouse1} type="text" placeholder="Spouse 1" />
+						<span class="w-10 text-center flex-end">&</span>
+						<input class="w-35" bind:value={spouse2} type="text" placeholder="Spouse 2" />
+					</div>
+					<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
+					<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
+				</div>
 			{/if}
-		</div>
 
-		<Spacer spacing="mt-20" />
+			<Spacer spacing="mt-10" />
+			<p class="subheading">2. Project you are assigned to:</p>
+			<select bind:value={newVolunteer.project} class="select">
+				{#await getProjects() then projects}
+					{#each projects as project}
+						<option value={project}>{project.friendly_name}</option>
+					{/each}
+				{/await}
+			</select>
+
+			<Spacer spacing="mt-10" />
+			<p class="subheading">3. Start and end date:</p>
+			<div class="flex justify-center items-center">
+				<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
+				<Arrow />
+				<input class="m-1" type="date" bind:value={newVolunteer.date_end} />
+			</div>
+
+			<Spacer spacing="mt-10" />
+			<div>
+				<input class="mr-2" type="checkbox" bind:checked={hasSpecialNeeds} />
+				Any special considerations (allergies, etc.)?
+
+				{#if hasSpecialNeeds}
+					<textarea
+						class="mt-2 textarea"
+						bind:value={newVolunteer.allergies_notes}
+						placeholder="add any information that may be useful in matching you to a home"
+					></textarea>
+				{/if}
+			</div>
+
+			<Spacer spacing="mt-20" />
+		</form>
 		<button
 			onclick={() => addVolunteer(newVolunteerName, newVolunteer, occupantType)}
+			type="button"
 			class="btn btn-success"
-			disabled={occupantType === ''}
+			disabled={newVolunteer.date_end === '' ||
+				newVolunteer.date_start === '' ||
+				occupantType === '' ||
+				newVolunteer.project === null ||
+				newVolunteerName === '' ||
+				newVolunteer.phone === null ||
+				newVolunteer.email === ''}
 		>
-			<Plus />
-			Submit Request</button
+			<Plus />Submit Request</button
 		>
 	</div>
 </div>
