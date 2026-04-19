@@ -8,27 +8,30 @@ const resend = new Resend(RESEND_API_KEY);
 export async function POST({ request }) {
   const body = await request.json();
 
+  let occupantType = body.type === "C" ? "Couple" : body.type === "B" ? "Brother" : "Sister";
+
   const htmlBody = `
-    <p>
-      Please note that the following housing request has been made:
-    </p>
+<h3>🏡 New Housing Request</h3>
+<p>
+  Please note that the following housing request has been made. Their contact information will be on your dashboard:
+</p>
 
-    <ul>
-      <li>Name: ${body.name}</li>
-      <li>Occupant type: ${body.type}</li>
-      <li>Phone: ${body.phone}</li>
-      <li>Email: ${body.email}</li>
-      <li>Project: ${body.project}</li>
-      <li>Date range: ${getParsedDate(body.date_start)} to ${getParsedDate(body.date_end)}</li>
-    </ul>
+<ul>
+  <li><strong>Name:</strong> ${body.name}</li>
+  <li><strong>Occupant type:</strong> ${occupantType}</li>
+  <li><strong>Project:</strong> ${body.project}</li>
+  <li><strong>Date range:</strong> ${getParsedDate(body.date_start)} to ${getParsedDate(body.date_end)}</li>
+</ul>
 
-    <p>
-      <strong>Special considerations:</strong>
-    </p>
-    <p>
-      ${body.allergies_notes}
-    </p>
-    </p>
+<p>
+  <strong>Special considerations:</strong>
+</p>
+
+<p>
+  ${body.allergies_notes}
+</p>
+
+</p>
   `;
 
   const { error } = await resend.emails.send({
