@@ -37,6 +37,7 @@ export async function POST({ request }) {
   const { error } = await resend.emails.send({
     from: "noreply@lacasamorada.org",
     to: body.emails,
+    cc: "ldchousingr7@gmail.com",
     subject: "Host Occupant Guidelines",
     html: htmlBody,
   });
