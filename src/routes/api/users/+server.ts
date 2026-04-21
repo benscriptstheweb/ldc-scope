@@ -4,7 +4,7 @@ import { json } from '@sveltejs/kit';
 export async function GET({ locals, url }) {
     const email = url.searchParams.get('email');
 
-    if (!locals.user || locals.user.isAdmin !== true) {
+    if (!locals.user) {
         return new Response('Unauthorized', { status: 401 });
     }
 
