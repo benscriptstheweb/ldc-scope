@@ -51,7 +51,8 @@
 				project: details.project.id,
 				date_start: details.date_start,
 				date_end: details.date_end,
-				allergies_notes: details.allergies_notes
+				allergies_notes: details.allergies_notes,
+				ba_number: details.ba_number
 			})
 		});
 
