@@ -12,7 +12,8 @@
 		phone: null,
 		date_start: '',
 		date_end: '',
-		allergies_notes: ''
+		allergies_notes: '',
+		ba_number: null
 	});
 
 	let occupantType = $state('');
@@ -55,6 +56,12 @@
 		});
 
 		if (res.ok) {
+			submitted = true;
+			setTimeout(() => {
+				submitted = false;
+				window.location.reload();
+			}, 7000);
+
 			await fetch('/api/send-notification', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -69,12 +76,6 @@
 					allergies_notes: details.allergies_notes
 				})
 			});
-
-			submitted = true;
-			setTimeout(() => {
-				submitted = false;
-				window.location.reload();
-			}, 7000);
 		}
 	}
 
@@ -118,23 +119,23 @@
 				</label>
 			</div>
 
-			{#if occupantType === OccupantType.Brother || occupantType === OccupantType.Sister}
-				<div class="info flex flex-col">
+			<div class="info flex flex-col">
+				{#if occupantType === OccupantType.Brother || occupantType === OccupantType.Sister}
 					<input bind:value={singleName} type="text" placeholder="Name" />
 					<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
 					<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
-				</div>
-			{:else if occupantType === OccupantType.Couple}
-				<div class="info flex flex-col">
+				{:else if occupantType === OccupantType.Couple}
 					<div class="flex">
 						<input class="w-35" bind:value={spouse1} type="text" placeholder="Spouse 1" />
 						<span class="w-10 text-center flex-end">&</span>
 						<input class="w-35" bind:value={spouse2} type="text" placeholder="Spouse 2" />
 					</div>
-					<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
-					<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
-				</div>
-			{/if}
+				{/if}
+
+				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
+				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
+				<input bind:value={newVolunteer.ba_number} type="number" placeholder="BA number" />
+			</div>
 
 			<Spacer spacing="mt-10" />
 			<p class="subheading">2. Project you are assigned to:</p>
