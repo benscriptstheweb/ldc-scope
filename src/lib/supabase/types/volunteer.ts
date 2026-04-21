@@ -16,4 +16,5 @@ export type Volunteer = {
     // foreign key relations
     assignments: Assignment[];
     project: Project;
+    ba_number: number | null;
 }
