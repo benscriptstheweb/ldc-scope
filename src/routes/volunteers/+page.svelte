@@ -119,8 +119,8 @@
 
 <div class="add-btn-container">
 	<p class="heading">Volunteers</p>
-	<button onclick={copySurveyLink} class="btn btn-soft btn-primary">
-		<Link /> Housing Request Form
+	<button onclick={copySurveyLink} class="btn btn-soft btn-success">
+		<Link /> Housing Request
 	</button>
 </div>
 
