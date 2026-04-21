@@ -85,7 +85,7 @@ export async function GET({ locals, url }) {
 export async function POST({ request, cookies }) {
 	const body = await request.json();
 
-	if (!body.project || !body.name || !body.phone) {
+	if (!body.project || !body.name || !body.phone || !body.ba_number) {
 		return json({ error: 'Missing required fields' }, { status: 400 });
 	}
 
