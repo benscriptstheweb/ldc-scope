@@ -9,6 +9,7 @@
 	import Lookup from '../../icons/Lookup.svelte';
 	import Ex from '../../icons/Ex.svelte';
 	import CompletedPerson from '../../icons/CompletedPerson.svelte';
+	import { dev } from '$app/environment';
 
 	let { data } = $props();
 	const volunteers = data.volunteers;
@@ -27,7 +28,8 @@
 			isLinkCopied = false;
 		}, 3000);
 
-		const link = `https://lacasamorada.org/survey`;
+		const currentEnvironment = dev ? 'localhost:5173' : 'https://lacasamorada.org';
+		const link = `${currentEnvironment}/survey`;
 		await navigator.clipboard.writeText(link);
 	}
 
