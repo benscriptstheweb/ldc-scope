@@ -32,13 +32,6 @@
 				</a>
 			</li>
 
-			<!-- link to reports -->
-			<li>
-				<a href="/reports">
-					<Stats /><span class="menu-text">Reports</span>
-				</a>
-			</li>
-
 			<!-- link to volunteers page -->
 			<li>
 				<a href="/volunteers">
@@ -51,6 +44,13 @@
 							{/if}
 						{/await}
 					</div>
+				</a>
+			</li>
+
+			<!-- link to reports -->
+			<li>
+				<a href="/reports">
+					<Stats /><span class="menu-text">Reports</span>
 				</a>
 			</li>
 
