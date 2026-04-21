@@ -72,6 +72,7 @@
 				<p class="heading header-name mr-2">{data.name}</p>
 			</div>
 		</div>
+		<p class="badge badge-dash badge-info"><strong>{data.ba_number}</strong></p>
 	</div>
 
 	<!-- CONTACT BUTTONS -->
