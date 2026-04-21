@@ -123,8 +123,6 @@
 			<div class="info flex flex-col">
 				{#if occupantType === OccupantType.Brother || occupantType === OccupantType.Sister}
 					<input bind:value={singleName} type="text" placeholder="Name" />
-					<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
-					<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
 				{:else if occupantType === OccupantType.Couple}
 					<div class="flex">
 						<input class="w-35" bind:value={spouse1} type="text" placeholder="Spouse 1" />
