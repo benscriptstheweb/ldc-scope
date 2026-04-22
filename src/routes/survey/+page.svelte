@@ -97,7 +97,7 @@
 				during your visit, please provide the following information.
 			</p>
 			<p class="mt-2 message">
-				💡 Please submit this form no later than <strong><u>one week</u></strong> before your visit.
+				💡 Please submit this form no later than <strong><u>two weeks</u></strong> before your visit.
 			</p>
 		</div>
 		<Spacer spacing="mt-15" />
