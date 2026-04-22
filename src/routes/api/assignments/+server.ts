@@ -14,11 +14,7 @@ export async function GET() {
 	return json(assignments);
 }
 
-export async function POST({ locals, request }) {
-	if (!locals.user?.isAdmin) {
-		return new Response('Forbidden', { status: 403 });
-	}
-
+export async function POST({ request }) {
 	const body = await request.json();
 
 	const hasOverlap = await isOverlapping(body.home, body.dateRange);
