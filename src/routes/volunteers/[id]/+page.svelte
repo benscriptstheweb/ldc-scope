@@ -59,7 +59,9 @@
 {#if data.user.isAdmin}
 	<VolunteerEditDrawer id="edit-volunteer-drawer" volunteerDetail={data} />
 {/if}
-<HomeAssignmentModal volunteerToAssign={data} id="assign-home-modal" />
+
+<!-- TEST - COMMENT -->
+<!-- <HomeAssignmentModal volunteerToAssign={data} id="assign-home-modal" /> -->
 
 {#if emailSent}
 	<Toast infoText="Email sent successfully!" alertType="alert-success" />
