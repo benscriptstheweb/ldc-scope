@@ -15,7 +15,7 @@
 					projectName: data.project.friendly_name,
 					phone: data.phone,
 					hostName: hosts.name,
-					hostAddress: `${assignedHome.address1}, ${assignedHome.city}, ${assignedHome.state} ${assignedHome.zip}`,
+					hostAddress: `${assignedHome.home_id.address1}, ${assignedHome.home_id.city}, ${assignedHome.home_id.state} ${assignedHome.home_id.zip}`,
 					hostPhone: hosts.phone,
 					emails: [hosts.email, data.email]
 				})
