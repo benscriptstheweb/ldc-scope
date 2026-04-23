@@ -97,8 +97,8 @@
 			{/if}
 
 			{#if assignableHomes.length > 0}
+				<h2 class="subheading text-center mb-3">Assignable homes</h2>
 				<ul class="list mb-8">
-					<h2 class="subheading text-center mb-3">Assignable homes</h2>
 					{#each assignableHomes as home}
 						<li class="list-row">
 							{home.address1}, {home.city}
@@ -134,36 +134,44 @@
 			{/if}
 
 			{#if unAssignableHomes.length > 0}
-				<ul class="list">
-					<p class="subheading text-center mb-3">Unassignable homes</p>
-
-					{#each unAssignableHomes as badHome}
-						<li class="list-row">
-							{badHome.address1}
-							<div>
-								{#if badHome.project === volunteerToAssign.project.id}
-									<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
-								{/if}
-								<details class="dropdown dropdown-end">
-									<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
-									<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
-										<li><a href="/homes/{badHome.id}">View Home</a></li>
-										<li>
-											<details>
-												<summary>Contact Host</summary>
-												<ul>
-													<li><a href="sms:{badHome.hosts.phone}">Text</a></li>
-													<li><a href="mailto:{badHome.hosts.email}">Email</a></li>
-													<li><a href="tel:{badHome.hosts.phone}">Call</a></li>
-												</ul>
-											</details>
-										</li>
-									</ul>
-								</details>
-							</div>
-						</li>
-					{/each}
-				</ul>
+				<div class="collapse collapse-arrow">
+					<input type="checkbox" name="accordion-unassignable" checked={false} />
+					<div class="collapse-title font-semibold">
+						<p class="subheading text-center mb-3">Unassignable homes</p>
+					</div>
+					<div class="collapse-content">
+						<ul class="list">
+							{#each unAssignableHomes as badHome}
+								<li class="list-row">
+									{badHome.address1}
+									<div>
+										{#if badHome.project === volunteerToAssign.project.id}
+											<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
+										{/if}
+										<details class="dropdown dropdown-end">
+											<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
+											<ul
+												class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm"
+											>
+												<li><a href="/homes/{badHome.id}">View Home</a></li>
+												<li>
+													<details>
+														<summary>Contact Host</summary>
+														<ul>
+															<li><a href="sms:{badHome.hosts.phone}">Text</a></li>
+															<li><a href="mailto:{badHome.hosts.email}">Email</a></li>
+															<li><a href="tel:{badHome.hosts.phone}">Call</a></li>
+														</ul>
+													</details>
+												</li>
+											</ul>
+										</details>
+									</div>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				</div>
 			{/if}
 
 			<div class="modal-action">
