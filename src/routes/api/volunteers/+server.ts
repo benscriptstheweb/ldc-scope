@@ -48,39 +48,39 @@ export async function GET({ locals, url }) {
 		};
 
 		return json(individualVolunteer);
+	} else {
+		const { data, error } = await supabase
+			.from('volunteers')
+			.select(
+				`
+	            *,
+	            project!inner ( * ),
+	            assignments (home_id ( * ))
+	        `
+			)
+			.eq('project.region', locals.user?.assignedRegion)
+			.overrideTypes<Volunteer[]>();
+	
+		if (error) {
+			console.error('Error fetching volunteers with assignments:', error);
+		}
+	
+		const volunteers = data?.map((v) => {
+			// supabase always returns array, mitigate by getting just the [0] index
+			// return 1 or 0 for isAssigned to sort them later in the frontend
+			return {
+				...v,
+				hasCompletedAssignment: new Date().getTime() > new Date(v.date_end).getTime() ? true : false,
+				assignedHome: v.assignments.length > 0 ? (v.assignments ?? null) : null,
+				isAssigned: v.assignments.length > 0 ? 1 : 0,
+				assignedProject: v.project,
+				daysAssigned:
+					(new Date(v.date_end).getTime() - new Date(v.date_start).getTime()) / (1000 * 60 * 60 * 24)
+			};
+		});
+	
+		return json(volunteers);
 	}
-
-	const { data, error } = await supabase
-		.from('volunteers')
-		.select(
-			`
-            *,
-            project!inner ( * ),
-            assignments (home_id ( * ))
-        `
-		)
-		.eq('project.region', locals.user?.assignedRegion)
-		.overrideTypes<Volunteer[]>();
-
-	if (error) {
-		console.error('Error fetching volunteers with assignments:', error);
-	}
-
-	const volunteers = data?.map((v) => {
-		// supabase always returns array, mitigate by getting just the [0] index
-		// return 1 or 0 for isAssigned to sort them later in the frontend
-		return {
-			...v,
-			hasCompletedAssignment: new Date().getTime() > new Date(v.date_end).getTime() ? true : false,
-			assignedHome: v.assignments.length > 0 ? (v.assignments ?? null) : null,
-			isAssigned: v.assignments.length > 0 ? 1 : 0,
-			assignedProject: v.project,
-			daysAssigned:
-				(new Date(v.date_end).getTime() - new Date(v.date_start).getTime()) / (1000 * 60 * 60 * 24)
-		};
-	});
-
-	return json(volunteers);
 }
 
 export async function POST({ request, cookies }) {
