@@ -97,36 +97,45 @@
 			{/if}
 
 			{#if assignableHomes.length > 0}
-				<h2 class="subheading text-center mb-3">Assignable homes</h2>
+				<h2 class="subheading text-center mb-2">Assignable homes</h2>
 				<ul class="list mb-8">
 					{#each assignableHomes as home}
 						<li class="list-row">
-							{home.address1}, {home.city}
-							<div>
-								{#if home.project === volunteerToAssign.project.id}
-									<div class="badge badge-xs">{home.distance_to_project} mi</div>
-								{/if}
-								<button
-									onclick={() => createAssignment(home, volunteerToAssign, [startDate, endDate])}
-									class="btn btn-success btn-xs btn-circle"><Plus /></button
-								>
+							<div class="flex flex-col">
+								<p>{home.address1}</p>
+								<div class="flex flex-row items-center">
+									<p class="address-city">{home.city}</p>
+									{#if home.project === volunteerToAssign.project.id}
+										<div class="badge badge-xs ml-2">{home.distance_to_project} mi</div>
+									{/if}
+								</div>
+							</div>
+							<div class="flex flex-col">
+								<div>
+									<button
+										onclick={() => createAssignment(home, volunteerToAssign, [startDate, endDate])}
+										class="btn btn-success btn-xs btn-circle"><Plus /></button
+									>
 
-								<details class="dropdown dropdown-end">
-									<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
-									<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm">
-										<li><a href="/homes/{home.id}">View Home</a></li>
-										<li>
-											<details>
-												<summary>Contact Host</summary>
-												<ul>
-													<li><a href="sms:{home.hosts.phone}">Text</a></li>
-													<li><a href="mailto:{home.hosts.email}">Email</a></li>
-													<li><a href="tel:{home.hosts.phone}">Call</a></li>
-												</ul>
-											</details>
-										</li>
-									</ul>
-								</details>
+									<details class="dropdown dropdown-end">
+										<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
+										<ul
+											class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm"
+										>
+											<li><a href="/homes/{home.id}">View Home</a></li>
+											<li>
+												<details>
+													<summary>Contact Host</summary>
+													<ul>
+														<li><a href="sms:{home.hosts.phone}">Text</a></li>
+														<li><a href="mailto:{home.hosts.email}">Email</a></li>
+														<li><a href="tel:{home.hosts.phone}">Call</a></li>
+													</ul>
+												</details>
+											</li>
+										</ul>
+									</details>
+								</div>
 							</div>
 						</li>
 					{/each}
@@ -145,25 +154,12 @@
 								<li class="list-row">
 									{badHome.address1}
 									<div>
-										{#if badHome.project === volunteerToAssign.project.id}
-											<div class="badge badge-xs">{badHome.distance_to_project} mi</div>
-										{/if}
 										<details class="dropdown dropdown-end">
 											<summary class="btn btn-ghost btn-xs btn-circle m-1"><Dots /></summary>
 											<ul
 												class="menu dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-sm"
 											>
 												<li><a href="/homes/{badHome.id}">View Home</a></li>
-												<li>
-													<details>
-														<summary>Contact Host</summary>
-														<ul>
-															<li><a href="sms:{badHome.hosts.phone}">Text</a></li>
-															<li><a href="mailto:{badHome.hosts.email}">Email</a></li>
-															<li><a href="tel:{badHome.hosts.phone}">Call</a></li>
-														</ul>
-													</details>
-												</li>
 											</ul>
 										</details>
 									</div>
@@ -184,6 +180,9 @@
 </dialog>
 
 <style>
+	.address-city {
+		font-size: 0.9em;
+	}
 	.subheading {
 		font-size: 1.3em;
 		font-weight: bold;
