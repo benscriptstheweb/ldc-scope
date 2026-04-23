@@ -17,6 +17,7 @@ export async function GET({ locals, url }) {
             `
 			)
 			.eq('project.region', locals.user?.assignedRegion)
+			.eq('assignments.volunteer_id', volunteerId)
 			.eq('id', volunteerId)
 			.single();
 
