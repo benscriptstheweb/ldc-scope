@@ -41,6 +41,11 @@
 		let newUnAssignable = [];
 
 		for (const home of homes) {
+			console.log('v date range: ', new Date(dateRange[1]));
+			if (home.assignment) {
+				console.log(new Date(home.assignment.date_range[0]))
+			}
+		
 			const hasAssignmentOverlap = home.assignment && 
 				new Date(home.assignment.date_range[0]).getTime() <= new Date(dateRange[1]).getTime() &&
 				new Date(home.assignment.date_range[1]).getTime() >= new Date(dateRange[0]).getTime();
@@ -59,10 +64,8 @@
 				home.max_days_stay >= daysRange &&
 				home.occupant_type.includes(volunteerToAssign.type)
 			) {
-				console.log('assignable: ', home)
 				newAssignable.push(home);
 			} else {
-				console.log('UNassignable: ', home)
 				newUnAssignable.push(home);
 			}
 		}
