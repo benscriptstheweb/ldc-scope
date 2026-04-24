@@ -35,7 +35,7 @@
 
 		const res = await fetch(`/api/homes?projectId=${projectId}`);
 		const homes = await res.json();
-		const dateRange = [${start}, ${end}];
+		const dateRange = [start, end];
 
 console.log(dateRange[0]);
 
