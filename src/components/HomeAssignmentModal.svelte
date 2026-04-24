@@ -40,10 +40,11 @@
 		let newAssignable = [];
 		let newUnAssignable = [];
 
+		console.log('v date range: ', dateRange);
+		
 		for (const home of homes) {
-			console.log('v date range: ', new Date(dateRange[1]));
-			if (home.assignment) {
-				console.log(new Date(home.assignment.date_range[0]))
+			if (home.assignment.length !== 0) {
+				console.log(new Date('a date range: ', home.assignment.date_range))
 			}
 		
 			const hasAssignmentOverlap = home.assignment && 
