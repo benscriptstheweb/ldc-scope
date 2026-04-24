@@ -59,8 +59,10 @@
 				home.max_days_stay >= daysRange &&
 				home.occupant_type.includes(volunteerToAssign.type)
 			) {
+				console.log('assignable: ', home)
 				newAssignable.push(home);
 			} else {
+				console.log('UNassignable: ', home)
 				newUnAssignable.push(home);
 			}
 		}
