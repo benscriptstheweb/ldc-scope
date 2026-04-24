@@ -44,7 +44,7 @@ console.log(dateRange[0]);
 		
 		for (const home of homes) {	
 if (home.assignments.length !== 0) {
-home.assignments.forEach(e => console.log(e.date_range[1])
+home.assignments.forEach(e => console.log(e.date_range[1]));
 }
 			const hasAssignmentOverlap = home.assignments.length !== 0 && 
 			home.assignments.some((a) => 
