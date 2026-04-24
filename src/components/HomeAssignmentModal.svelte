@@ -37,10 +37,13 @@
 		const homes = await res.json();
 		const dateRange = `['${start}', '${end}']`
 
+console.log(dateRange);
+
 		let newAssignable = [];
 		let newUnAssignable = [];
 		
 		for (const home of homes) {	
+console.log(home);
 			const hasAssignmentOverlap = home.assignment && 
 				new Date(home.assignment.date_range[0]).getTime() <= new Date(dateRange[1]).getTime() &&
 				new Date(home.assignment.date_range[1]).getTime() >= new Date(dateRange[0]).getTime();
