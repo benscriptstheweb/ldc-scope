@@ -44,7 +44,7 @@ console.log(dateRange);
 		
 		for (const home of homes) {	
 console.log(home);
-			const hasAssignmentOverlap = home.assignments && 
+			const hasAssignmentOverlap = home.assignments.length !== 0 && 
 				new Date(home.assignments.date_range[0]).getTime() <= new Date(dateRange[1]).getTime() &&
 				new Date(home.assignments.date_range[1]).getTime() >= new Date(dateRange[0]).getTime();
 
