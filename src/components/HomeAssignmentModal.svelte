@@ -43,7 +43,7 @@
 		for (const home of homes) {
 			const hasAssignmentOverlap = home.assignment && 
 				new Date(home.assignment.date_range[0]).getTime() <= new Date(dateRange[1]).getTime() &&
-				new Date(home.assignment.date_range[1]).getTime() >= new Date(dateRange[0]).getTime());
+				new Date(home.assignment.date_range[1]).getTime() >= new Date(dateRange[0]).getTime();
 
 			const hasBlackoutOverlap = home.blackout_dates &&
 				new Date(home.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
