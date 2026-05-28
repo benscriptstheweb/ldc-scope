@@ -33,7 +33,7 @@
 		amenities: home.amenities,
 		occupantType: home.occupant_type,
 		hasPets: home.hasPets,
-		parkingType: home.parkingType,
+		parkingType: home.parking_type,
 		dateAvailable: home.date_available,
 		maxDaysStay: home.max_days_stay,
 		comfortRating: home.comfort_rating,

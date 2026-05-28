@@ -182,7 +182,7 @@
 		<h2>Parking & RV</h2>
 		<div class="block mt-2">
 			<div class="flex detail">
-				Type: {home.parkingType}
+				Type: {home.parking_type}
 			</div>
 
 			<div class="detail flex flex-row">

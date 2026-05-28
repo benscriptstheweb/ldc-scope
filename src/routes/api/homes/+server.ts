@@ -165,7 +165,8 @@ export async function PATCH({ locals, url, request }) {
             date_available: body.dateAvailable,
             comfort_rating: body.comfortRating,
             project: body.project,
-            blackout_dates: blackoutDates
+            blackout_dates: blackoutDates,
+            parking_type: body.parkingType
         })
         .eq('id', id);
 
