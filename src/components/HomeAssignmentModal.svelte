@@ -24,12 +24,6 @@
 		(document.getElementById(id) as HTMLDialogElement).close();
 	}
 
-	async function getHomesByVolunteerProject(projectId: string) {
-		const res = await fetch(`/api/homes?projectId=${projectId}`);
-		const homesByProject = res.json();
-
-		return homesByProject;
-	}
 
 	let startDate = $state(volunteerToAssign.date_start);
 	let endDate = $state(volunteerToAssign.date_end);
@@ -39,18 +33,30 @@
 			return { assignableHomes: [], unAssignableHomes: [] };
 		}
 
-		const homes = await getHomesByVolunteerProject(projectId);
+		const res = await fetch(`/api/homes?projectId=${projectId}`);
+		const homes = await res.json();
+		const dateRange = [start, end];
 
 		let newAssignable = [];
 		let newUnAssignable = [];
+		
+		for (const home of homes) {	
+			const hasAssignmentOverlap = home.assignments.length !== 0 && 
+			home.assignments.some((a) => 
+				new Date(a.date_range[0]).getTime() <= new Date(dateRange[1]).getTime() &&
+				new Date(a.date_range[1]).getTime() >= new Date(dateRange[0]).getTime()
+			);
 
-		for (const home of homes) {
-			const hasOverlap = await isOverlapping(home, [start, end]);
+			const hasBlackoutOverlap = home.blackout_dates &&
+				new Date(home.blackout_dates[0]).getTime() <= new Date(dateRange[1]).getTime() &&
+				new Date(home.blackout_dates[1]).getTime() >= new Date(dateRange[0]).getTime();
+			
 			const daysRange =
 				(new Date(end).getTime() - new Date(start).getTime()) / (1000 * 60 * 60 * 24);
 
 			if (
-				!hasOverlap &&
+				!hasAssignmentOverlap &&
+				!hasBlackoutOverlap &&
 				new Date(home.date_available).getTime() <= new Date(startDate).getTime() &&
 				home.max_days_stay >= daysRange &&
 				home.occupant_type.includes(volunteerToAssign.type)

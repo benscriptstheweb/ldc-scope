@@ -9,7 +9,9 @@ export async function GET({ locals, url }) {
     if (projectId) {
         const { data: homesByProject, error } = await supabase
             .from('homes')
-            .select('*')
+            .select(`
+            *,
+            assignments ( date_range ) `)
             .order('distance_to_project', { ascending: true })
             .eq('project', projectId);
 
