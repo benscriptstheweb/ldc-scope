@@ -137,7 +137,9 @@ export async function PATCH({ locals, url, request }) {
 	const volunteerId = url.searchParams.get('id');
 	const body = await request.json();
 
-	if (!body.name || !body.phone || !body.project || !body.date_start || !body.date_end) {
+	console.log(body.project)
+
+	if (!body.name || !body.phone || body.project === null || !body.date_start || !body.date_end) {
 		return json({ error: 'Missing required fields' }, { status: 400 });
 	}
 
