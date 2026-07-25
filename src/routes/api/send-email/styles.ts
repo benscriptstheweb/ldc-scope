@@ -32,54 +32,40 @@ export function htmlBody(body: any) {
                                         Dear friends,
                                         </p>
 
-                                        <p style="margin:0 0 36px;">
-                                        By way of introduction, included in this email is
-                                        <strong>${body.name}</strong>
-                                        who will be visiting from
-                                        <strong>${body.date_start}</strong>
-                                        to
+                                        <p style="margin:0 0 32px;">
+                                        This email serves as an introduction between
+                                        <strong>${body.name}</strong> (${body.phone}),
+                                        who will be visiting on
+                                        <strong>${body.date_start}</strong> –
                                         <strong>${body.date_end}</strong>
                                         to assist with the
-                                        <strong>${body.projectName}</strong>
-                                        project.
+                                        <strong>${body.projectName}</strong> project.
+                                        Also included in this email is
+                                        <strong>${body.hostName}</strong> (${body.hostPhone}),
+                                        who will be providing the housing accommodations.
                                         </p>
 
-                                        <div style="margin-left:64px; margin-bottom:34px;">
-                                            <div style="
-                                                font-weight:bold;
-                                                text-decoration:underline;
-                                                font-size:18px;
-                                                margin-bottom:10px;">
-                                                Guest information
-                                            </div>
-
-                                            <div>Name: ${body.name}</div>
-                                            <div>Mobile: ${body.phone}</div>
-                                        </div>
-
-                                        <p style="margin:0 0 34px;">
-                                        Also included in this email is the host
-                                        <strong>${body.hostName}</strong>,
-                                        who will be providing housing.
+                                        <p style="margin:0 0 16px;">
+                                        Below is the address of the host's property:
                                         </p>
 
-                                        <div style="margin-left:64px; margin-bottom:38px;">
-                                            <div style="
-                                                font-weight:bold;
-                                                text-decoration:underline;
-                                                font-size:18px;
-                                                margin-bottom:10px;">
-                                                Host information
-                                            </div>
-
-                                            <div>Name: ${body.hostName}</div>
-                                            <div>Address: ${body.hostAddress}</div>
-                                            <div>Mobile: ${body.hostPhone}</div>
+                                        <div style="
+                                            margin-left:48px;
+                                            margin-bottom:36px;
+                                            font-size:16px;">
+                                            ${body.hostAddress}
                                         </div>
+
+                                        <p style="margin:0 0 40px;">
+                                        We recommend that you contact one another to review any further details,
+                                        such as expected time of arrival, special remarks, or any other information
+                                        that will help make the stay enjoyable for everyone.
+                                        </p>
 
                                         <p style="margin:0 0 52px;">
-                                        We want to warmly express our appreciation for your loving support of this arrangement.
-                                        May you have Jehovah's blessing!
+                                        Your volunteer efforts for this arrangement add to the blessing of this
+                                        project, and your families' loving support is much appreciated.
+                                        Thank you very much!
                                         </p>
 
                                         <h1 style="
@@ -99,7 +85,7 @@ export function htmlBody(body: any) {
                                         <p style="margin:0 0 36px;">
                                         You are encouraged to review
                                         <i>Host and Occupant Guidelines</i>,
-                                        provided by the U.S. branch, to help you make the best of your stay:
+                                        provided by the U.S. branch, to help make the best of your stay:
                                         <br><br>
 
                                             <a href="https://drive.google.com/file/d/1mfO3HSsR9Vbd9J12AzM6rXnD4X3DkIwC/view?usp=drive_link"
