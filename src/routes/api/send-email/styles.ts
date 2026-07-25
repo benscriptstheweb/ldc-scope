@@ -1,3 +1,9 @@
+function formatPhone(phone: number): string {
+    const digits = phone.toString();
+
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 export function htmlBody(body: any) {
     return `
     <!DOCTYPE html>
@@ -34,14 +40,14 @@ export function htmlBody(body: any) {
 
                                         <p style="margin:0 0 32px;">
                                         This email serves as an introduction between
-                                        <strong>${body.name}</strong> (${body.phone}),
+                                        <strong>${body.name}</strong> (${formatPhone(body.phone)}),
                                         who will be visiting on
                                         <strong>${body.date_start}</strong> –
                                         <strong>${body.date_end}</strong>
                                         to assist with the
                                         <strong>${body.projectName}</strong> project.
                                         Also included in this email is
-                                        <strong>${body.hostName}</strong> (${body.hostPhone}),
+                                        <strong>${body.hostName}</strong> (${formatPhone(body.hostPhone)}),
                                         who will be providing the housing accommodations.
                                         </p>
 
