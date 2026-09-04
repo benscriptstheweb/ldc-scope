@@ -66,5 +66,6 @@
 <style>
 	.comment-origin {
 		font-size: 0.7em;
+		color: gray;
 	}
 </style>
