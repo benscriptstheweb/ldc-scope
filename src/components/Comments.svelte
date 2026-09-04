@@ -6,7 +6,7 @@
 	let isCommenting = $state(false);
 	let commentText = $state('');
 
-	let { postCommentCallback, deleteCommentCallback, commentsData, currentUserEmail } = $props();
+	let { postCommentCallback, deleteCommentCallback, commentsData, currentUser } = $props();
 </script>
 
 <div class="items-center flex flex-col mt-10">
@@ -36,11 +36,11 @@
 		{/if}
 
 		{#each commentsData as comment}
-			<div class="chat {currentUserEmail === comment.user ? 'chat-end' : 'chat-start'}">
+			<div class="chat {currentUser === comment.user ? 'chat-end' : 'chat-start'}">
 				<div class="chat-bubble flex flex-col">
 					<div class="flex items-center">
 						<p class="comment-origin">{comment.user}</p>
-						{#if currentUserEmail === comment.user}
+						{#if currentUser === comment.user}
 							<details class="dropdown dropdown-end">
 								<summary class="btn btn-ghost btn-xs btn-circle"><Dots /></summary>
 								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-50 shadow-sm">

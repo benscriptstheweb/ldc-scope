@@ -2,7 +2,6 @@
 	import HomeAssignmentModal from '../../../components/HomeAssignmentModal.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
 	import VolunteerEditDrawer from '../../../components/VolunteerEditDrawer.svelte';
-	import Trash from '../../../icons/Trash.svelte';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import CustomBadge from '../../../components/CustomBadge.svelte';
 	import Email from '../../../icons/Email.svelte';
@@ -13,7 +12,6 @@
 	import Sms from '../../../icons/Sms.svelte';
 	import Dots from '../../../icons/Dots.svelte';
 	import Route from '../../../icons/Route.svelte';
-	import Comment from '../../../icons/Comment.svelte';
 	import Comments from '../../../components/Comments.svelte';
 
 	let { data } = $props();
@@ -31,13 +29,10 @@
 
 	let emailSent = $state(false);
 
-	let newComment = $state(false);
-	let commentText = $state('');
-
 	async function postComment(text: string) {
 		const res = await fetch(`/api/volunteerComments?volunteerId=${data.id}`, {
 			method: 'POST',
-			body: JSON.stringify({ text, user: data.user.email })
+			body: JSON.stringify({ text, user: data.user.displayName })
 		});
 
 		if (res.ok) {
@@ -196,7 +191,7 @@
 		postCommentCallback={postComment}
 		deleteCommentCallback={deleteComment}
 		commentsData={data.volunteer_comments}
-		currentUserEmail={data.user.email}
+		currentUser={data.user.displayName}
 	/>
 </div>
 

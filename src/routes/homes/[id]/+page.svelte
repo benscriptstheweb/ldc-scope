@@ -40,7 +40,7 @@
 	async function postComment(text: string) {
 		const res = await fetch(`/api/comments?homeId=${home.id}`, {
 			method: 'POST',
-			body: JSON.stringify({ text, user: data.user.email })
+			body: JSON.stringify({ text, user: data.user.displayName })
 		});
 
 		if (res.ok) {
@@ -223,7 +223,7 @@
 		postCommentCallback={postComment}
 		deleteCommentCallback={deleteComment}
 		commentsData={home.comments}
-		currentUserEmail={data.user.email}
+		currentUser={data.user.displayName}
 	/>
 </div>
 
