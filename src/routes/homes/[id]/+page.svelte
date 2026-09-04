@@ -5,15 +5,9 @@
 	import ContactsEditDrawer from '../../../components/ContactsEditDrawer.svelte';
 	import Edit from '../../../icons/Edit.svelte';
 	import RecommendedOccupantBadge from '../../../components/RecommendedOccupantBadge.svelte';
-	import ParkingStructure from '../../../icons/ParkingStructure.svelte';
-	import ParkingStreet from '../../../icons/ParkingStreet.svelte';
 	import { onMount } from 'svelte';
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import CustomBadge from '../../../components/CustomBadge.svelte';
-	import Van from '../../../icons/Van.svelte';
-	import Trash from '../../../icons/Trash.svelte';
-	import Dots from '../../../icons/Dots.svelte';
-	import Comment from '../../../icons/Comment.svelte';
 	import Comments from '../../../components/Comments.svelte';
 
 	const { data } = $props();
@@ -42,9 +36,6 @@
 			return dateB.getTime() - dateA.getTime();
 		});
 	}
-
-	let newComment = $state(false);
-	let commentText = $state('');
 
 	async function postComment(text: string) {
 		const res = await fetch(`/api/comments?homeId=${home.id}`, {
