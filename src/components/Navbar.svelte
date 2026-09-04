@@ -14,7 +14,7 @@
 	async function getUnassignedCount() {
 		const res = await fetch('/api/volunteers');
 		const volunteers = await res.json();
-		return volunteers.filter((v: any) => v.isAssigned === 0).length;
+		return volunteers.filter((v: any) => v.isAssigned === 0 && !v.hasCompletedAssignment).length;
 	}
 </script>
 
