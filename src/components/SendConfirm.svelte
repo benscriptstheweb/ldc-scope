@@ -10,8 +10,8 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					name: data.name,
-					date_start: getParsedDate(data.date_start),
-					date_end: getParsedDate(data.date_end),
+					date_start: getParsedDate(assignedHome.date_range[0]),
+					date_end: getParsedDate(assignedHome.date_range[1]),
 					projectName: data.project.friendly_name,
 					phone: data.phone,
 					hostName: hosts.name,
