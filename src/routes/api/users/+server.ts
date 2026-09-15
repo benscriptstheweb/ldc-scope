@@ -1,29 +1,38 @@
-import { adminAuth } from '$lib/firebase/admin';
 import { json } from '@sveltejs/kit';
+import { supabase } from '$lib/supabase/supabaseClient';
 
-export async function GET({ locals, url }) {
-    const email = url.searchParams.get('email');
+export async function GET() {
+    const { data, error } = await supabase
+        .from('agents')
+        .select(`*`);
 
-    if (!locals.user) {
-        return new Response('Unauthorized', { status: 401 });
+    if (error) {
+        console.error('Error fetching volunteers with assignments:', error);
     }
 
-    if (email) {
-        const singleUser = await adminAuth.getUserByEmail(email);
+    const agents = data?.map((v) => {
+        return {
+            full_name: v.full_name,
+            email: v.email
+        };
+    });
 
-        return json({
-            uid: singleUser.uid,
-            email: singleUser.email,
-            displayName: singleUser.displayName
-        })
+    return json(agents);
+}
+
+export async function POST({ request }) {
+    const body = await request.json();
+
+    if (!body.full_name || !body.email) {
+        return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    let listUsersResult = await adminAuth.listUsers(20);
-    let users = listUsersResult.users.map(user => ({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName
-    }));
+    const { error } = await supabase.from('agents').insert([body]);
 
-    return json(users);
+    if (error) {
+        console.error('Failed to add agent:', error);
+        return json({ error: 'Failed to add agent' }, { status: 500 });
+    }
+
+    return json({ success: true }, { status: 201 });
 }

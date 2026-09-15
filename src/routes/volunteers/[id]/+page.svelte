@@ -117,13 +117,13 @@
 
 			<p class="project-info">
 				Assigned agent:
-				{#if data.agent}
+				<!-- {#if data.agent}
 					<span class="badge badge-soft badge-info">
 						<strong>{data.assignedUserAgent.displayName}</strong></span
 					>
 				{:else}
 					<span class="badge badge-soft badge-error"><strong>No assigned agent</strong></span>
-				{/if}
+				{/if} -->
 			</p>
 		</div>
 
@@ -186,13 +186,13 @@
 			{/if}
 		</div>
 	</div>
-
+	<!-- 
 	<Comments
 		postCommentCallback={postComment}
 		deleteCommentCallback={deleteComment}
 		commentsData={data.volunteer_comments}
 		currentUser={data.user.displayName}
-	/>
+	/> -->
 </div>
 
 <style>

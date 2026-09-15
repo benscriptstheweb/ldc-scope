@@ -45,9 +45,8 @@
 
 	async function getUsers() {
 		const res = await fetch('/api/users');
-		const users = await res.json();
-
-		return { users };
+		const agents = await res.json();
+		return { agents };
 	}
 </script>
 
@@ -79,9 +78,9 @@
 
 			<strong class="text-center">Assigned agent</strong>
 			<select bind:value={newVolunteerDetails.agent} class="select mb-7">
-				{#await getUsers() then fbUsers}
-					{#each fbUsers.users as user}
-						<option value={user.email}>{user.displayName}</option>
+				{#await getUsers() then dbData}
+					{#each dbData.agents as agent}
+						<option value={agent.email}>{agent.full_name}</option>
 					{/each}
 				{/await}
 			</select>
