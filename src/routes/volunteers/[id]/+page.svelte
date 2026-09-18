@@ -117,13 +117,13 @@
 
 			<p class="project-info">
 				Assigned agent:
-				<!-- {#if data.agent}
+				{#if data.assignedAgent}
 					<span class="badge badge-soft badge-info">
-						<strong>{data.assignedUserAgent.displayName}</strong></span
+						<strong>{data.assignedAgent[0].full_name}</strong></span
 					>
 				{:else}
 					<span class="badge badge-soft badge-error"><strong>No assigned agent</strong></span>
-				{/if} -->
+				{/if}
 			</p>
 		</div>
 

@@ -1,7 +1,22 @@
 import { json } from '@sveltejs/kit';
 import { supabase } from '$lib/supabase/supabaseClient';
 
-export async function GET() {
+export async function GET({ url }) {
+    const agentEmail = url.searchParams.get('email');
+
+    if (agentEmail) {
+        const { data: agentData, error } = await supabase
+            .from('agents')
+            .select(`*`)
+            .eq('email', agentEmail)
+
+        if (error) {
+            console.error('Error fetching agent:', error);
+        }
+
+        return json(agentData);
+    }
+
     const { data, error } = await supabase
         .from('agents')
         .select(`*`);

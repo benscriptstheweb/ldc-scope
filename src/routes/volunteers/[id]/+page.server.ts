@@ -9,5 +9,11 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
         ...volunteerById,
     }
 
+    if (volunteer.agent) {
+        const agentResponse = await fetch(`/api/users?email=${volunteer.agent}`);
+        const assignedAgent = await agentResponse.json();
+        return { ...volunteer, assignedAgent }
+    }
+
     return { ...volunteer };
 }
