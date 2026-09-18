@@ -19,8 +19,10 @@
 
 	const auth = getAuth();
 
+	let agentName = $state('');
+
 	async function createAccount() {
-		if (email === '' || password === '') {
+		if (email === '' || password === '' || agentName === '') {
 			fieldsEmpty = true;
 			setTimeout(() => {
 				fieldsEmpty = false;
@@ -29,21 +31,39 @@
 			return;
 		}
 
-		createUserWithEmailAndPassword(auth, email, password)
-			.then(() => {
-				isAccountCreated = true;
-				setTimeout(() => {
-					isAccountCreated = false;
-				}, 5000);
+		// adds to the supabase public db
+		const res = await fetch(`/api/users`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				full_name: agentName,
+				email: email
 			})
-			.catch((e) => {
-				if (e.code === 'auth/email-already-in-use') {
-					accountExists = true;
+		});
+
+		if (res.ok) {
+			// adds to the fb list
+			createUserWithEmailAndPassword(auth, email, password)
+				.then(() => {
+					isAccountCreated = true;
+					email = '';
+					agentName = '';
+					password = '';
 					setTimeout(() => {
-						accountExists = false;
-					}, 3000);
-				}
-			});
+						isAccountCreated = false;
+					}, 5000);
+				})
+				.catch((e) => {
+					if (e.code === 'auth/email-already-in-use') {
+						accountExists = true;
+						setTimeout(() => {
+							accountExists = false;
+						}, 3000);
+					}
+				});
+		}
 	}
 
 	async function login() {
@@ -71,6 +91,8 @@
 				}, 3000);
 			});
 	}
+
+	let isCreatingAccount = $state(false);
 </script>
 
 {#if isAccountCreated}
@@ -87,10 +109,7 @@
 	<Toast infoText={'Wrong credentials. Please try again'} alertType={'alert-error'} />
 {/if}
 {#if fieldsEmpty}
-	<Toast
-		infoText={'Please fill out your email and password, then click create account!'}
-		alertType={'alert-error'}
-	/>
+	<Toast infoText={'Please fill out all fields, then click Create!'} alertType={'alert-error'} />
 {/if}
 
 <div class="center-container">
@@ -101,6 +120,15 @@
 		<h1 class="welcome-sign mb-2">Welcome home</h1>
 		<form onsubmit={(e) => e.preventDefault()}>
 			<div class="mb-5 flex flex-col">
+				{#if isCreatingAccount}
+					<input
+						required
+						class="input mb-2"
+						type="text"
+						bind:value={agentName}
+						placeholder="full name"
+					/>
+				{/if}
 				<input
 					required
 					class="input mb-2"
@@ -131,16 +159,41 @@
 						<Eye style={makePassVisible ? 'closed' : 'open'} />
 					</span>
 				</div>
-				<div>
-					<button class="btn btn-soft btn-primary mt-2" type="submit" onclick={login}>Login</button>
-					<button
-						class="btn btn-ghost mt-2"
-						onclick={(e) => {
-							e.preventDefault();
-							createAccount();
-						}}>Create Account</button
-					>
-				</div>
+
+				{#if !isCreatingAccount}
+					<div>
+						<button
+							class="btn btn-ghost mt-2"
+							type="button"
+							onclick={(e) => {
+								e.preventDefault();
+								isCreatingAccount = true;
+							}}>Create Account</button
+						>
+						<button class="btn btn-soft btn-primary mt-2" type="submit" onclick={login}
+							>Login</button
+						>
+					</div>
+				{:else}
+					<div>
+						<button
+							class="btn btn-ghost mt-2"
+							type="button"
+							onclick={(e) => {
+								e.preventDefault();
+								isCreatingAccount = false;
+							}}>Cancel</button
+						>
+						<button
+							class="btn btn-soft btn-primary mt-2"
+							type="submit"
+							onclick={(e) => {
+								e.preventDefault();
+								createAccount();
+							}}>Create</button
+						>
+					</div>
+				{/if}
 			</div>
 		</form>
 	</div>

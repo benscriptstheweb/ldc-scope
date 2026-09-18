@@ -32,7 +32,7 @@
 	async function postComment(text: string) {
 		const res = await fetch(`/api/volunteerComments?volunteerId=${data.id}`, {
 			method: 'POST',
-			body: JSON.stringify({ text, user: data.user.displayName })
+			body: JSON.stringify({ text, user: data.user.email })
 		});
 
 		if (res.ok) {
@@ -117,9 +117,9 @@
 
 			<p class="project-info">
 				Assigned agent:
-				{#if data.agent}
+				{#if data.assignedAgent}
 					<span class="badge badge-soft badge-info">
-						<strong>{data.assignedUserAgent.displayName}</strong></span
+						<strong>{data.assignedAgent[0].full_name}</strong></span
 					>
 				{:else}
 					<span class="badge badge-soft badge-error"><strong>No assigned agent</strong></span>
@@ -191,7 +191,7 @@
 		postCommentCallback={postComment}
 		deleteCommentCallback={deleteComment}
 		commentsData={data.volunteer_comments}
-		currentUser={data.user.displayName}
+		currentUser={data.user.email}
 	/>
 </div>
 
