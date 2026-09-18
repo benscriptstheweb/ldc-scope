@@ -36,11 +36,11 @@
 		{/if}
 
 		{#each commentsData as comment}
-			<div class="chat {currentUser === comment.user ? 'chat-end' : 'chat-start'}">
+			<div class="chat {currentUser === comment.user.email ? 'chat-end' : 'chat-start'}">
 				<div class="chat-bubble flex flex-col">
 					<div class="flex items-center">
-						<p class="comment-origin">{comment.user}</p>
-						{#if currentUser === comment.user}
+						<p class="comment-origin">{comment.user.full_name}</p>
+						{#if currentUser === comment.user.email}
 							<details class="dropdown dropdown-end">
 								<summary class="btn btn-ghost btn-xs btn-circle"><Dots /></summary>
 								<ul class="menu dropdown-content bg-base-300 rounded-box z-1 w-50 shadow-sm">

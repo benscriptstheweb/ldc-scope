@@ -32,7 +32,7 @@
 	async function postComment(text: string) {
 		const res = await fetch(`/api/volunteerComments?volunteerId=${data.id}`, {
 			method: 'POST',
-			body: JSON.stringify({ text, user: data.user.displayName })
+			body: JSON.stringify({ text, user: data.user.email })
 		});
 
 		if (res.ok) {
@@ -186,13 +186,13 @@
 			{/if}
 		</div>
 	</div>
-	<!-- 
+
 	<Comments
 		postCommentCallback={postComment}
 		deleteCommentCallback={deleteComment}
 		commentsData={data.volunteer_comments}
-		currentUser={data.user.displayName}
-	/> -->
+		currentUser={data.user.email}
+	/>
 </div>
 
 <style>
