@@ -13,7 +13,7 @@ export async function GET({ locals, url }) {
                 *,
                 project!inner ( * ),
                 assignments ( id, home_id ( * ), date_range),
-				volunteer_comments ( * )
+				volunteer_comments ( *, user ( full_name, email ) )
             `
 			)
 			.eq('project.region', locals.user?.assignedRegion)
