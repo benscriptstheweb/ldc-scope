@@ -160,11 +160,11 @@
 					</span>
 				</div>
 
-				<!-- TBD: these buttons will change to Cancel and Create Account when the create account flag is on -->
 				{#if !isCreatingAccount}
 					<div>
 						<button
 							class="btn btn-ghost mt-2"
+							type="button"
 							onclick={(e) => {
 								e.preventDefault();
 								isCreatingAccount = true;
@@ -178,11 +178,15 @@
 					<div>
 						<button
 							class="btn btn-ghost mt-2"
-							type="submit"
-							onclick={() => (isCreatingAccount = false)}>Cancel</button
+							type="button"
+							onclick={(e) => {
+								e.preventDefault();
+								isCreatingAccount = false;
+							}}>Cancel</button
 						>
 						<button
 							class="btn btn-soft btn-primary mt-2"
+							type="submit"
 							onclick={(e) => {
 								e.preventDefault();
 								createAccount();
