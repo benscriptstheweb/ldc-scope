@@ -18,6 +18,7 @@ export async function POST({ request }) {
 
 <ul>
   <li><strong>Name:</strong> ${body.name}</li>
+  <li><strong>Congregation:</strong> ${body.congregation}</li>
   <li><strong>Occupant type:</strong> ${occupantType}</li>
   <li><strong>Project:</strong> ${body.project}</li>
   <li><strong>Date range:</strong> ${getParsedDate(body.date_start)} to ${getParsedDate(body.date_end)}</li>

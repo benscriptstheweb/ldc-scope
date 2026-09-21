@@ -13,7 +13,8 @@
 		date_start: '',
 		date_end: '',
 		allergies_notes: '',
-		ba_number: null
+		ba_number: null,
+		congregation: ''
 	});
 
 	let occupantType = $state('');
@@ -52,7 +53,8 @@
 				date_start: details.date_start,
 				date_end: details.date_end,
 				allergies_notes: details.allergies_notes,
-				ba_number: details.ba_number
+				ba_number: details.ba_number,
+				congregation: details.congregation
 			})
 		});
 
@@ -74,7 +76,8 @@
 					project: details.project.friendly_name,
 					date_start: details.date_start,
 					date_end: details.date_end,
-					allergies_notes: details.allergies_notes
+					allergies_notes: details.allergies_notes,
+					congregation: details.congregation
 				})
 			});
 		}
@@ -134,6 +137,7 @@
 				<input bind:value={newVolunteer.phone} type="number" placeholder="Phone" />
 				<input bind:value={newVolunteer.email} type="email" placeholder="Email" />
 				<input bind:value={newVolunteer.ba_number} type="number" placeholder="BA number" />
+				<input bind:value={newVolunteer.congregation} type="text" placeholder="Congregation name" />
 			</div>
 
 			<Spacer spacing="mt-10" />

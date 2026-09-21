@@ -17,4 +17,5 @@ export type Volunteer = {
     assignments: Assignment[];
     project: Project;
     ba_number: number | null;
+    congregation: string;
 }
