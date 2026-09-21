@@ -13,6 +13,7 @@
 	import Dots from '../../../icons/Dots.svelte';
 	import Route from '../../../icons/Route.svelte';
 	import Comments from '../../../components/Comments.svelte';
+	import DeleteConfirm from '../../../components/DeleteConfirm.svelte';
 
 	let { data } = $props();
 
@@ -145,6 +146,10 @@
 						hosts={assignedHome.home_id.hosts}
 						bind:successfullySent={emailSent}
 					/>
+					<DeleteConfirm
+						id="delete-stay-confirm"
+						deleteFunction={() => deleteHomeAssignment(assignedHome.id)}
+					/>
 					{#if assignedHome !== null}
 						<div class="stay-info mt-5 flex justify-between items-center">
 							<div class="address">
@@ -174,7 +179,14 @@
 										</button>
 									</li>
 									<li>
-										<button onclick={() => deleteHomeAssignment(assignedHome.id)}>
+										<button
+											onclick={(e) => {
+												e.preventDefault();
+												(
+													document.getElementById('delete-stay-confirm') as HTMLDialogElement
+												).showModal();
+											}}
+										>
 											Remove stay
 										</button>
 									</li>
