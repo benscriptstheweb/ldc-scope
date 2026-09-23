@@ -38,7 +38,6 @@ export async function GET({ locals, url }) {
 
 		const individualVolunteer = {
 			...data,
-			hasCompletedAssignment: new Date().getTime() > new Date(data.date_end).getTime() ? true : false,
 			assignedHome: data.assignments.length > 0 ? (newAssignments ?? null) : null,
 			daysAssigned:
 				(new Date(data.date_end).getTime() - new Date(data.date_start).getTime()) /
@@ -65,12 +64,11 @@ export async function GET({ locals, url }) {
 		console.error('Error fetching volunteers with assignments:', error);
 	}
 
-	const volunteers = data?.map((v) => {
+	const volunteers = data?.filter(e => new Date().getTime() < new Date(e.date_end).getTime()).map((v) => {
 		// supabase always returns array, mitigate by getting just the [0] index
 		// return 1 or 0 for isAssigned to sort them later in the frontend
 		return {
 			...v,
-			hasCompletedAssignment: new Date().getTime() > new Date(v.date_end).getTime() ? true : false,
 			assignedHome: v.assignments.length > 0 ? (v.assignments ?? null) : null,
 			isAssigned: v.assignments.length > 0 ? 1 : 0,
 			assignedProject: v.project,
