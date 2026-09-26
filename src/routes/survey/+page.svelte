@@ -97,16 +97,14 @@
 		<div class="p-5 bg-base-200 message-block w-90 self-center">
 			<p class="message">
 				Thank you for volunteering to assist with this LDC project! To request housing accomodations
-				during your visit, please provide the following information.
-			</p>
-			<p class="mt-2 message">
-				💡 Please submit this form no later than <strong><u>two weeks</u></strong> before your visit.
+				during your visit, please provide the following information and submit this form no later
+				than <strong><u>two weeks</u></strong> before your visit.
 			</p>
 		</div>
 		<Spacer spacing="mt-15" />
 
 		<form>
-			<p class="subheading">1. Basic info:</p>
+			<p class="subheading">1. Basic info</p>
 
 			<div class="mt-5 mb-5 occupant-type flex justify-between">
 				<label>
@@ -141,7 +139,7 @@
 			</div>
 
 			<Spacer spacing="mt-10" />
-			<p class="subheading">2. Project you are assigned to:</p>
+			<p class="subheading mb-5">2. Project assignment</p>
 			<select bind:value={newVolunteer.project} class="select">
 				{#await getProjects() then projects}
 					{#each projects as project}
@@ -151,10 +149,12 @@
 			</select>
 
 			<Spacer spacing="mt-10" />
-			<p class="subheading">3. Start and end date:</p>
-			<div class="flex justify-center items-center">
+			<p class="subheading">3. Arrival and Departure date</p>
+			<p class="mb-5">
+				<strong>Reminder:</strong> your arrival date is the date you check-in at your guest's home.
+			</p>
+			<div class="flex">
 				<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
-				<Arrow />
 				<input class="m-1" type="date" bind:value={newVolunteer.date_end} />
 			</div>
 
@@ -203,6 +203,7 @@
 	}
 	.subheading {
 		font-weight: bold;
+		font-size: 1.2em;
 	}
 
 	h2 {
