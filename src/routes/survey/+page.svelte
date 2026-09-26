@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Spacer from '../../components/Spacer.svelte';
 	import Toast from '../../components/Toast.svelte';
-	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
 	import { getProjects } from '$lib/helpers/getProjects';
 	import { type Volunteer } from '$lib/supabase/types/volunteer';
 	import { OccupantType } from '$lib/supabase/types/occupantType';
+	import RangeCalendar from '../../components/RangeCalendar.svelte';
+	import { CalendarDate } from '@internationalized/date';
 
 	let newVolunteer: Partial<Volunteer> = $state({
 		email: '',
@@ -50,8 +51,16 @@
 				email: details.email,
 				phone: details.phone,
 				project: details.project.id,
-				date_start: details.date_start,
-				date_end: details.date_end,
+				date_start: new CalendarDate(
+					rangeDates.start.year,
+					rangeDates.start.month,
+					rangeDates.start.day
+				).toString(),
+				date_end: new CalendarDate(
+					rangeDates.end.year,
+					rangeDates.end.month,
+					rangeDates.end.day
+				).toString(),
 				allergies_notes: details.allergies_notes,
 				ba_number: details.ba_number,
 				congregation: details.congregation
@@ -74,8 +83,16 @@
 					email: details.email,
 					phone: details.phone,
 					project: details.project.friendly_name,
-					date_start: details.date_start,
-					date_end: details.date_end,
+					date_start: new CalendarDate(
+						rangeDates.start.year,
+						rangeDates.start.month,
+						rangeDates.start.day
+					).toString(),
+					date_end: new CalendarDate(
+						rangeDates.end.year,
+						rangeDates.end.month,
+						rangeDates.end.day
+					).toString(),
 					allergies_notes: details.allergies_notes,
 					congregation: details.congregation
 				})
@@ -84,6 +101,8 @@
 	}
 
 	let hasSpecialNeeds = $state(false);
+
+	let rangeDates: any = $state([]);
 </script>
 
 {#if submitted}
@@ -153,10 +172,11 @@
 			<p class="mb-5">
 				<strong>Reminder:</strong> your arrival date is the date you check-in at your guest's home.
 			</p>
-			<div class="flex">
+			<RangeCalendar bind:value={rangeDates} />
+			<!-- <div class="flex">
 				<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
 				<input class="m-1" type="date" bind:value={newVolunteer.date_end} />
-			</div>
+			</div> -->
 
 			<Spacer spacing="mt-10" />
 			<div>
@@ -178,8 +198,8 @@
 			onclick={() => addVolunteer(newVolunteerName, newVolunteer, occupantType)}
 			type="button"
 			class="btn btn-success"
-			disabled={newVolunteer.date_end === '' ||
-				newVolunteer.date_start === '' ||
+			disabled={rangeDates.start === undefined ||
+				rangeDates.end === undefined ||
 				occupantType === '' ||
 				newVolunteer.project === null ||
 				newVolunteerName === '' ||
