@@ -173,10 +173,6 @@
 				<strong>Reminder:</strong> your arrival date is the date you check-in at your guest's home.
 			</p>
 			<RangeCalendar bind:value={rangeDates} />
-			<!-- <div class="flex">
-				<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
-				<input class="m-1" type="date" bind:value={newVolunteer.date_end} />
-			</div> -->
 
 			<Spacer spacing="mt-10" />
 			<div>

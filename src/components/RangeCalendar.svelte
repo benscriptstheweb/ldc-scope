@@ -2,6 +2,7 @@
 	import { RangeCalendar } from 'bits-ui';
 	import CaretLeft from '../icons/CaretLeft.svelte';
 	import CaretRight from '../icons/CaretRight.svelte';
+	import { getParsedDate } from '$lib/helpers/getParsedDate';
 
 	let { value = $bindable() } = $props();
 </script>
@@ -72,3 +73,10 @@
 		</div>
 	{/snippet}
 </RangeCalendar.Root>
+
+<p class="mt-2">Selected dates:</p>
+{#if value.start && value.end}
+	{getParsedDate(`${value.start.year}-${value.start.month}-${value.start.day}`)} to {getParsedDate(
+		`${value.end.year}-${value.end.month}-${value.end.day}`
+	)}
+{/if}
