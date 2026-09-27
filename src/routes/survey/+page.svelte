@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Spacer from '../../components/Spacer.svelte';
 	import Toast from '../../components/Toast.svelte';
-	import Arrow from '../../icons/Arrow.svelte';
 	import Plus from '../../icons/Plus.svelte';
 	import { getProjects } from '$lib/helpers/getProjects';
 	import { type Volunteer } from '$lib/supabase/types/volunteer';
 	import { OccupantType } from '$lib/supabase/types/occupantType';
+	import RangeCalendar from '../../components/RangeCalendar.svelte';
+	import { CalendarDate } from '@internationalized/date';
 
 	let newVolunteer: Partial<Volunteer> = $state({
 		email: '',
@@ -50,8 +51,16 @@
 				email: details.email,
 				phone: details.phone,
 				project: details.project.id,
-				date_start: details.date_start,
-				date_end: details.date_end,
+				date_start: new CalendarDate(
+					rangeDates.start.year,
+					rangeDates.start.month,
+					rangeDates.start.day
+				).toString(),
+				date_end: new CalendarDate(
+					rangeDates.end.year,
+					rangeDates.end.month,
+					rangeDates.end.day
+				).toString(),
 				allergies_notes: details.allergies_notes,
 				ba_number: details.ba_number,
 				congregation: details.congregation
@@ -74,8 +83,16 @@
 					email: details.email,
 					phone: details.phone,
 					project: details.project.friendly_name,
-					date_start: details.date_start,
-					date_end: details.date_end,
+					date_start: new CalendarDate(
+						rangeDates.start.year,
+						rangeDates.start.month,
+						rangeDates.start.day
+					).toString(),
+					date_end: new CalendarDate(
+						rangeDates.end.year,
+						rangeDates.end.month,
+						rangeDates.end.day
+					).toString(),
 					allergies_notes: details.allergies_notes,
 					congregation: details.congregation
 				})
@@ -84,6 +101,8 @@
 	}
 
 	let hasSpecialNeeds = $state(false);
+
+	let rangeDates: any = $state([]);
 </script>
 
 {#if submitted}
@@ -97,16 +116,14 @@
 		<div class="p-5 bg-base-200 message-block w-90 self-center">
 			<p class="message">
 				Thank you for volunteering to assist with this LDC project! To request housing accomodations
-				during your visit, please provide the following information.
-			</p>
-			<p class="mt-2 message">
-				💡 Please submit this form no later than <strong><u>two weeks</u></strong> before your visit.
+				during your visit, please provide the following information and submit this form no later
+				than <strong><u>two weeks</u></strong> before your visit.
 			</p>
 		</div>
 		<Spacer spacing="mt-15" />
 
 		<form>
-			<p class="subheading">1. Basic info:</p>
+			<p class="subheading">1. Basic info</p>
 
 			<div class="mt-5 mb-5 occupant-type flex justify-between">
 				<label>
@@ -141,7 +158,7 @@
 			</div>
 
 			<Spacer spacing="mt-10" />
-			<p class="subheading">2. Project you are assigned to:</p>
+			<p class="subheading mb-5">2. Project assignment</p>
 			<select bind:value={newVolunteer.project} class="select">
 				{#await getProjects() then projects}
 					{#each projects as project}
@@ -151,12 +168,11 @@
 			</select>
 
 			<Spacer spacing="mt-10" />
-			<p class="subheading">3. Start and end date:</p>
-			<div class="flex justify-center items-center">
-				<input class="m-1" type="date" bind:value={newVolunteer.date_start} />
-				<Arrow />
-				<input class="m-1" type="date" bind:value={newVolunteer.date_end} />
-			</div>
+			<p class="subheading">3. Arrival and Departure date</p>
+			<p class="mb-5">
+				<strong>Reminder:</strong> your arrival date is the date you check-in at your guest's home.
+			</p>
+			<RangeCalendar bind:value={rangeDates} />
 
 			<Spacer spacing="mt-10" />
 			<div>
@@ -178,8 +194,8 @@
 			onclick={() => addVolunteer(newVolunteerName, newVolunteer, occupantType)}
 			type="button"
 			class="btn btn-success"
-			disabled={newVolunteer.date_end === '' ||
-				newVolunteer.date_start === '' ||
+			disabled={rangeDates.start === undefined ||
+				rangeDates.end === undefined ||
 				occupantType === '' ||
 				newVolunteer.project === null ||
 				newVolunteerName === '' ||
@@ -203,6 +219,7 @@
 	}
 	.subheading {
 		font-weight: bold;
+		font-size: 1.2em;
 	}
 
 	h2 {
