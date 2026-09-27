@@ -8,7 +8,6 @@
 	import CustomBadge from '../../components/CustomBadge.svelte';
 	import Lookup from '../../icons/Lookup.svelte';
 	import Ex from '../../icons/Ex.svelte';
-	import CompletedPerson from '../../icons/CompletedPerson.svelte';
 	import { dev } from '$app/environment';
 
 	let { data } = $props();
@@ -53,19 +52,10 @@
 		}
 	}
 
-	let viewCompleted = $state(false);
 	let searchedVolunteer = $state('');
-
 	let sortedVolunteers = $derived(
 		volunteers.filter((e: any) => {
-			if (viewCompleted) {
-				return e.name.toLowerCase().includes(searchedVolunteer.toLowerCase());
-			} else {
-				return (
-					e.name.toLowerCase().includes(searchedVolunteer.toLowerCase()) &&
-					!e.hasCompletedAssignment
-				);
-			}
+			return e.name.toLowerCase().includes(searchedVolunteer.toLowerCase());
 		})
 	);
 
@@ -162,10 +152,6 @@
 			><Lookup />Search name</button
 		>
 	{/if}
-
-	<button class="mr-2 btn btn-ghost btn-xs" onclick={() => (viewCompleted = !viewCompleted)}
-		><CompletedPerson />View completed</button
-	>
 </div>
 
 <div class="overflow-x-auto">
@@ -207,15 +193,11 @@
 						{volunteer.project.friendly_name}
 					</td>
 					<td class="info-status flex justify-end">
-						{#if !volunteer.hasCompletedAssignment}
-							{#if volunteer.assignedHome === null}
-								<CustomBadge type="unassigned" />
-							{/if}
-							<CustomBadge type="days" days={volunteer.daysAssigned} />
-							<RecommendedOccupantBadge occupantType={volunteer.type} />
-						{:else}
-							<div class="badge badge-soft">Completed</div>
+						{#if volunteer.assignedHome === null}
+							<CustomBadge type="unassigned" />
 						{/if}
+						<CustomBadge type="days" days={volunteer.daysAssigned} />
+						<RecommendedOccupantBadge occupantType={volunteer.type} />
 					</td>
 				</tr>
 			{/each}
@@ -224,10 +206,6 @@
 </div>
 
 <style>
-	.view-complete-checkbox {
-		font-size: 0.8em;
-		font-weight: bold;
-	}
 	.info-status {
 		font-weight: bold;
 	}
