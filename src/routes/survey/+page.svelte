@@ -170,7 +170,7 @@
 			<Spacer spacing="mt-10" />
 			<p class="subheading">3. Arrival and Departure date</p>
 			<p class="mb-5">
-				<strong>Reminder:</strong> your arrival date is the date you check-in at your guest's home.
+				<strong>Reminder:</strong> your arrival date is the date you check-in at your host's home.
 			</p>
 			<RangeCalendar bind:value={rangeDates} />
 
