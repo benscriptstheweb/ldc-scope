@@ -62,37 +62,38 @@
 {/if}
 
 <div class="top-container flex flex-col items-center">
-	<div class="w-80 mt-5">
-		<div class="flex items-center justify-between">
-			<div class="flex items-center">
-				<p class="heading header-name mr-2">{data.name}</p>
+	<div class="w-80">
+		<div class="mt-5">
+			<div class="flex items-center justify-between">
+				<div class="flex items-center">
+					<p class="heading header-name mt-5">{data.name}</p>
+				</div>
+			</div>
+			<p class="badge badge-dash badge-info"><strong>{data.ba_number}</strong></p>
+			<div class="flex w-80 mt-5 mb-5 justify-between">
+				<!-- CONTACT BUTTONS -->
+				<div class="flex">
+					<a href="sms:{data.phone}" aria-label="telephone" class="phone mr-3">
+						<Sms />
+					</a>
+					<a href="tel:{data.phone}" aria-label="telephone" class="phone mr-3">
+						<Telephone />
+					</a>
+					<a href="mailto:{data.email}" aria-label="email" class="email">
+						<Email />
+					</a>
+				</div>
+
+				{#if data.user.isAdmin}
+					<div>
+						<label for="edit-volunteer-drawer" class="btn btn-xs btn-soft btn-primary">
+							<Edit />Edit Volunteer
+						</label>
+					</div>
+				{/if}
 			</div>
 		</div>
-		<p class="badge badge-dash badge-info"><strong>{data.ba_number}</strong></p>
 	</div>
-
-	<!-- CONTACT BUTTONS -->
-	<div class="w-80 mb-8">
-		<div class="mt-2">
-			<div class="flex mt-5">
-				<a href="sms:{data.phone}" aria-label="telephone" class="phone mr-5">
-					<Sms />
-				</a>
-				<a href="tel:{data.phone}" aria-label="telephone" class="phone mr-5">
-					<Telephone />
-				</a>
-				<a href="mailto:{data.email}" aria-label="email" class="email">
-					<Email />
-				</a>
-			</div>
-		</div>
-	</div>
-
-	{#if data.user.isAdmin}
-		<label for="edit-volunteer-drawer" class="btn btn-soft btn-primary mb-8">
-			<Edit />Edit Volunteer
-		</label>
-	{/if}
 
 	{#if data.allergies_notes}
 		<div class="w-80 mb-10">
@@ -101,22 +102,21 @@
 		</div>
 	{/if}
 
-	<div class="self-center card bg-base-300 pt-9 w-90">
-		<div class="ml-8 mr-8 mb-10">
-			<div class="flex justify-between items-cente">
+	<div class="self-center card bg-base-300 w-90">
+		<div class="m-8">
+			<div class="flex justify-between items-center mb-3">
 				<h2 class="subheading">Assignment</h2>
 				<div class="flex">
 					<CustomBadge type="days" days={data.daysAssigned} />
 					<RecommendedOccupantBadge occupantType={data.type} />
 				</div>
 			</div>
-			<div class="divider"></div>
-			<p class="project-info">Project: {data.project.friendly_name} - {data.project.id}</p>
+			<p class="project-info">Project: {data.project.friendly_name}</p>
 			<p class="project-info">
 				Dates: {getParsedDate(data.date_start)} to {getParsedDate(data.date_end)}
 			</p>
 
-			<p class="project-info">
+			<p class="project-info mt-4">
 				Assigned agent:
 				{#if data.assignedAgent}
 					<span class="badge badge-soft badge-info">
@@ -127,8 +127,10 @@
 				{/if}
 			</p>
 		</div>
+	</div>
 
-		<div class="mt-4 ml-8 mr-8 mb-9 flex flex-col">
+	<div class="self-center w-90 card bg-base-200 mt-3">
+		<div class="m-8 flex flex-col">
 			<div class="flex flex-row justify-between mb-2">
 				<h2 class="subheading">Stays</h2>
 				<button
