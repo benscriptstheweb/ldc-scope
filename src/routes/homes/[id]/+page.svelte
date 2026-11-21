@@ -9,6 +9,7 @@
 	import { getParsedDate } from '$lib/helpers/getParsedDate';
 	import CustomBadge from '../../../components/CustomBadge.svelte';
 	import Comments from '../../../components/Comments.svelte';
+	import Person from '../../../icons/Person.svelte';
 
 	const { data } = $props();
 	const home = data;
@@ -83,12 +84,13 @@
 				<img class="map-pin" src="/pin.png" width="70px" alt="open-in-map" />
 			</a>
 		</div>
-
 		{#if data.user.isAdmin}
-			<label for="edit-home-drawer" class="btn btn-soft btn-primary">
-				<Edit />
-				Edit Home
-			</label>
+			<div class="w-80">
+				<label for="edit-home-drawer" class="btn btn-soft btn-primary btn-xs">
+					<Edit />
+					Edit Home
+				</label>
+			</div>
 		{/if}
 
 		{#if home.blackout_dates}
@@ -110,7 +112,7 @@
 			{#if home.assignments.length !== 0}
 				<Assignments {sortedVolunteers}></Assignments>
 			{:else}
-				<p class="message text-center">This home has no assigned volunteers 🪹</p>
+				<p class="message text-center amenities-none-text">No assigned volunteers yet</p>
 			{/if}
 		</div>
 	</div>
@@ -135,20 +137,20 @@
 				</p>
 			</div>
 			<div class="detail">
-				<p><strong>Distance to Project</strong>: {home.distanceToProject} miles</p>
+				<strong>Project: </strong>
+				{home.project.friendly_name}
 			</div>
 			<div class="detail">
-				<strong>Project: </strong>
-				{home.project.friendly_name} - {home.project.id}
+				<p><strong>Distance to Project</strong>: {home.distanceToProject} mi</p>
 			</div>
 
-			<div class="detail">
+			<div class="detail mt-3">
 				<strong>Comfort rating: </strong>
 				<div
 					class="badge {home.comfort_rating === 'excellent'
 						? 'badge-success'
 						: home.comfort_rating === 'good'
-							? 'badge-primary'
+							? 'badge-info'
 							: home.comfort_rating === 'unacceptable'
 								? 'badge-error'
 								: ''}"
@@ -165,7 +167,7 @@
 					<div class="badge badge-soft badge-info">{amenity}</div>
 				{/each}
 			{:else}
-				<p class="detail amenities-none-text">No amenities listed for this home 🤷‍♂️</p>
+				<p class="detail amenities-none-text">No amenities listed for this home</p>
 			{/if}
 		</div>
 
@@ -173,7 +175,7 @@
 		<h2>Parking & RV</h2>
 		<div class="block mt-2">
 			<div class="flex detail">
-				Type: {home.parking_type}
+				Parking: {home.parking_type}
 			</div>
 
 			<div class="detail flex flex-row">
@@ -196,26 +198,28 @@
 				</div>
 			</div>
 		{/if}
+	</div>
 
-		<!-- HOST -->
-		<h2 class="text-center mb-4">Host</h2>
+	<!-- HOST -->
+	<div class="mt-2 self-center card bg-base-200 pt-9 w-90">
+		<h2 class="mb-4">Host</h2>
 		<div class="block details">
 			<div class="detail">
 				<strong>Congregation:</strong>
 				{home.congregation}
 			</div>
 
-			<div class="flex justify-between mt-5">
+			<ul class="list bg-base-100 rounded-box shadow-md mt-3">
+				<ContactsList host={home.hosts} />
+			</ul>
+
+			<div class="flex justify-between mt-1">
 				{#if data.user.isAdmin}
 					<label for="edit-contacts-drawer" class="btn btn-soft btn-primary btn-xs mr-5 mb-4">
 						<Edit />Edit contacts
 					</label>
 				{/if}
 			</div>
-
-			<ul class="list bg-base-100 rounded-box shadow-md">
-				<ContactsList host={home.hosts} />
-			</ul>
 		</div>
 	</div>
 
