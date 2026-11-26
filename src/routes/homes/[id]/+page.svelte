@@ -104,17 +104,12 @@
 		{/if}
 	</div>
 
-	<div class="history flex flex-col">
-		<div class="w-90 self-center">
-			<div class="divider">History</div>
-		</div>
-		<div class="block volunteers">
-			{#if home.assignments.length !== 0}
-				<Assignments {sortedVolunteers}></Assignments>
-			{:else}
-				<p class="message text-center amenities-none-text">No assigned volunteers yet</p>
-			{/if}
-		</div>
+	<div class="self-center block volunteers w-95">
+		{#if home.assignments.length !== 0}
+			<Assignments {sortedVolunteers}></Assignments>
+		{:else}
+			<p class="message text-center amenities-none-text">No assigned volunteers yet</p>
+		{/if}
 	</div>
 
 	<div class="self-center card bg-base-300 pt-9 w-90">
@@ -144,19 +139,20 @@
 				<p><strong>Distance to Project</strong>: {home.distanceToProject} mi</p>
 			</div>
 
-			<div class="detail mt-3">
-				<strong>Comfort rating: </strong>
-				<div
-					class="badge {home.comfort_rating === 'excellent'
-						? 'badge-success'
+			<div class="detail mt-3 flex items-center gap-2">
+				<strong>Comfort rating:</strong>
+
+				<span
+					class="h-2.5 w-2.5 rounded-full {home.comfort_rating === 'excellent'
+						? 'bg-success'
 						: home.comfort_rating === 'good'
-							? 'badge-info'
+							? 'bg-info'
 							: home.comfort_rating === 'unacceptable'
-								? 'badge-error'
-								: ''}"
-				>
-					<strong>{home.comfort_rating}</strong>
-				</div>
+								? 'bg-error'
+								: 'bg-warning'}"
+				></span>
+
+				<span class="font-medium capitalize">{home.comfort_rating}</span>
 			</div>
 		</div>
 
